@@ -1,0 +1,23 @@
+---
+import { getCollection } from 'astro:content';
+import TimelineItem from './TimelineItem.astro';
+
+const entries = await getCollection('experience');
+entries.sort((a, b) => b.data.startDate.valueOf() - a.data.startDate.valueOf());
+---
+
+<section id="experience">
+  <div class="container">
+    <h2>Career experience</h2>
+    <div class="timeline">
+      {entries.map((entry) => <TimelineItem entry={entry} />)}
+    </div>
+  </div>
+</section>
+
+<style>
+  .timeline {
+    margin-top: var(--space-5);
+    max-width: var(--max-width-prose);
+  }
+</style>

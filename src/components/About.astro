@@ -1,0 +1,112 @@
+---
+import { site, skills, tools, education } from '../data/site.config';
+import ResumeCTA from './ResumeCTA.astro';
+---
+
+<section id="about">
+  <div class="container about-grid">
+    <div class="prose">
+      <h2>About me</h2>
+      <p class="tagline">{site.tagline}</p>
+      <p>{site.description}</p>
+      <p>
+        Shelby has 8 years of experience in user research and software product development, with an
+        emphasis on data and sustainability initiatives — bringing concepts to life for start-ups and
+        larger organizations alike, always grounded in human-centered design.
+      </p>
+      <ResumeCTA />
+    </div>
+    <div class="about-lists">
+      <div>
+        <h3>Expertise</h3>
+        <ul>
+          {skills.map((skill) => <li>{skill}</li>)}
+        </ul>
+      </div>
+      <div>
+        <h3>Familiar tools</h3>
+        <ul>
+          {tools.map((tool) => <li>{tool}</li>)}
+        </ul>
+      </div>
+      <div>
+        <h3>Education</h3>
+        <ul class="education-list">
+          {
+            education.map((item) => (
+              <li>
+                <strong>{item.school}</strong>
+                <span>{item.program}</span>
+                <span class="detail">{item.detail}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about-grid {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: var(--space-7);
+  }
+
+  .tagline {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    color: var(--color-text);
+  }
+
+  .about-lists h3 {
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-2);
+  }
+
+  .about-lists > div {
+    margin-bottom: var(--space-5);
+  }
+
+  .about-lists ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .about-lists li {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-1) var(--space-3);
+    font-size: 0.9rem;
+  }
+
+  .education-list li {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    background: none;
+    border: none;
+    padding: 0;
+  }
+
+  .education-list .detail {
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+  }
+
+  @media (max-width: 800px) {
+    .about-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-5);
+    }
+  }
+</style>

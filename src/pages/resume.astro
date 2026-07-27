@@ -1,0 +1,146 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { site, skills, tools, education } from '../data/site.config';
+
+const entries = await getCollection('experience');
+entries.sort((a, b) => b.data.startDate.valueOf() - a.data.startDate.valueOf());
+
+function formatDate(date: Date | null) {
+  if (!date) return 'Present';
+  return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' });
+}
+---
+
+<BaseLayout title={`${site.name} — Résumé`}>
+  <main class="container resume-page">
+    <a href="/" class="back-link">&larr; Back to portfolio</a>
+
+    <header class="resume-header">
+      <h1>{site.name}</h1>
+      <p class="tagline">{site.tagline}</p>
+      <p class="contact-line">
+        {site.email} &middot; {site.location} &middot;
+        <a href={site.social.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a> &middot;
+        <a href={site.social.github} target="_blank" rel="noopener noreferrer">GitHub</a>
+      </p>
+      <a href="/resume.pdf" download class="btn">Download PDF</a>
+    </header>
+
+    <section>
+      <h2>Experience</h2>
+      {
+        entries.map((entry) => (
+          <div class="resume-entry">
+            <div class="entry-header">
+              <h3>{entry.data.role}, {entry.data.company}</h3>
+              <span class="dates">
+                {formatDate(entry.data.startDate)} – {formatDate(entry.data.endDate)}
+              </span>
+            </div>
+            {entry.data.note && <p class="note">{entry.data.note}</p>}
+          </div>
+        ))
+      }
+    </section>
+
+    <section>
+      <h2>Education</h2>
+      {
+        education.map((item) => (
+          <div class="resume-entry">
+            <h3>{item.school}</h3>
+            <p>{item.program} &mdash; {item.detail}</p>
+          </div>
+        ))
+      }
+    </section>
+
+    <section>
+      <h2>Expertise</h2>
+      <p>{skills.join(' · ')}</p>
+    </section>
+
+    <section>
+      <h2>Familiar tools</h2>
+      <p>{tools.join(' · ')}</p>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .resume-page {
+    max-width: var(--max-width-prose);
+    padding-top: var(--space-6);
+    padding-bottom: var(--space-8);
+  }
+
+  .back-link {
+    display: inline-block;
+    margin-bottom: var(--space-5);
+    font-size: 0.9rem;
+  }
+
+  .resume-header {
+    margin-bottom: var(--space-6);
+    padding-bottom: var(--space-5);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .tagline {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    color: var(--color-text);
+  }
+
+  .contact-line {
+    font-size: 0.9rem;
+  }
+
+  section {
+    padding: var(--space-5) 0;
+  }
+
+  section h2 {
+    font-size: 1.3rem;
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: var(--space-2);
+    margin-bottom: var(--space-4);
+  }
+
+  .resume-entry {
+    margin-bottom: var(--space-4);
+  }
+
+  .entry-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--space-2);
+  }
+
+  .entry-header h3 {
+    font-size: 1.05rem;
+    margin: 0;
+  }
+
+  .dates {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    white-space: nowrap;
+  }
+
+  .note {
+    font-style: italic;
+    font-size: 0.9rem;
+    margin: var(--space-1) 0 0;
+  }
+
+  @media print {
+    .back-link,
+    .btn {
+      display: none;
+    }
+  }
+</style>

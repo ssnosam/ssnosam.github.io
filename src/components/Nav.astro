@@ -1,0 +1,93 @@
+---
+import { site } from '../data/site.config';
+
+const links = [
+  { label: 'About', href: '#about' },
+  { label: 'Philosophy', href: '#philosophy' },
+  { label: 'Experience', href: '#experience' },
+  { label: 'Contact', href: '#contact' },
+];
+---
+
+<header class="nav">
+  <div class="container nav-inner">
+    <a href="/" class="nav-name">{site.name}</a>
+    <nav>
+      <ul>
+        {
+          links.map((link) => (
+            <li>
+              <a href={link.href}>{link.label}</a>
+            </li>
+          ))
+        }
+        <li>
+          <a href="/resume.pdf" download class="resume-link">Résumé ↓</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(250, 248, 244, 0.85);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: var(--space-3);
+    padding-bottom: var(--space-3);
+  }
+
+  .nav-name {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 500;
+    color: var(--color-text);
+  }
+
+  .nav-name:hover {
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  nav ul {
+    display: flex;
+    align-items: center;
+    gap: var(--space-5);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  nav a {
+    color: var(--color-text-muted);
+    font-weight: 500;
+    font-size: 0.95rem;
+  }
+
+  nav a:hover {
+    color: var(--color-accent);
+  }
+
+  .resume-link {
+    color: var(--color-accent);
+  }
+
+  @media (max-width: 640px) {
+    nav ul {
+      gap: var(--space-3);
+    }
+    nav a {
+      font-size: 0.85rem;
+    }
+  }
+</style>

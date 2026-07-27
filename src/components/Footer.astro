@@ -1,0 +1,45 @@
+---
+import SocialLinks from './SocialLinks.astro';
+import { site } from '../data/site.config';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <p class="footer-note">
+      Alongside full-time roles, {site.name.split(' ')[0]} has maintained an ongoing freelance design practice since 2015.
+    </p>
+    <div class="footer-bottom">
+      <SocialLinks />
+      <p class="copyright">&copy; {year} {site.name}</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    border-top: 1px solid var(--color-border);
+    padding: var(--space-6) 0;
+  }
+
+  .footer-note {
+    font-size: 0.9rem;
+    font-style: italic;
+    margin-bottom: var(--space-5);
+  }
+
+  .footer-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+
+  .copyright {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+  }
+</style>
