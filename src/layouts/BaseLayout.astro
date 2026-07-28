@@ -20,6 +20,8 @@ const { title = site.title, description = site.description } = Astro.props;
     <title>{title}</title>
   </head>
   <body>
-    <slot />
+    <div class="page-sheet">
+      <slot />
+    </div>
   </body>
 </html>
