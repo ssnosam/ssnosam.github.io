@@ -2,13 +2,14 @@
 
 :root {
   /* color */
-  --color-bg: #faf8f4;
+  --color-bg: #fdf8f8;
   --color-surface: #ffffff;
-  --color-text: #1a1a1a;
-  --color-text-muted: #5c5c5c;
-  --color-border: #e5e2db;
-  --color-accent: #1b6459;
-  --color-accent-ink: #0f4740;
+  --color-text: #2b2226;
+  --color-text-muted: #6d5c62;
+  --color-border: #f0e2e5;
+  --color-accent: #a03a60;
+  --color-accent-ink: #7a2949;
+  --color-accent-wash: #f9edf1;
 
   /* type */
   --font-display: 'Fraunces', serif;
@@ -27,8 +28,9 @@
   /* layout */
   --max-width-prose: 42rem;
   --max-width-page: 68rem;
-  --radius-md: 0.5rem;
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --radius-md: 0.75rem;
+  --radius-pill: 999px;
+  --shadow-sm: 0 1px 3px rgba(43, 34, 38, 0.06);
 }
 
 *,
@@ -55,8 +57,9 @@ h1,
 h2,
 h3 {
   font-family: var(--font-display);
-  font-weight: 500;
-  line-height: 1.15;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
   margin: 0 0 var(--space-3);
 }
 
@@ -104,9 +107,10 @@ section {
   background: var(--color-accent);
   color: #fff;
   font-family: var(--font-body);
-  font-weight: 600;
+  font-weight: 500;
+  letter-spacing: 0.01em;
   padding: var(--space-3) var(--space-5);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-pill);
   border: none;
   cursor: pointer;
   font-size: 1rem;

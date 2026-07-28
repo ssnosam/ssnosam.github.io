@@ -1,9 +1,9 @@
 ---
-company: "AuditBoard → Optro"
+company: "Optro"
 role: "Senior Product Designer"
 startDate: 2024-04-08
 endDate: null
-note: "AuditBoard was acquired and rebranded to Optro during this role"
+note: "Formerly AuditBoard, which was acquired and rebranded to Optro during this role"
 ---
 
 As a member of the design team at Optro, responsible for the user experience of multiple platform products.

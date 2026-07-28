@@ -1,10 +1,19 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import { site, skills, tools, education, personalInterests } from '../data/site.config';
 
 const entries = await getCollection('experience');
 entries.sort((a, b) => b.data.startDate.valueOf() - a.data.startDate.valueOf());
+
+// Pre-render each entry's markdown body so the résumé shows the same
+// detail as the timeline on the homepage.
+const roles = await Promise.all(
+  entries.map(async (entry) => ({
+    data: entry.data,
+    Content: (await render(entry)).Content,
+  }))
+);
 
 function formatDate(date: Date | null) {
   if (!date) return 'Current';
@@ -12,7 +21,7 @@ function formatDate(date: Date | null) {
 }
 ---
 
-<BaseLayout title={`${site.name} — Résumé`}>
+<BaseLayout title={`Résumé | ${site.name}`}>
   <main class="container resume-page">
     <div class="toolbar no-print">
       <a href="/" class="back-link">&larr; Back to portfolio</a>
@@ -22,73 +31,85 @@ function formatDate(date: Date | null) {
     <header class="resume-header">
       <h1>{site.name}</h1>
       <p class="tagline">is a Senior Product Designer &amp; Creative in {site.location}</p>
+      <p class="contact-line">
+        <a href={`mailto:${site.email}`}>{site.email}</a>
+        <span class="sep" aria-hidden="true">·</span>
+        <a href={site.social.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <span class="sep" aria-hidden="true">·</span>
+        <a href={site.social.dribbble} target="_blank" rel="noopener noreferrer">Dribbble</a>
+        <span class="sep" aria-hidden="true">·</span>
+        <span>shelby-mason.com</span>
+      </p>
     </header>
 
     <div class="resume-grid">
+      <div class="main-col">
+        <h2 class="section-heading">Experience</h2>
+        {
+          roles.map(({ data, Content }) => (
+            <article class="role">
+              <div class="role-head">
+                <h3>
+                  {data.role} at {data.company}
+                </h3>
+                <span class="dates">
+                  {formatDate(data.startDate)} to {formatDate(data.endDate)}
+                </span>
+              </div>
+              {data.note && <p class="note">{data.note}</p>}
+              <div class="role-body">
+                <Content />
+              </div>
+            </article>
+          ))
+        }
+      </div>
+
       <aside class="sidebar">
-        <section>
-          <h2>Education</h2>
+        <section class="side-block">
+          <h2 class="section-heading">Education</h2>
           {
             education.map((item) => (
-              <div class="sidebar-entry">
+              <div>
                 <p class="school">{item.school}</p>
-                <p>{item.program}</p>
-                <p class="detail">{item.detail}</p>
+                <p class="school-detail">{item.program}</p>
+                <p class="school-detail">{item.detail}</p>
               </div>
             ))
           }
         </section>
 
-        <section>
-          <h2>Expertise</h2>
+        <section class="side-block">
+          <h2 class="section-heading">Expertise</h2>
           <ul class="plain-list">
             {skills.map((skill) => <li>{skill}</li>)}
           </ul>
         </section>
 
-        <section>
-          <h2>Familiar Tools</h2>
+        <section class="side-block">
+          <h2 class="section-heading">Familiar Tools</h2>
           <ul class="plain-list">
             {tools.map((tool) => <li>{tool}</li>)}
           </ul>
         </section>
 
-        <section>
-          <h2>Personal Interests</h2>
+        <section class="side-block">
+          <h2 class="section-heading">Personal Interests</h2>
           <ul class="plain-list">
-            {personalInterests.map((item) => <li>{item.emoji} {item.label}</li>)}
+            {personalInterests.map((item) => (
+              <li>
+                <span class="interest-emoji">{item.emoji}</span> {item.label}
+              </li>
+            ))}
           </ul>
         </section>
       </aside>
-
-      <div class="main-col">
-        <h2>Experience</h2>
-        {
-          entries.map((entry) => (
-            <div class="resume-entry">
-              <div class="entry-header">
-                <h3>
-                  {entry.data.role}, {entry.data.company}
-                </h3>
-                <span class="dates">
-                  {formatDate(entry.data.startDate)} – {formatDate(entry.data.endDate)}
-                </span>
-              </div>
-              {entry.data.note && <p class="note">{entry.data.note}</p>}
-            </div>
-          ))
-        }
-      </div>
     </div>
 
-    <footer class="resume-footer">
+    <footer class="resume-footer no-print">
       <p class="connect">Let's Connect!</p>
       <p>
         Say <a href={`mailto:${site.email}`}>{site.email}</a>
-      </p>
-      <p class="footer-links">
-        <a href={site.social.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
-        <a href={site.social.dribbble} target="_blank" rel="noopener noreferrer">Dribbble</a>
       </p>
     </footer>
   </main>
@@ -96,13 +117,12 @@ function formatDate(date: Date | null) {
 
 <style>
   .resume-page {
-    max-width: 60rem;
+    max-width: 62rem;
     padding-top: var(--space-5);
     padding-bottom: var(--space-8);
   }
 
-  /* override global.css's `section { padding: 6rem 0 }` full-page rule,
-     which isn't meant for these small sidebar blocks */
+  /* global.css styles `section` as a full-page band; these are small blocks */
   .resume-page section {
     padding: 0;
   }
@@ -119,47 +139,123 @@ function formatDate(date: Date | null) {
   }
 
   .resume-header {
-    margin-bottom: var(--space-7);
+    margin-bottom: var(--space-6);
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--color-border);
   }
 
   .resume-header h1 {
     font-style: italic;
+    margin-bottom: var(--space-2);
   }
 
   .tagline {
-    font-size: 1.1rem;
-    color: var(--color-text-muted);
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    color: var(--color-text);
+    margin-bottom: var(--space-3);
+  }
+
+  .contact-line {
+    font-size: 0.9rem;
+    margin: 0;
+  }
+
+  .contact-line .sep {
+    color: var(--color-border);
+    margin: 0 var(--space-2);
   }
 
   .resume-grid {
     display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: var(--space-7);
+    grid-template-columns: 17rem 1fr;
+    column-gap: var(--space-7);
+    align-items: start;
   }
 
-  .sidebar section {
+  .sidebar {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .main-col {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .section-heading {
+    font-size: 0.8rem;
+    font-family: var(--font-body);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: var(--color-accent);
+    padding-bottom: var(--space-2);
+    margin-bottom: var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  /* Experience */
+  .role {
+    margin-bottom: var(--space-5);
+  }
+
+  .role-head {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+    column-gap: var(--space-3);
+  }
+
+  .role-head h3 {
+    font-size: 1.05rem;
+    margin: 0;
+  }
+
+  .dates {
+    font-size: 0.82rem;
+    font-style: italic;
+    color: var(--color-text-muted);
+    white-space: nowrap;
+  }
+
+  .note {
+    font-style: italic;
+    font-size: 0.88rem;
+    margin: var(--space-1) 0 var(--space-2);
+  }
+
+  .role-body :global(p) {
+    margin: 0 0 var(--space-2);
+  }
+
+  .role-body :global(ul) {
+    margin: 0;
+    padding-left: 1.1rem;
+  }
+
+  .role-body :global(li) {
+    margin-bottom: var(--space-1);
+  }
+
+  .role-body :global(li)::marker {
+    color: var(--color-accent);
+  }
+
+  /* Sidebar */
+  .side-block {
     margin-bottom: var(--space-6);
   }
 
-  .sidebar h2,
-  .main-col > h2 {
-    font-size: 1.1rem;
-    margin-bottom: var(--space-3);
-  }
-
-  .sidebar-entry .school {
+  .school {
     font-weight: 600;
     color: var(--color-text);
     margin-bottom: var(--space-1);
   }
 
-  .sidebar-entry p {
-    margin-bottom: var(--space-1);
-  }
-
-  .sidebar-entry .detail {
-    color: var(--color-text-muted);
+  .school-detail {
     font-size: 0.9rem;
+    margin-bottom: var(--space-1);
   }
 
   .plain-list {
@@ -169,47 +265,18 @@ function formatDate(date: Date | null) {
   }
 
   .plain-list li {
+    font-size: 0.92rem;
     margin-bottom: var(--space-2);
-    font-size: 0.95rem;
-  }
-
-  .main-col > h2 {
-    border-bottom: 1px solid var(--color-border);
-    padding-bottom: var(--space-2);
-  }
-
-  .resume-entry {
-    margin-bottom: var(--space-5);
-  }
-
-  .entry-header {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: var(--space-2);
-  }
-
-  .entry-header h3 {
-    font-size: 1.05rem;
-    margin: 0;
-  }
-
-  .dates {
-    font-size: 0.85rem;
-    font-style: italic;
     color: var(--color-text-muted);
-    white-space: nowrap;
   }
 
-  .note {
-    font-style: italic;
-    font-size: 0.9rem;
-    margin: var(--space-1) 0 0;
+  .interest-emoji {
+    display: inline-block;
+    width: 1.4em;
   }
 
   .resume-footer {
-    margin-top: var(--space-8);
+    margin-top: var(--space-7);
     padding-top: var(--space-5);
     border-top: 1px solid var(--color-border);
     text-align: center;
@@ -221,67 +288,116 @@ function formatDate(date: Date | null) {
     color: var(--color-text);
   }
 
-  .footer-links {
-    display: flex;
-    justify-content: center;
-    gap: var(--space-4);
-  }
-
-  @media (max-width: 700px) {
+  @media (max-width: 780px) {
     .resume-grid {
       grid-template-columns: 1fr;
+      row-gap: var(--space-5);
+    }
+    .sidebar,
+    .main-col {
+      grid-column: 1;
+      grid-row: auto;
     }
   }
 
   @media print {
+    @page {
+      margin: 0.55in 0.6in;
+    }
+
     .no-print {
       display: none;
     }
 
     :global(body) {
       background: #fff;
+      font-size: 10.5pt;
       -webkit-print-color-adjust: exact;
       print-color-adjust: exact;
     }
 
     .resume-page {
-      padding-top: 0;
-      padding-bottom: var(--space-3);
       max-width: none;
+      padding: 0;
     }
 
     .resume-header {
-      margin-bottom: var(--space-5);
+      margin-bottom: var(--space-4);
+      padding-bottom: var(--space-3);
     }
 
-    .resume-footer {
-      margin-top: var(--space-4);
-      padding-top: var(--space-3);
+    .resume-header h1 {
+      font-size: 26pt;
     }
 
-    /* CSS grid columns don't paginate cleanly across print pages,
-       so stack everything into one column for the PDF/print output. */
+    .tagline {
+      font-size: 11.5pt;
+      margin-bottom: var(--space-2);
+    }
+
+    .contact-line,
+    .contact-line a,
+    .contact-line span {
+      font-size: 9pt;
+      color: var(--color-text);
+      text-decoration: none;
+    }
+
+    .contact-line .sep {
+      color: var(--color-border);
+    }
+
+    /* Multi-column grids don't paginate across printed pages, so the
+       résumé stacks: experience first, then the supporting sections. */
     .resume-grid {
       display: block;
     }
 
+    .section-heading {
+      font-size: 8.5pt;
+      margin-bottom: var(--space-3);
+      break-after: avoid;
+    }
+
+    .main-col {
+      margin-bottom: var(--space-5);
+    }
+
+    /* Keep each job (heading, note, and bullets) on one page. */
+    .role {
+      break-inside: avoid;
+      margin-bottom: var(--space-4);
+    }
+
+    .role-head h3 {
+      font-size: 11pt;
+    }
+
+    .dates,
+    .note {
+      font-size: 9pt;
+    }
+
+    /* Supporting sections flow into two tidy columns under the experience.
+       CSS columns (rather than grid) let short blocks pack together instead
+       of leaving dead space from row alignment. */
     .sidebar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0 var(--space-7);
-      margin-bottom: var(--space-6);
+      columns: 2;
+      column-gap: var(--space-6);
     }
 
-    .sidebar section {
+    .side-block {
       break-inside: avoid;
+      margin-bottom: var(--space-4);
     }
 
-    .resume-entry {
-      break-inside: avoid;
+    .plain-list li {
+      font-size: 9.5pt;
+      margin-bottom: 2pt;
     }
 
-    .resume-footer {
-      break-inside: avoid;
+    .school-detail {
+      font-size: 9.5pt;
     }
   }
 </style>

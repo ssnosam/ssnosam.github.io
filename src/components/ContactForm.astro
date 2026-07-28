@@ -59,7 +59,7 @@ const formAction = `https://formspree.io/f/${site.formspreeFormId}`;
       });
 
       if (response.ok) {
-        status.textContent = "Thanks — I'll get back to you soon.";
+        status.textContent = "Thanks! I'll get back to you soon.";
         form.reset();
       } else {
         status.textContent = 'Something went wrong. Please try emailing directly instead.';

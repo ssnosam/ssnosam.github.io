@@ -1,6 +1,6 @@
 export const site = {
   name: 'Shelby Mason',
-  title: 'Shelby Mason — Senior Product Designer',
+  title: 'Shelby Mason, Senior Product Designer',
   tagline: 'Senior Product Designer living in Portland, Oregon',
   email: 'hello@shelby-mason.com',
   location: 'Portland, Oregon',
