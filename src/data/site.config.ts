@@ -16,7 +16,7 @@ export const site = {
 export const quickFacts = [
   { emoji: '📍', text: 'Small town, CT &gt; Rochester, NY &gt; <strong>Portland, OR</strong>' },
   { emoji: '🎓', text: 'BFA in New Media Design from RIT' },
-  { emoji: '🐰', text: 'I love my immortal rabbit named Bunny' },
+  { emoji: '🧸', text: 'Connoisseur of cute &amp; cozy' },
 ];
 
 export const skills = [

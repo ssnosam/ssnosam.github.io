@@ -1,15 +1,13 @@
 ---
 import { site, skills, tools, education, quickFacts } from '../data/site.config';
 import ResumeCTA from './ResumeCTA.astro';
-import Squiggle from './Squiggle.astro';
 import StickyNote from './StickyNote.astro';
 ---
 
 <section id="about">
   <div class="container about-grid">
     <div class="prose">
-      <h2>About me</h2>
-      <Squiggle width={150} />
+      <h2><span class="highlight">About me</span></h2>
       <p class="tagline">{site.tagline}</p>
 
       <ul class="quick-facts">

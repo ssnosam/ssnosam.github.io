@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=Nothing+You+Could+Do&display=swap');
 
 :root {
   /* color */
@@ -14,11 +14,13 @@
   --color-grid: rgba(160, 58, 96, 0.055);
   --color-note: #fdf3bf;
   --color-note-edge: #f2e2a0;
+  --color-highlight: #f8cddf;
+  --color-ink: #37313f;
 
   /* type */
   --font-display: 'Fraunces', serif;
   --font-body: 'Inter', sans-serif;
-  --font-hand: 'Caveat', 'Bradley Hand', cursive;
+  --font-hand: 'Nothing You Could Do', 'Bradley Hand', cursive;
 
   /* spacing (4/8pt scale) */
   --space-1: 0.25rem;
@@ -109,6 +111,28 @@ a:hover {
 
 section {
   padding: var(--space-8) 0;
+}
+
+/* Marker-pen highlight behind heading text. The uneven gradient stops and
+   the band sitting low on the line give it a hand-swiped look rather than
+   a flat rectangle. */
+.highlight {
+  background-image: linear-gradient(
+    to right,
+    rgba(248, 205, 223, 0) 0%,
+    rgba(248, 205, 223, 0.75) 1.5%,
+    rgba(248, 205, 223, 0.95) 6%,
+    rgba(248, 205, 223, 0.88) 50%,
+    rgba(248, 205, 223, 0.95) 93%,
+    rgba(248, 205, 223, 0.7) 98%,
+    rgba(248, 205, 223, 0) 100%
+  );
+  background-repeat: no-repeat;
+  background-size: 100% 0.68em;
+  background-position: 0 0.4em;
+  padding: 0 0.18em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
 }
 
 /* Ethereal button: soft gradient, a faint bloom, and a light sweep on hover. */
