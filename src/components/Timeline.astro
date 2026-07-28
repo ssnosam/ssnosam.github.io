@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import TimelineItem from './TimelineItem.astro';
+import Squiggle from './Squiggle.astro';
 
 const entries = await getCollection('experience');
 entries.sort((a, b) => b.data.startDate.valueOf() - a.data.startDate.valueOf());
@@ -8,7 +9,8 @@ entries.sort((a, b) => b.data.startDate.valueOf() - a.data.startDate.valueOf());
 
 <section id="experience">
   <div class="container">
-    <h2>Career experience</h2>
+    <h2>Career experience <span class="heading-emoji" aria-hidden="true">🌱</span></h2>
+    <Squiggle width={215} />
     <div class="timeline">
       {entries.map((entry) => <TimelineItem entry={entry} />)}
     </div>
@@ -19,5 +21,10 @@ entries.sort((a, b) => b.data.startDate.valueOf() - a.data.startDate.valueOf());
   .timeline {
     margin-top: var(--space-5);
     max-width: var(--max-width-prose);
+  }
+
+  .heading-emoji {
+    font-size: 0.6em;
+    vertical-align: middle;
   }
 </style>

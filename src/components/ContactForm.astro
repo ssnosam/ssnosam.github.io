@@ -1,6 +1,7 @@
 ---
 import { site } from '../data/site.config';
 import SocialLinks from './SocialLinks.astro';
+import Squiggle from './Squiggle.astro';
 
 const formAction = `https://formspree.io/f/${site.formspreeFormId}`;
 ---
@@ -8,9 +9,10 @@ const formAction = `https://formspree.io/f/${site.formspreeFormId}`;
 <section id="contact">
   <div class="container contact-grid">
     <div class="prose">
-      <h2>Get in touch</h2>
+      <h2>Get in touch <span class="heading-emoji" aria-hidden="true">💌</span></h2>
+      <Squiggle width={165} />
       <p>
-        Have a project in mind or just want to say hello? Send a message, or reach out directly at{' '}
+        Have a project in mind or just want to say hello? Send me a message, or reach me directly at{' '}
         <a href={`mailto:${site.email}`}>{site.email}</a>.
       </p>
       <SocialLinks class="contact-socials" />
@@ -80,6 +82,11 @@ const formAction = `https://formspree.io/f/${site.formspreeFormId}`;
 
   :global(.contact-socials) {
     margin-top: var(--space-4);
+  }
+
+  .heading-emoji {
+    font-size: 0.6em;
+    vertical-align: middle;
   }
 
   form {

@@ -1,4 +1,6 @@
 ---
+import Squiggle from './Squiggle.astro';
+
 const principles = [
   {
     title: 'Start with the user, end with the user',
@@ -21,7 +23,8 @@ const principles = [
 
 <section id="philosophy">
   <div class="container prose">
-    <h2>Design philosophy</h2>
+    <h2>Design philosophy <span class="heading-emoji" aria-hidden="true">✨</span></h2>
+    <Squiggle width={210} />
     <div class="principles">
       {
         principles.map((p) => (
@@ -49,5 +52,10 @@ const principles = [
 
   .principle p {
     margin: 0;
+  }
+
+  .heading-emoji {
+    font-size: 0.6em;
+    vertical-align: middle;
   }
 </style>

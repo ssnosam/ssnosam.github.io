@@ -1,47 +1,71 @@
 ---
-import { site, skills, tools, education } from '../data/site.config';
+import { site, skills, tools, education, quickFacts } from '../data/site.config';
 import ResumeCTA from './ResumeCTA.astro';
+import Squiggle from './Squiggle.astro';
+import StickyNote from './StickyNote.astro';
 ---
 
 <section id="about">
   <div class="container about-grid">
     <div class="prose">
       <h2>About me</h2>
+      <Squiggle width={150} />
       <p class="tagline">{site.tagline}</p>
+
+      <ul class="quick-facts">
+        {
+          quickFacts.map((fact) => (
+            <li>
+              <span class="fact-emoji" aria-hidden="true">
+                {fact.emoji}
+              </span>
+              <span set:html={fact.text} />
+            </li>
+          ))
+        }
+      </ul>
+
+      <p class="tilde" aria-hidden="true">~</p>
+
       <p>{site.description}</p>
       <p>
-        Shelby has 8 years of experience in user research and software product development, with an
-        emphasis on data and sustainability initiatives. She brings concepts to life for start-ups and
-        larger organizations alike, always grounded in human-centered design.
+        I have 8 years of experience in user research and software product development, with an
+        emphasis on data and sustainability initiatives. I like bringing concepts to life for
+        start-ups and larger organizations alike, always grounded in human-centered design.
       </p>
       <ResumeCTA />
     </div>
-    <div class="about-lists">
-      <div>
-        <h3>Expertise</h3>
-        <ul>
-          {skills.map((skill) => <li>{skill}</li>)}
-        </ul>
-      </div>
-      <div>
-        <h3>Familiar tools</h3>
-        <ul>
-          {tools.map((tool) => <li>{tool}</li>)}
-        </ul>
-      </div>
-      <div>
-        <h3>Education</h3>
-        <ul class="education-list">
-          {
-            education.map((item) => (
-              <li>
-                <strong>{item.school}</strong>
-                <span>{item.program}</span>
-                <span class="detail">{item.detail}</span>
-              </li>
-            ))
-          }
-        </ul>
+
+    <div class="about-side">
+      <StickyNote rotate={4} class="about-note">Hi there! Thanks for stopping by ✿</StickyNote>
+
+      <div class="about-lists">
+        <div>
+          <h3>Expertise</h3>
+          <ul>
+            {skills.map((skill) => <li>{skill}</li>)}
+          </ul>
+        </div>
+        <div>
+          <h3>Familiar tools</h3>
+          <ul>
+            {tools.map((tool) => <li>{tool}</li>)}
+          </ul>
+        </div>
+        <div>
+          <h3>Education</h3>
+          <ul class="education-list">
+            {
+              education.map((item) => (
+                <li>
+                  <strong>{item.school}</strong>
+                  <span>{item.program}</span>
+                  <span class="detail">{item.detail}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -58,6 +82,54 @@ import ResumeCTA from './ResumeCTA.astro';
     font-family: var(--font-display);
     font-size: 1.25rem;
     color: var(--color-text);
+  }
+
+  .quick-facts {
+    list-style: none;
+    margin: var(--space-4) 0 0;
+    padding: 0;
+  }
+
+  .quick-facts li {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
+    margin-bottom: var(--space-2);
+    color: var(--color-text-muted);
+  }
+
+  .fact-emoji {
+    flex: none;
+    width: 1.4em;
+    text-align: center;
+  }
+
+  .quick-facts :global(strong) {
+    color: var(--color-text);
+    font-weight: 600;
+  }
+
+  .tilde {
+    font-family: var(--font-hand);
+    font-size: 1.6rem;
+    line-height: 1;
+    color: var(--color-accent-soft);
+    margin: var(--space-4) 0 var(--space-3);
+  }
+
+  .about-side {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: var(--space-6);
+  }
+
+  .about-note {
+    margin-right: var(--space-4);
+  }
+
+  .about-lists {
+    width: 100%;
   }
 
   .about-lists h3 {
@@ -107,6 +179,15 @@ import ResumeCTA from './ResumeCTA.astro';
     .about-grid {
       grid-template-columns: 1fr;
       gap: var(--space-5);
+    }
+
+    .about-side {
+      align-items: flex-start;
+    }
+
+    .about-note {
+      margin-right: 0;
+      align-self: center;
     }
   }
 </style>

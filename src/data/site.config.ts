@@ -9,10 +9,15 @@ export const site = {
   social: {
     linkedin: 'https://www.linkedin.com/in/ssnosam/',
     github: 'https://github.com/ssnosam',
-    dribbble: 'https://dribbble.com/ssnosam',
   },
   formspreeFormId: 'mrenjbgj',
 };
+
+export const quickFacts = [
+  { emoji: '📍', text: 'Small town, CT &gt; Rochester, NY &gt; <strong>Portland, OR</strong>' },
+  { emoji: '🎓', text: 'BFA in New Media Design from RIT' },
+  { emoji: '🐰', text: 'I love my immortal rabbit named Bunny' },
+];
 
 export const skills = [
   'Visual Design',
