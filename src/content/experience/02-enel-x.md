@@ -1,6 +1,6 @@
 ---
 company: "Enel X"
-role: "User Experience Designer (previously UX Design Intern)"
+role: "User Experience Designer"
 startDate: 2018-05-01
 endDate: 2019-06-01
 note: "Promoted from Design Intern to User Experience Designer, March 2019"

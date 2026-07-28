@@ -1,6 +1,6 @@
 ---
 company: "Measurabl"
-role: "Senior Product Designer (previously Product Designer)"
+role: "Senior Product Designer"
 startDate: 2022-04-01
 endDate: 2024-03-01
 note: "Promoted to Senior Product Designer, August 2023"

@@ -1,6 +1,6 @@
 ---
 company: "Hatch Data"
-role: "Product Designer II (previously Product Designer)"
+role: "Product Designer II"
 startDate: 2019-06-01
 endDate: 2022-04-01
 note: "Promoted to Product Designer II, January 2022; acquired by Measurabl in April 2022"

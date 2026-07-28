@@ -233,7 +233,8 @@ function formatDate(date: Date | null) {
   }
 
   .role-body :global(li) {
-    margin-bottom: var(--space-1);
+    margin-bottom: var(--space-2);
+    line-height: 1.6;
   }
 
   .role-body :global(li)::marker {
@@ -399,6 +400,12 @@ function formatDate(date: Date | null) {
     .dates,
     .note {
       font-size: 9pt;
+    }
+
+    /* keep printed bullets tight so the resume stays two pages */
+    .role-body :global(li) {
+      margin-bottom: 2pt;
+      line-height: 1.35;
     }
 
     /* Supporting sections flow into two tidy columns under the experience.
