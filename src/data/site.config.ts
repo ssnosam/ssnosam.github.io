@@ -11,9 +11,7 @@ export const site = {
     github: 'https://github.com/ssnosam',
     dribbble: 'https://dribbble.com/ssnosam',
   },
-  // Create a form at https://formspree.io and replace this with your form ID
-  // (e.g. the "xnnpyyzz" in https://formspree.io/f/xnnpyyzz)
-  formspreeFormId: 'YOUR_FORM_ID',
+  formspreeFormId: 'mrenjbgj',
 };
 
 export const skills = [
@@ -27,13 +25,13 @@ export const skills = [
 ];
 
 export const tools = [
+  'Claude',
+  'Replit',
   'Figma',
   'Adobe Suite',
   'Atlassian (Confluence, Jira)',
   'Notion',
-  'Mixpanel',
-  'Sketch',
-  'InVision',
+  'Coda',
 ];
 
 export const education = [
@@ -42,4 +40,12 @@ export const education = [
     program: 'New Media Design, BFA',
     detail: 'Visual Culture minor, English immersion',
   },
+];
+
+export const personalInterests = [
+  { emoji: '🐾', label: 'Animals & Critters' },
+  { emoji: '🎨', label: 'Arts & Crafts' },
+  { emoji: '🚴', label: 'Biking > Driving in PDX' },
+  { emoji: '🌸', label: 'Skincare' },
+  { emoji: '🕵️', label: 'True Crime' },
 ];
