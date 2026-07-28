@@ -41,17 +41,17 @@ const { rotate = -4, class: className = '' } = Astro.props;
   /* Real handwriting is never perfectly level or evenly weighted: the text
      sits at a slight angle to the note, rides a touch above the baseline,
      and uses ink rather than pure black. */
+  /* Cedarville has a small x-height and fine strokes, so it needs more size
+     and leading than a print hand to stay legible. */
   .sticky-note p {
     margin: 0;
     font-family: var(--font-hand);
-    font-size: 1.2rem;
-    line-height: 1.55;
-    letter-spacing: 0.01em;
-    word-spacing: 0.08em;
+    font-size: 1.35rem;
+    line-height: 1.75;
+    word-spacing: 0.04em;
     color: var(--color-ink);
     text-align: center;
     transform: rotate(-1.2deg);
     text-wrap: balance;
-    opacity: 0.92;
   }
 </style>
