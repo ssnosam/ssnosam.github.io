@@ -82,12 +82,33 @@ const links = [
     color: var(--color-accent);
   }
 
-  @media (max-width: 640px) {
-    nav ul {
-      gap: var(--space-3);
+  /* On phones the five links plus the name can't share one row, so the bar
+     stacks and the links wrap. Two stacked rows are too tall to pin to the
+     top of a phone screen, so the bar scrolls away here instead of sticking,
+     leaving the full viewport for reading. */
+  @media (max-width: 760px) {
+    .nav {
+      position: static;
     }
+
+    .nav-inner {
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-1);
+      padding-top: var(--space-2);
+      padding-bottom: var(--space-2);
+    }
+
+    nav ul {
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0 var(--space-4);
+    }
+
     nav a {
-      font-size: 0.85rem;
+      display: inline-block;
+      padding: var(--space-2) 0;
+      font-size: 0.9rem;
     }
   }
 </style>

@@ -298,6 +298,31 @@ function formatDate(date: Date | null) {
     }
   }
 
+  @media (max-width: 560px) {
+    /* the back link and the button collide when squeezed onto one row */
+    .toolbar {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-3);
+      margin-bottom: var(--space-5);
+    }
+
+    /* dates sit under the role rather than fighting it for width */
+    .role-head {
+      grid-template-columns: 1fr;
+      row-gap: var(--space-1);
+    }
+
+    .dates {
+      white-space: normal;
+    }
+
+    /* wrap between contact items, never inside an address */
+    .contact-line > * {
+      white-space: nowrap;
+    }
+  }
+
   @media print {
     @page {
       margin: 0.55in 0.6in;

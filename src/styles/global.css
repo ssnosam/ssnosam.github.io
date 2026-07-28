@@ -57,6 +57,7 @@ body {
   font-size: 1.0625rem;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  overflow-wrap: break-word;
 
   /* Faint grid-paper backdrop, echoing the notebook feel of Shelby's decks. */
   background-color: var(--color-bg);
@@ -111,6 +112,22 @@ a:hover {
 
 section {
   padding: var(--space-8) 0;
+}
+
+/* Keep the sticky bar from covering a heading when jumping to an anchor. */
+section[id] {
+  scroll-margin-top: 5rem;
+}
+
+@media (max-width: 760px) {
+  section {
+    padding: var(--space-6) 0;
+  }
+
+  /* the bar isn't pinned here, so anchors only need a little breathing room */
+  section[id] {
+    scroll-margin-top: var(--space-4);
+  }
 }
 
 /* Marker-pen highlight behind heading text. The uneven gradient stops and
