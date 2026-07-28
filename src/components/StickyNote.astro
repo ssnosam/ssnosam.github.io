@@ -52,6 +52,7 @@ const { rotate = -4, class: className = '' } = Astro.props;
     color: var(--color-ink);
     text-align: center;
     transform: rotate(-1.2deg);
-    text-wrap: balance;
+    /* balancing strands short words onto their own line; let it wrap plainly */
+    text-wrap: pretty;
   }
 </style>
