@@ -35,17 +35,16 @@ import Polaroid from './Polaroid.astro';
       <ResumeCTA />
     </div>
 
-    <div class="about-side">
-      <div class="about-media">
-        <Polaroid
-          src="/shelby.jpg"
-          alt="Shelby Mason bundled up in a winter coat, with a city skyline behind her"
-          rotate={-3}
-        />
-        <StickyNote rotate={5} class="about-note">Hi there, I'm Shelby :)</StickyNote>
-      </div>
+    <div class="about-media">
+      <Polaroid
+        src="/shelby.jpg"
+        alt="Shelby Mason bundled up in a winter coat, with a city skyline behind her"
+        rotate={-3}
+      />
+      <StickyNote rotate={5} class="about-note">Hi there, I'm Shelby :)</StickyNote>
+    </div>
 
-      <div class="about-lists">
+    <div class="about-lists">
         <div>
           <h3>Expertise</h3>
           <ul>
@@ -71,17 +70,36 @@ import Polaroid from './Polaroid.astro';
               ))
             }
           </ul>
-        </div>
       </div>
     </div>
   </div>
 </section>
 
 <style>
+  /* Three siblings placed explicitly, so the photo can move above the copy
+     on narrow screens without disturbing the two-column desktop layout. */
   .about-grid {
     display: grid;
     grid-template-columns: 3fr 2fr;
-    gap: var(--space-7);
+    column-gap: var(--space-7);
+    row-gap: var(--space-6);
+    align-items: start;
+  }
+
+  .prose {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+  }
+
+  .about-media {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+  }
+
+  .about-lists {
+    grid-column: 2;
+    grid-row: 2;
   }
 
   .tagline {
@@ -121,13 +139,6 @@ import Polaroid from './Polaroid.astro';
     line-height: 1;
     color: var(--color-accent-soft);
     margin: var(--space-4) 0 var(--space-3);
-  }
-
-  .about-side {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: var(--space-6);
   }
 
   /* the note overlaps the photo's lower corner, like it was stuck on after */
@@ -198,15 +209,25 @@ import Polaroid from './Polaroid.astro';
   @media (max-width: 800px) {
     .about-grid {
       grid-template-columns: 1fr;
-      gap: var(--space-5);
+      row-gap: var(--space-5);
     }
 
-    .about-side {
-      align-items: flex-start;
-    }
-
+    /* photo and note lead, then the copy, then the lists */
     .about-media {
-      margin: 0 auto;
+      grid-column: 1;
+      grid-row: 1;
+      justify-self: center;
+      margin: 0 auto var(--space-2);
+    }
+
+    .prose {
+      grid-column: 1;
+      grid-row: 2;
+    }
+
+    .about-lists {
+      grid-column: 1;
+      grid-row: 3;
     }
 
     /* the note's overhang runs off a phone screen, so tuck it in closer */
