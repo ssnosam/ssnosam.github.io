@@ -9,17 +9,23 @@ const { entry } = Astro.props;
 const { company, role, startDate, endDate, note } = entry.data;
 const { Content } = await render(entry);
 
+// an open end date means this is the role Shelby holds today
+const isCurrent = endDate === null;
+
 function formatDate(date: Date | null) {
   if (!date) return 'Present';
   return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' });
 }
 ---
 
-<article class="timeline-item">
+<article class={`timeline-item ${isCurrent ? 'is-current' : ''}`}>
   <div class="timeline-marker" aria-hidden="true"></div>
   <div class="timeline-body">
     <div class="timeline-header">
-      <h3>{company}</h3>
+      <div class="company-line">
+        <h3>{company}</h3>
+        {isCurrent && <span class="current-badge">Current</span>}
+      </div>
       <span class="dates">{formatDate(startDate)} – {formatDate(endDate)}</span>
     </div>
     <p class="role">{role}</p>
@@ -55,6 +61,36 @@ function formatDate(date: Date | null) {
     border-radius: 50%;
     background: var(--color-accent);
     margin-top: 0.2rem;
+  }
+
+  /* the role Shelby holds now: a halo on the marker and a small badge */
+  .is-current .timeline-marker {
+    box-shadow: 0 0 0 5px var(--color-accent-wash);
+  }
+
+  .company-line {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .current-badge {
+    font-family: var(--font-body);
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: var(--color-accent-ink);
+    background: var(--color-accent-wash);
+    border: 1px solid var(--color-highlight);
+    border-radius: var(--radius-pill);
+    padding: 0.15rem 0.6rem;
+    white-space: nowrap;
+  }
+
+  .is-current .timeline-header h3 {
+    font-weight: 500;
   }
 
   .timeline-header {
