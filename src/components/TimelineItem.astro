@@ -19,14 +19,12 @@ function formatDate(date: Date | null) {
 ---
 
 <article class={`timeline-item ${isCurrent ? 'is-current' : ''}`}>
+  <p class="dates">{formatDate(startDate)} – {formatDate(endDate)}</p>
   <div class="timeline-marker" aria-hidden="true"></div>
   <div class="timeline-body">
-    <div class="timeline-header">
-      <div class="company-line">
-        <h3>{company}</h3>
-        {isCurrent && <span class="current-badge">Current</span>}
-      </div>
-      <span class="dates">{formatDate(startDate)} – {formatDate(endDate)}</span>
+    <div class="company-line">
+      <h3>{company}</h3>
+      {isCurrent && <span class="current-badge">Current</span>}
     </div>
     <p class="role">{role}</p>
     {note && <p class="note">{note}</p>}
@@ -37,10 +35,13 @@ function formatDate(date: Date | null) {
 </article>
 
 <style>
+  /* dates | marker rail | body */
   .timeline-item {
+    --dates-col: 9.5rem;
+    --rail-gap: var(--space-4);
     display: grid;
-    grid-template-columns: 1.25rem 1fr;
-    gap: var(--space-4);
+    grid-template-columns: var(--dates-col) 1.25rem 1fr;
+    column-gap: var(--rail-gap);
     padding-bottom: var(--space-6);
     position: relative;
   }
@@ -48,7 +49,8 @@ function formatDate(date: Date | null) {
   .timeline-item:not(:last-child)::before {
     content: '';
     position: absolute;
-    left: 0.5625rem;
+    /* centre the rail under the marker, past the dates column */
+    left: calc(var(--dates-col) + var(--rail-gap) + 0.5625rem);
     top: 1.5rem;
     bottom: 0;
     width: 2px;
@@ -89,27 +91,24 @@ function formatDate(date: Date | null) {
     white-space: nowrap;
   }
 
-  .is-current .timeline-header h3 {
+  .is-current .company-line h3 {
     font-weight: 500;
   }
 
-  .timeline-header {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: var(--space-2);
-  }
-
-  .timeline-header h3 {
+  .company-line h3 {
     margin: 0;
     font-size: 1.2rem;
   }
 
   .dates {
+    grid-column: 1;
+    margin: 0;
+    padding-top: 0.15rem;
+    text-align: right;
     font-size: 0.85rem;
+    line-height: 1.45;
     color: var(--color-text-muted);
-    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
   }
 
   .role {
@@ -147,5 +146,34 @@ function formatDate(date: Date | null) {
 
   .timeline-body :global(li)::marker {
     color: var(--color-accent);
+  }
+
+  /* too narrow for a dates column on a phone: stack the date above the role */
+  @media (max-width: 640px) {
+    .timeline-item {
+      grid-template-columns: 1.25rem 1fr;
+    }
+
+    .timeline-item:not(:last-child)::before {
+      left: 0.5625rem;
+    }
+
+    .timeline-marker {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .dates {
+      grid-column: 2;
+      grid-row: 1;
+      text-align: left;
+      padding-top: 0.15rem;
+      margin-bottom: var(--space-1);
+    }
+
+    .timeline-body {
+      grid-column: 2;
+      grid-row: 2;
+    }
   }
 </style>

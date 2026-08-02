@@ -21,7 +21,9 @@ entries.sort((a, b) => b.data.startDate.valueOf() - a.data.startDate.valueOf());
 <style>
   .timeline {
     margin-top: var(--space-5);
-    max-width: var(--max-width-prose);
+    /* wider than plain prose, since the dates column now takes a share of it,
+       leaving the descriptions at a comfortable measure */
+    max-width: 47rem;
   }
 
   .heading-emoji {
