@@ -5,7 +5,7 @@ export const site = {
   email: 'hello@shelby-mason.com',
   location: 'Portland, Oregon',
   description:
-    "I'm a curious and creative person who is deeply interested in people and communities, understanding their experiences and needs, and working with diverse teams to create smart solutions.",
+    "I'm a curious person drawn to understanding people and their experiences. I like learning how things work, being creative, and finding ways to make life easier for myself and others. I believe that good design can help provide a sense of peace.",
   social: {
     linkedin: 'https://www.linkedin.com/in/ssnosam/',
     github: 'https://github.com/ssnosam',
