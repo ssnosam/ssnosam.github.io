@@ -21,6 +21,11 @@ const principles = [
       <span class="highlight">Design philosophy</span>
       <span class="heading-emoji" aria-hidden="true">✨</span>
     </h2>
+    <p class="lead">
+      I work closely with customers, product managers, and engineers to validate hypotheses and
+      proposed solutions. It's a multidisciplinary effort grounded in empathy, curiosity, and
+      iteration.
+    </p>
     <div class="principles">
       {
         principles.map((p) => (
@@ -35,14 +40,20 @@ const principles = [
 </section>
 
 <style>
+  .lead {
+    font-size: var(--text-lg);
+    line-height: var(--leading-body);
+    margin: 0;
+  }
+
   .principles {
     display: grid;
     gap: var(--space-5);
-    margin: var(--space-5) 0;
+    margin: var(--space-6) 0 0;
   }
 
   .principle h3 {
-    font-size: 1.1rem;
+    font-size: var(--text-h3);
     margin-bottom: var(--space-2);
   }
 
@@ -51,7 +62,7 @@ const principles = [
   }
 
   .heading-emoji {
-    font-size: 0.6em;
+    font-size: 0.55em;
     vertical-align: middle;
   }
 </style>

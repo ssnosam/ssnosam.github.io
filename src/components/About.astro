@@ -104,7 +104,8 @@ import Polaroid from './Polaroid.astro';
 
   .tagline {
     font-family: var(--font-display);
-    font-size: 1.25rem;
+    font-size: var(--text-h3);
+    line-height: var(--leading-snug);
     color: var(--color-text);
   }
 
@@ -134,8 +135,8 @@ import Polaroid from './Polaroid.astro';
   }
 
   .tilde {
-    font-family: var(--font-hand);
-    font-size: 1.6rem;
+    font-family: var(--font-display);
+    font-size: var(--text-h3);
     line-height: 1;
     color: var(--color-accent-soft);
     margin: var(--space-4) 0 var(--space-3);
@@ -163,11 +164,13 @@ import Polaroid from './Polaroid.astro';
   }
 
   .about-lists h3 {
-    font-size: 1rem;
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
+    letter-spacing: var(--tracking-label);
     color: var(--color-text-muted);
-    margin-bottom: var(--space-2);
+    margin-bottom: var(--space-3);
   }
 
   .about-lists > div {
@@ -189,7 +192,7 @@ import Polaroid from './Polaroid.astro';
     border: 1px solid var(--color-border);
     border-radius: var(--radius-pill);
     padding: var(--space-1) var(--space-3);
-    font-size: 0.9rem;
+    font-size: var(--text-xs);
   }
 
   .education-list li {
@@ -201,9 +204,13 @@ import Polaroid from './Polaroid.astro';
     padding: 0;
   }
 
+  .education-list li {
+    font-size: var(--text-sm);
+  }
+
   .education-list .detail {
     color: var(--color-text-muted);
-    font-size: 0.85rem;
+    font-size: var(--text-xs);
   }
 
   @media (max-width: 800px) {
