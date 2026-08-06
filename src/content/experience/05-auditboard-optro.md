@@ -6,7 +6,7 @@ endDate: null
 note: "Formerly AuditBoard, which was acquired and rebranded to Optro during this role"
 ---
 
-As a member of the design team at Optro, responsible for the user experience of multiple platform products.
+As a member of the design team at Optro, I am responsible for the user experience of multiple product solutions.
 
 - Partnering with customers and cross-disciplinary teammates to understand and address user pain through investigating, developing, testing, and iterating on product solutions
 - Working to help move teams from working in siloed experiences and tooling to more collaborative processes
