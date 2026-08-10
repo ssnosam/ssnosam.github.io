@@ -1,0 +1,186 @@
+---
+/**
+ * Brief page-load animation: a Dutch rabbit and a Siamese cat chasing each
+ * other in a circle. It dismisses itself in CSS, so a JS failure can never
+ * leave a visitor staring at a covered page.
+ */
+---
+
+<div class="loader" id="site-loader" aria-hidden="true">
+  <div class="orbit">
+    <div class="orbiter orbiter-rabbit">
+      <span class="critter">
+        <svg viewBox="0 0 100 100" width="80" height="80" role="img" aria-label="">
+          <!-- Dutch rabbit: dark head and hindquarters, white saddle and blaze -->
+          <g>
+            <!-- ears -->
+            <ellipse cx="60" cy="22" rx="5.5" ry="15" fill="#3c3138" transform="rotate(-14 60 22)" />
+            <ellipse cx="72" cy="24" rx="5.5" ry="14" fill="#3c3138" transform="rotate(6 72 24)" />
+            <ellipse cx="60" cy="23" rx="2.6" ry="10" fill="#e7b9c4" transform="rotate(-14 60 23)" />
+            <ellipse cx="72" cy="25" rx="2.6" ry="9" fill="#e7b9c4" transform="rotate(6 72 25)" />
+            <!-- body: white saddle -->
+            <ellipse cx="42" cy="63" rx="26" ry="19" fill="#ffffff" />
+            <!-- dark hindquarter -->
+            <path d="M18 63c0-10 6-18 14-19-6 6-8 12-8 19s2 13 8 19c-8-1-14-9-14-19z" fill="#3c3138" />
+            <ellipse cx="24" cy="63" rx="10" ry="17" fill="#3c3138" />
+            <!-- tail -->
+            <circle cx="15" cy="57" r="6" fill="#ffffff" />
+            <!-- head -->
+            <circle cx="66" cy="47" r="18" fill="#3c3138" />
+            <!-- white blaze -->
+            <path d="M66 30c4 0 6 4 6 9s-2 9-2 13 3 6 3 9c0 3-3 5-7 5s-7-2-7-5c0-3 3-5 3-9s-2-8-2-13 2-9 6-9z" fill="#ffffff" />
+            <!-- eye + nose -->
+            <circle cx="76" cy="44" r="2.9" fill="#1d181c" />
+            <circle cx="77" cy="43" r="0.9" fill="#ffffff" opacity="0.85" />
+            <circle cx="66" cy="58" r="2.2" fill="#e0879b" />
+            <!-- front foot -->
+            <ellipse cx="56" cy="78" rx="7" ry="4.5" fill="#ffffff" />
+          </g>
+        </svg>
+      </span>
+    </div>
+
+    <div class="orbiter orbiter-cat">
+      <span class="critter">
+        <svg viewBox="0 0 100 100" width="80" height="80" role="img" aria-label="">
+          <!-- Siamese cat: cream coat with dark points on ears, mask, paws, tail -->
+          <g>
+            <!-- tail -->
+            <path
+              d="M20 62c-12 2-16-10-9-17 5-5 12-3 13 3"
+              fill="none"
+              stroke="#4a3b40"
+              stroke-width="7"
+              stroke-linecap="round"
+            />
+            <!-- body -->
+            <ellipse cx="45" cy="64" rx="25" ry="17" fill="#f2e4d4" />
+            <!-- haunch shading -->
+            <ellipse cx="30" cy="66" rx="12" ry="14" fill="#e8d6c2" />
+            <!-- paws -->
+            <ellipse cx="58" cy="79" rx="7" ry="4.5" fill="#4a3b40" />
+            <ellipse cx="42" cy="80" rx="7" ry="4.5" fill="#4a3b40" />
+            <!-- ears -->
+            <path d="M56 33l3-16 11 11z" fill="#4a3b40" />
+            <path d="M84 34l1-16-12 9z" fill="#4a3b40" />
+            <!-- head -->
+            <circle cx="70" cy="45" r="18" fill="#f2e4d4" />
+            <!-- dark face mask -->
+            <ellipse cx="72" cy="52" rx="12" ry="10" fill="#4a3b40" opacity="0.92" />
+            <!-- eyes -->
+            <ellipse cx="63" cy="42" rx="3.6" ry="2.8" fill="#6f9fd0" transform="rotate(-12 63 42)" />
+            <ellipse cx="77" cy="41" rx="3.6" ry="2.8" fill="#6f9fd0" transform="rotate(8 77 41)" />
+            <circle cx="63" cy="42" r="1.3" fill="#20303f" />
+            <circle cx="77" cy="41" r="1.3" fill="#20303f" />
+            <!-- muzzle -->
+            <circle cx="72" cy="50" r="1.9" fill="#e0879b" />
+          </g>
+        </svg>
+      </span>
+    </div>
+  </div>
+
+  <p class="loader-note">just a moment</p>
+</div>
+
+<script is:inline>
+  (function () {
+    var el = document.getElementById('site-loader');
+    if (!el) return;
+    try {
+      sessionStorage.setItem('sm-loader-seen', '1');
+    } catch (e) {
+      /* private mode: the loader simply shows again next time */
+    }
+    // remove it from the document once its fade-out has finished
+    window.setTimeout(function () {
+      el.remove();
+    }, 2000);
+  })();
+</script>
+
+<style>
+  .loader {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-5);
+    background: var(--color-bg);
+    /* dismisses on its own, with or without JavaScript */
+    animation: loader-out 1.5s ease-in 1.05s forwards;
+  }
+
+  .orbit {
+    position: relative;
+    width: 210px;
+    height: 210px;
+  }
+
+  .orbiter {
+    position: absolute;
+    inset: 0;
+    animation: orbit-spin 2.6s linear infinite;
+  }
+
+  /* half a lap apart, so they face each other across the circle */
+  .orbiter-cat {
+    animation-delay: -1.3s;
+  }
+
+  .critter {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    margin-left: -40px;
+    display: block;
+    /* cancel the parent's rotation so each animal stays upright */
+    animation: orbit-spin 2.6s linear infinite reverse;
+  }
+
+  /* must match the parent's offset, or the counter-rotation lands 180 out
+     and the cat rides upside down */
+  .orbiter-cat .critter {
+    animation-delay: -1.3s;
+  }
+
+  .orbiter-rabbit .critter svg {
+    transform: scaleX(-1);
+  }
+
+  .loader-note {
+    margin: 0;
+    font-family: var(--font-hand);
+    font-size: 1.35rem;
+    color: var(--color-text-muted);
+  }
+
+  @keyframes orbit-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes loader-out {
+    to {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+  }
+
+  /* Returning within the same tab session, or preferring less motion:
+     skip the animation entirely. */
+  :global(html.loader-seen) .loader {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .loader {
+      display: none;
+    }
+  }
+</style>

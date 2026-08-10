@@ -1,0 +1,75 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import StickyNote from '../components/StickyNote.astro';
+import { site } from '../data/site.config';
+---
+
+<BaseLayout
+  title={`Work Examples | ${site.name}`}
+  description="Selected projects and case studies from Shelby Mason, Senior Product Designer. Currently in progress."
+>
+  <Nav />
+  <main>
+    <section id="work">
+      <div class="container work-grid">
+        <div class="prose">
+          <h2><span class="highlight">Work Examples</span></h2>
+          <p class="lead">
+            This is where I'll be sharing my best projects and case studies: the problems, the
+            process, and what I learned along the way.
+          </p>
+          <p>
+            I'm crafting these now and taking the time to tell each story properly. In the meantime,
+            my <a href="/resume">résumé</a> covers the work in brief, and I'm always happy to walk
+            through any of it in person.
+          </p>
+          <a href={`mailto:${site.email}`} class="btn">Ask me about my work</a>
+        </div>
+
+        <div class="work-aside">
+          <StickyNote rotate={-5}>Under construction!</StickyNote>
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+  .work-grid {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    column-gap: var(--space-7);
+    align-items: start;
+  }
+
+  .lead {
+    font-size: var(--text-lg);
+    line-height: var(--leading-body);
+  }
+
+  .work-aside {
+    display: flex;
+    justify-content: center;
+    padding-top: var(--space-4);
+  }
+
+  @media (max-width: 800px) {
+    .work-grid {
+      grid-template-columns: 1fr;
+      row-gap: var(--space-6);
+    }
+
+    .work-aside {
+      grid-row: 1;
+      justify-content: flex-start;
+      padding-top: 0;
+    }
+
+    .prose {
+      grid-row: 2;
+    }
+  }
+</style>
