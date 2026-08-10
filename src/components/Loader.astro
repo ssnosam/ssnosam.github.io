@@ -144,7 +144,8 @@ const BAR = { x: 22, y: 12, w: 22, h: 5 };
   }
 
   .scene {
-    width: min(512px, 88vw);
+    /* 384 is 6x the 64-pixel artboard, so pixels stay square and even */
+    width: min(384px, 86vw);
     height: auto;
     /* keep the pixels hard-edged when the sprite is scaled up */
     image-rendering: pixelated;
@@ -187,7 +188,7 @@ const BAR = { x: 22, y: 12, w: 22, h: 5 };
   .loader-note {
     margin: 0;
     font-family: var(--font-hand);
-    font-size: 1.3rem;
+    font-size: 1.15rem;
     color: var(--color-text-muted);
   }
 
