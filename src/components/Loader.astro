@@ -1,111 +1,250 @@
 ---
 /**
  * Brief page-load animation: a Dutch rabbit and a Siamese cat circling each
- * other, painted in a loose watercolour style. It dismisses itself in CSS, so
- * a JS failure can never leave a visitor staring at a covered page.
+ * other, painted as loose watercolour studies. Original drawings; the painterly
+ * treatment (layered washes, tonal modelling, soft lost edges) follows the
+ * conventions of the medium rather than any particular artist's work.
+ *
+ * It dismisses itself in CSS, so a JS failure can never leave a visitor
+ * staring at a covered page.
  */
 ---
 
 <div class="loader" id="site-loader" aria-hidden="true">
-  <!-- Filters and artwork live here once and are referenced by <use> below,
-       so each animal can be painted twice: a soft bleed under a crisper pass. -->
   <svg class="loader-defs" width="0" height="0" aria-hidden="true" focusable="false">
     <defs>
-      <!-- ragged, hand-painted edges plus a mottling of pigment -->
+      <!-- ── washes ─────────────────────────────────────────────── -->
+      <linearGradient id="catCoat" x1="0.2" y1="0" x2="0.85" y2="1">
+        <stop offset="0" stop-color="#fbf3e8" />
+        <stop offset="0.55" stop-color="#eaddcb" />
+        <stop offset="1" stop-color="#c9b6a4" />
+      </linearGradient>
+      <linearGradient id="catPoint" x1="0.3" y1="0" x2="0.8" y2="1">
+        <stop offset="0" stop-color="#6d5761" />
+        <stop offset="0.6" stop-color="#4a3944" />
+        <stop offset="1" stop-color="#2e2129" />
+      </linearGradient>
+      <radialGradient id="catEye" cx="0.4" cy="0.35" r="0.75">
+        <stop offset="0" stop-color="#cfe4f4" />
+        <stop offset="0.55" stop-color="#7fa9d2" />
+        <stop offset="1" stop-color="#3f6690" />
+      </radialGradient>
+
+      <linearGradient id="bunWhite" x1="0.25" y1="0" x2="0.8" y2="1">
+        <stop offset="0" stop-color="#fdfaf6" />
+        <stop offset="0.6" stop-color="#efe6df" />
+        <stop offset="1" stop-color="#cfc2bb" />
+      </linearGradient>
+      <linearGradient id="bunDark" x1="0.25" y1="0" x2="0.85" y2="1">
+        <stop offset="0" stop-color="#6b4b3c" />
+        <stop offset="0.55" stop-color="#4a3227" />
+        <stop offset="1" stop-color="#2c1d17" />
+      </linearGradient>
+      <linearGradient id="bunEar" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#5c4034" />
+        <stop offset="1" stop-color="#33221b" />
+      </linearGradient>
+      <radialGradient id="groundShade" cx="0.5" cy="0.5" r="0.5">
+        <stop offset="0" stop-color="#b9a9a4" stop-opacity="0.5" />
+        <stop offset="1" stop-color="#b9a9a4" stop-opacity="0" />
+      </radialGradient>
+
+      <!-- ── paint behaviour ────────────────────────────────────── -->
+      <!-- ragged edge plus granulation, the pigment settling into paper -->
       <filter id="wc-paint" x="-30%" y="-30%" width="160%" height="160%">
-        <feTurbulence type="fractalNoise" baseFrequency="0.055" numOctaves="3" seed="5" result="warp" />
+        <feTurbulence type="fractalNoise" baseFrequency="0.045" numOctaves="4" seed="5" result="warp" />
         <feDisplacementMap
           in="SourceGraphic"
           in2="warp"
-          scale="3.2"
+          scale="2.6"
           xChannelSelector="R"
           yChannelSelector="G"
           result="ragged"
         />
-        <feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="4" seed="17" result="grain" />
+        <feTurbulence type="fractalNoise" baseFrequency="0.55" numOctaves="5" seed="21" result="grain" />
         <feColorMatrix in="grain" type="saturate" values="0" result="greyGrain" />
         <feComponentTransfer in="greyGrain" result="softGrain">
-          <feFuncA type="linear" slope="0.42" intercept="0" />
+          <feFuncA type="linear" slope="0.3" />
         </feComponentTransfer>
         <feComposite in="softGrain" in2="ragged" operator="in" result="grainInShape" />
         <feBlend in="ragged" in2="grainInShape" mode="multiply" />
       </filter>
 
-      <!-- pigment escaping past the line, the way a wet wash spreads -->
-      <filter id="wc-bleed" x="-40%" y="-40%" width="180%" height="180%">
-        <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="9" result="warp" />
+      <!-- a wet underwash spreading past the drawn edge -->
+      <filter id="wc-bleed" x="-45%" y="-45%" width="190%" height="190%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.016" numOctaves="2" seed="9" result="warp" />
         <feDisplacementMap
           in="SourceGraphic"
           in2="warp"
-          scale="7"
+          scale="8"
           xChannelSelector="R"
           yChannelSelector="G"
           result="spread"
         />
-        <feGaussianBlur in="spread" stdDeviation="1.8" />
+        <feGaussianBlur in="spread" stdDeviation="2.2" />
       </filter>
 
-      <!-- Dutch rabbit: dark head and hindquarters, white saddle and blaze -->
-      <g id="rabbit-art">
-        <ellipse cx="60" cy="22" rx="5.5" ry="15" fill="#4a3a44" transform="rotate(-14 60 22)" />
-        <ellipse cx="72" cy="24" rx="5.5" ry="14" fill="#4a3a44" transform="rotate(6 72 24)" />
-        <ellipse cx="60" cy="23" rx="2.6" ry="10" fill="#e6adbb" transform="rotate(-14 60 23)" />
-        <ellipse cx="72" cy="25" rx="2.6" ry="9" fill="#e6adbb" transform="rotate(6 72 25)" />
-        <ellipse cx="42" cy="63" rx="26" ry="19" fill="#fbf6f2" />
-        <ellipse cx="24" cy="63" rx="11" ry="17.5" fill="#4a3a44" />
-        <circle cx="15" cy="57" r="6.5" fill="#fbf6f2" />
-        <circle cx="66" cy="47" r="18" fill="#4a3a44" />
+      <!-- softens an overlaid wash so its edge dissolves instead of cutting -->
+      <filter id="wc-soft" x="-30%" y="-30%" width="160%" height="160%">
+        <feGaussianBlur stdDeviation="1.5" />
+      </filter>
+
+      <!-- ── Siamese cat, seated three-quarter ──────────────────── -->
+      <g id="cat-art">
+        <ellipse cx="52" cy="90" rx="30" ry="6" fill="url(#groundShade)" />
+
+        <!-- tail sweeping round the base -->
         <path
-          d="M66 30c4 0 6 4 6 9s-2 9-2 13 3 6 3 9c0 3-3 5-7 5s-7-2-7-5c0-3 3-5 3-9s-2-8-2-13 2-9 6-9z"
-          fill="#fbf6f2"
+          d="M26 86C12 86 6 74 12 66c4-6 12-6 15-1"
+          fill="none"
+          stroke="url(#catPoint)"
+          stroke-width="8"
+          stroke-linecap="round"
+          opacity="0.92"
         />
-        <circle cx="76" cy="44" r="2.9" fill="#241d22" />
-        <circle cx="77" cy="43" r="0.9" fill="#ffffff" opacity="0.8" />
-        <circle cx="66" cy="58" r="2.2" fill="#dd8298" />
-        <ellipse cx="56" cy="78" rx="7" ry="4.5" fill="#fbf6f2" />
+
+        <!-- body: haunch behind, chest rising to the shoulders -->
+        <path
+          d="M34 88c-9 0-15-9-13-20 2-13 10-23 22-27 9-3 18 0 22 8 5 10 4 24-3 32-6 7-18 8-28 7z"
+          fill="url(#catCoat)"
+        />
+        <!-- shadow side of the haunch, edge left soft -->
+        <path
+          d="M30 84c-6-3-8-12-5-21 3-8 8-14 14-17-6 8-9 17-9 24 0 6 1 11 3 15z"
+          fill="#b9a08d"
+          opacity="0.5"
+          filter="url(#wc-soft)"
+        />
+        <!-- chest highlight -->
+        <path d="M50 84c-3-9-2-19 3-26 4-5 9-7 13-6-7 4-12 12-13 20-1 5 0 9 1 12z" fill="#fdf7ee" opacity="0.75" filter="url(#wc-soft)" />
+
+        <!-- front paws -->
+        <path d="M40 88c-4 0-7-2-7-4s3-4 7-4 7 2 7 4-3 4-7 4z" fill="url(#catPoint)" opacity="0.9" />
+        <path d="M56 88c-4 0-7-2-7-4s3-4 7-4 7 2 7 4-3 4-7 4z" fill="url(#catPoint)" opacity="0.9" />
+
+        <!-- ears -->
+        <path d="M50 30c-1-8-2-14-1-16 2-1 8 4 13 9z" fill="url(#catPoint)" />
+        <path d="M82 31c2-8 3-13 2-15-2-1-8 3-13 8z" fill="url(#catPoint)" />
+        <path d="M53 27c-1-5-1-8 0-9 1 0 4 2 7 5z" fill="#c68f96" opacity="0.55" />
+        <path d="M79 28c1-5 2-8 1-9-1 0-4 2-7 4z" fill="#c68f96" opacity="0.55" />
+
+        <!-- head -->
+        <path
+          d="M66 20c10 0 17 8 17 18 0 11-8 18-17 18s-17-7-17-18c0-10 7-18 17-18z"
+          fill="url(#catCoat)"
+        />
+        <!-- point mask, soft at the top where it melts into the coat -->
+        <path
+          d="M66 28c8 0 14 6 14 14 0 8-6 14-14 14s-14-6-14-14c0-8 6-14 14-14z"
+          fill="url(#catPoint)"
+          opacity="0.82"
+          filter="url(#wc-soft)"
+        />
+        <!-- muzzle catching light -->
+        <path d="M66 44c5 0 8 3 8 6s-4 5-8 5-8-2-8-5 3-6 8-6z" fill="#f7ece0" opacity="0.85" filter="url(#wc-soft)" />
+
+        <!-- eyes: almond, iris wash, catchlight -->
+        <path d="M57 36c3-2 7-2 9 1-2 3-7 3-9-1z" fill="url(#catEye)" />
+        <path d="M75 36c3-3 8-3 10 0-3 3-8 3-10 0z" fill="url(#catEye)" />
+        <ellipse cx="61" cy="36.5" rx="1.5" ry="2" fill="#22303c" />
+        <ellipse cx="80" cy="36.5" rx="1.5" ry="2" fill="#22303c" />
+        <circle cx="60.4" cy="35.6" r="0.7" fill="#fff" opacity="0.9" />
+        <circle cx="79.4" cy="35.6" r="0.7" fill="#fff" opacity="0.9" />
+        <!-- brow shadows -->
+        <path d="M56 33c3-2 8-2 11 0" stroke="#3b2c35" stroke-width="0.9" fill="none" opacity="0.5" />
+        <path d="M74 33c3-2 8-2 11 0" stroke="#3b2c35" stroke-width="0.9" fill="none" opacity="0.5" />
+
+        <!-- nose -->
+        <path d="M66 46c1.6 0 2.6 1 2.6 2s-1.2 1.7-2.6 1.7-2.6-.7-2.6-1.7 1-2 2.6-2z" fill="#c2727f" />
+
+        <!-- whiskers, dry-brush light strokes -->
+        <g stroke="#fdf8f1" stroke-width="0.7" opacity="0.75" fill="none" stroke-linecap="round">
+          <path d="M60 49c-6 1-10 3-13 6" />
+          <path d="M60 51c-6 2-9 5-11 8" />
+          <path d="M72 49c6 1 10 3 13 6" />
+          <path d="M72 51c6 2 9 5 11 8" />
+        </g>
       </g>
 
-      <!-- Siamese cat: cream coat with dark points on ears, mask, paws, tail -->
-      <g id="cat-art">
+      <!-- ── Dutch rabbit, side view ────────────────────────────── -->
+      <g id="rabbit-art">
+        <ellipse cx="56" cy="84" rx="32" ry="5.5" fill="url(#groundShade)" />
+
+        <!-- ears rising from the head, not the back -->
+        <path d="M33 46c-4-11-5-21-2-25 3-3 7 4 9 14 1 6 2 11 2 14z" fill="url(#bunEar)" />
+        <path d="M45 45c1-11 3-20 6-23 4-2 5 5 3 14-1 6-3 10-5 13z" fill="url(#bunEar)" />
+        <path d="M35 42c-3-8-3-14-2-16 2-1 4 3 5 9z" fill="#c08d8d" opacity="0.4" />
+        <path d="M47 41c1-7 2-12 4-14 2-1 2 4 1 10z" fill="#c08d8d" opacity="0.4" />
+
+        <!-- body loaf, sitting behind the head -->
         <path
-          d="M20 62c-12 2-16-10-9-17 5-5 12-3 13 3"
-          fill="none"
-          stroke="#574349"
-          stroke-width="7"
-          stroke-linecap="round"
+          d="M50 45c16-2 32 2 39 11 6 8 3 19-7 23-12 4-26 2-34-2-4-2-5-8-4-16 1-8 3-14 6-16z"
+          fill="url(#bunWhite)"
         />
-        <ellipse cx="45" cy="64" rx="25" ry="17" fill="#efe0cd" />
-        <ellipse cx="30" cy="66" rx="12" ry="14" fill="#e3d0b9" />
-        <ellipse cx="58" cy="79" rx="7" ry="4.5" fill="#574349" />
-        <ellipse cx="42" cy="80" rx="7" ry="4.5" fill="#574349" />
-        <path d="M56 33l3-16 11 11z" fill="#574349" />
-        <path d="M84 34l1-16-12 9z" fill="#574349" />
-        <circle cx="70" cy="45" r="18" fill="#efe0cd" />
-        <ellipse cx="72" cy="52" rx="12" ry="10" fill="#574349" opacity="0.9" />
-        <ellipse cx="63" cy="42" rx="3.6" ry="2.8" fill="#7aa8d4" transform="rotate(-12 63 42)" />
-        <ellipse cx="77" cy="41" rx="3.6" ry="2.8" fill="#7aa8d4" transform="rotate(8 77 41)" />
-        <circle cx="63" cy="42" r="1.3" fill="#243544" />
-        <circle cx="77" cy="41" r="1.3" fill="#243544" />
-        <circle cx="72" cy="50" r="1.9" fill="#dd8298" />
+        <!-- chocolate saddle across the hindquarters -->
+        <path
+          d="M70 45c11 2 19 8 19 18 0 10-8 16-19 16-6 0-11-1-15-3 9-4 14-13 15-22 0-3 0-6 0-9z"
+          fill="url(#bunDark)"
+        />
+        <!-- the saddle edge broken where the wash ran out -->
+        <path
+          d="M68 46c2 6 2 13 0 20-2 7-6 13-11 16"
+          stroke="#4a3227"
+          stroke-width="2.2"
+          fill="none"
+          opacity="0.3"
+          filter="url(#wc-soft)"
+        />
+        <!-- belly shadow -->
+        <path d="M52 74c10 4 22 5 31 1-8 6-23 6-31-1z" fill="#9c8a80" opacity="0.4" filter="url(#wc-soft)" />
+
+        <!-- head: a separate mass, set forward of the shoulder -->
+        <path
+          d="M27 59c0-9 6-16 14-16 8 0 13 6 13 15 0 9-6 15-14 15-8 0-13-5-13-14z"
+          fill="url(#bunDark)"
+        />
+        <!-- white muzzle and chin, the blaze of a Dutch marking -->
+        <path
+          d="M27 58c0-6 3-11 8-13 2 5 2 11 1 17-1 6-3 10-6 11-2-2-3-8-3-15z"
+          fill="url(#bunWhite)"
+        />
+        <path d="M31 70c4 2 8 2 11 0-3 4-9 4-11 0z" fill="#8f7a6d" opacity="0.3" filter="url(#wc-soft)" />
+
+        <!-- eye on the dark cheek -->
+        <ellipse cx="41" cy="55" rx="4" ry="3.8" fill="#2a1b15" />
+        <ellipse cx="41" cy="55" rx="2.4" ry="2.2" fill="#120b08" />
+        <circle cx="40" cy="53.9" r="1" fill="#fff" opacity="0.85" />
+
+        <!-- nose and whiskers -->
+        <path d="M28 62c1.3 0 2 .7 2 1.4S29 65 28 65s-2-.6-2-1.3S26.7 62 28 62z" fill="#c2848c" />
+        <g stroke="#fdf8f1" stroke-width="0.6" opacity="0.55" fill="none" stroke-linecap="round">
+          <path d="M26 64c-5 0-8 1-11 3" />
+          <path d="M27 66c-4 1-7 3-9 5" />
+        </g>
+
+        <!-- front foot and cotton tail -->
+        <path d="M36 75c5-2 11-2 15 1-4 3-11 3-15-1z" fill="url(#bunWhite)" />
+        <circle cx="88" cy="66" r="6.5" fill="url(#bunWhite)" opacity="0.95" />
       </g>
+
     </defs>
   </svg>
 
   <div class="orbit">
     <div class="orbiter orbiter-rabbit">
       <span class="critter">
-        <svg viewBox="-12 -12 124 124" width="88" height="88" aria-hidden="true" focusable="false">
-          <use href="#rabbit-art" filter="url(#wc-bleed)" opacity="0.34"></use>
-          <use href="#rabbit-art" filter="url(#wc-paint)" opacity="0.94"></use>
+        <svg viewBox="-14 -14 128 128" width="118" height="118" aria-hidden="true" focusable="false">
+          <use href="#rabbit-art" filter="url(#wc-bleed)" opacity="0.3"></use>
+          <use href="#rabbit-art" filter="url(#wc-paint)"></use>
         </svg>
       </span>
     </div>
 
     <div class="orbiter orbiter-cat">
       <span class="critter">
-        <svg viewBox="-12 -12 124 124" width="88" height="88" aria-hidden="true" focusable="false">
-          <use href="#cat-art" filter="url(#wc-bleed)" opacity="0.34"></use>
-          <use href="#cat-art" filter="url(#wc-paint)" opacity="0.94"></use>
+        <svg viewBox="-14 -14 128 128" width="118" height="118" aria-hidden="true" focusable="false">
+          <use href="#cat-art" filter="url(#wc-bleed)" opacity="0.3"></use>
+          <use href="#cat-art" filter="url(#wc-paint)"></use>
         </svg>
       </span>
     </div>
@@ -153,35 +292,35 @@
 
   .orbit {
     position: relative;
-    width: 210px;
-    height: 210px;
+    width: 250px;
+    height: 250px;
   }
 
   .orbiter {
     position: absolute;
     inset: 0;
-    animation: orbit-spin 2.6s linear infinite;
+    animation: orbit-spin 2.8s linear infinite;
   }
 
   /* half a lap apart, so they face each other across the circle */
   .orbiter-cat {
-    animation-delay: -1.3s;
+    animation-delay: -1.4s;
   }
 
   .critter {
     position: absolute;
     top: 0;
     left: 50%;
-    margin-left: -44px;
+    margin-left: -59px;
     display: block;
     /* cancel the parent's rotation so each animal stays upright */
-    animation: orbit-spin 2.6s linear infinite reverse;
+    animation: orbit-spin 2.8s linear infinite reverse;
   }
 
   /* must match the parent's offset, or the counter-rotation lands 180 out
      and the cat rides upside down */
   .orbiter-cat .critter {
-    animation-delay: -1.3s;
+    animation-delay: -1.4s;
   }
 
   .orbiter-rabbit .critter svg {
