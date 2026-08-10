@@ -1,80 +1,111 @@
 ---
 /**
- * Brief page-load animation: a Dutch rabbit and a Siamese cat chasing each
- * other in a circle. It dismisses itself in CSS, so a JS failure can never
- * leave a visitor staring at a covered page.
+ * Brief page-load animation: a Dutch rabbit and a Siamese cat circling each
+ * other, painted in a loose watercolour style. It dismisses itself in CSS, so
+ * a JS failure can never leave a visitor staring at a covered page.
  */
 ---
 
 <div class="loader" id="site-loader" aria-hidden="true">
+  <!-- Filters and artwork live here once and are referenced by <use> below,
+       so each animal can be painted twice: a soft bleed under a crisper pass. -->
+  <svg class="loader-defs" width="0" height="0" aria-hidden="true" focusable="false">
+    <defs>
+      <!-- ragged, hand-painted edges plus a mottling of pigment -->
+      <filter id="wc-paint" x="-30%" y="-30%" width="160%" height="160%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.055" numOctaves="3" seed="5" result="warp" />
+        <feDisplacementMap
+          in="SourceGraphic"
+          in2="warp"
+          scale="3.2"
+          xChannelSelector="R"
+          yChannelSelector="G"
+          result="ragged"
+        />
+        <feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="4" seed="17" result="grain" />
+        <feColorMatrix in="grain" type="saturate" values="0" result="greyGrain" />
+        <feComponentTransfer in="greyGrain" result="softGrain">
+          <feFuncA type="linear" slope="0.42" intercept="0" />
+        </feComponentTransfer>
+        <feComposite in="softGrain" in2="ragged" operator="in" result="grainInShape" />
+        <feBlend in="ragged" in2="grainInShape" mode="multiply" />
+      </filter>
+
+      <!-- pigment escaping past the line, the way a wet wash spreads -->
+      <filter id="wc-bleed" x="-40%" y="-40%" width="180%" height="180%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="9" result="warp" />
+        <feDisplacementMap
+          in="SourceGraphic"
+          in2="warp"
+          scale="7"
+          xChannelSelector="R"
+          yChannelSelector="G"
+          result="spread"
+        />
+        <feGaussianBlur in="spread" stdDeviation="1.8" />
+      </filter>
+
+      <!-- Dutch rabbit: dark head and hindquarters, white saddle and blaze -->
+      <g id="rabbit-art">
+        <ellipse cx="60" cy="22" rx="5.5" ry="15" fill="#4a3a44" transform="rotate(-14 60 22)" />
+        <ellipse cx="72" cy="24" rx="5.5" ry="14" fill="#4a3a44" transform="rotate(6 72 24)" />
+        <ellipse cx="60" cy="23" rx="2.6" ry="10" fill="#e6adbb" transform="rotate(-14 60 23)" />
+        <ellipse cx="72" cy="25" rx="2.6" ry="9" fill="#e6adbb" transform="rotate(6 72 25)" />
+        <ellipse cx="42" cy="63" rx="26" ry="19" fill="#fbf6f2" />
+        <ellipse cx="24" cy="63" rx="11" ry="17.5" fill="#4a3a44" />
+        <circle cx="15" cy="57" r="6.5" fill="#fbf6f2" />
+        <circle cx="66" cy="47" r="18" fill="#4a3a44" />
+        <path
+          d="M66 30c4 0 6 4 6 9s-2 9-2 13 3 6 3 9c0 3-3 5-7 5s-7-2-7-5c0-3 3-5 3-9s-2-8-2-13 2-9 6-9z"
+          fill="#fbf6f2"
+        />
+        <circle cx="76" cy="44" r="2.9" fill="#241d22" />
+        <circle cx="77" cy="43" r="0.9" fill="#ffffff" opacity="0.8" />
+        <circle cx="66" cy="58" r="2.2" fill="#dd8298" />
+        <ellipse cx="56" cy="78" rx="7" ry="4.5" fill="#fbf6f2" />
+      </g>
+
+      <!-- Siamese cat: cream coat with dark points on ears, mask, paws, tail -->
+      <g id="cat-art">
+        <path
+          d="M20 62c-12 2-16-10-9-17 5-5 12-3 13 3"
+          fill="none"
+          stroke="#574349"
+          stroke-width="7"
+          stroke-linecap="round"
+        />
+        <ellipse cx="45" cy="64" rx="25" ry="17" fill="#efe0cd" />
+        <ellipse cx="30" cy="66" rx="12" ry="14" fill="#e3d0b9" />
+        <ellipse cx="58" cy="79" rx="7" ry="4.5" fill="#574349" />
+        <ellipse cx="42" cy="80" rx="7" ry="4.5" fill="#574349" />
+        <path d="M56 33l3-16 11 11z" fill="#574349" />
+        <path d="M84 34l1-16-12 9z" fill="#574349" />
+        <circle cx="70" cy="45" r="18" fill="#efe0cd" />
+        <ellipse cx="72" cy="52" rx="12" ry="10" fill="#574349" opacity="0.9" />
+        <ellipse cx="63" cy="42" rx="3.6" ry="2.8" fill="#7aa8d4" transform="rotate(-12 63 42)" />
+        <ellipse cx="77" cy="41" rx="3.6" ry="2.8" fill="#7aa8d4" transform="rotate(8 77 41)" />
+        <circle cx="63" cy="42" r="1.3" fill="#243544" />
+        <circle cx="77" cy="41" r="1.3" fill="#243544" />
+        <circle cx="72" cy="50" r="1.9" fill="#dd8298" />
+      </g>
+    </defs>
+  </svg>
+
   <div class="orbit">
     <div class="orbiter orbiter-rabbit">
       <span class="critter">
-        <svg viewBox="0 0 100 100" width="80" height="80" role="img" aria-label="">
-          <!-- Dutch rabbit: dark head and hindquarters, white saddle and blaze -->
-          <g>
-            <!-- ears -->
-            <ellipse cx="60" cy="22" rx="5.5" ry="15" fill="#3c3138" transform="rotate(-14 60 22)" />
-            <ellipse cx="72" cy="24" rx="5.5" ry="14" fill="#3c3138" transform="rotate(6 72 24)" />
-            <ellipse cx="60" cy="23" rx="2.6" ry="10" fill="#e7b9c4" transform="rotate(-14 60 23)" />
-            <ellipse cx="72" cy="25" rx="2.6" ry="9" fill="#e7b9c4" transform="rotate(6 72 25)" />
-            <!-- body: white saddle -->
-            <ellipse cx="42" cy="63" rx="26" ry="19" fill="#ffffff" />
-            <!-- dark hindquarter -->
-            <path d="M18 63c0-10 6-18 14-19-6 6-8 12-8 19s2 13 8 19c-8-1-14-9-14-19z" fill="#3c3138" />
-            <ellipse cx="24" cy="63" rx="10" ry="17" fill="#3c3138" />
-            <!-- tail -->
-            <circle cx="15" cy="57" r="6" fill="#ffffff" />
-            <!-- head -->
-            <circle cx="66" cy="47" r="18" fill="#3c3138" />
-            <!-- white blaze -->
-            <path d="M66 30c4 0 6 4 6 9s-2 9-2 13 3 6 3 9c0 3-3 5-7 5s-7-2-7-5c0-3 3-5 3-9s-2-8-2-13 2-9 6-9z" fill="#ffffff" />
-            <!-- eye + nose -->
-            <circle cx="76" cy="44" r="2.9" fill="#1d181c" />
-            <circle cx="77" cy="43" r="0.9" fill="#ffffff" opacity="0.85" />
-            <circle cx="66" cy="58" r="2.2" fill="#e0879b" />
-            <!-- front foot -->
-            <ellipse cx="56" cy="78" rx="7" ry="4.5" fill="#ffffff" />
-          </g>
+        <svg viewBox="-12 -12 124 124" width="88" height="88" aria-hidden="true" focusable="false">
+          <use href="#rabbit-art" filter="url(#wc-bleed)" opacity="0.34"></use>
+          <use href="#rabbit-art" filter="url(#wc-paint)" opacity="0.94"></use>
         </svg>
       </span>
     </div>
 
     <div class="orbiter orbiter-cat">
       <span class="critter">
-        <svg viewBox="0 0 100 100" width="80" height="80" role="img" aria-label="">
-          <!-- Siamese cat: cream coat with dark points on ears, mask, paws, tail -->
-          <g>
-            <!-- tail -->
-            <path
-              d="M20 62c-12 2-16-10-9-17 5-5 12-3 13 3"
-              fill="none"
-              stroke="#4a3b40"
-              stroke-width="7"
-              stroke-linecap="round"
-            />
-            <!-- body -->
-            <ellipse cx="45" cy="64" rx="25" ry="17" fill="#f2e4d4" />
-            <!-- haunch shading -->
-            <ellipse cx="30" cy="66" rx="12" ry="14" fill="#e8d6c2" />
-            <!-- paws -->
-            <ellipse cx="58" cy="79" rx="7" ry="4.5" fill="#4a3b40" />
-            <ellipse cx="42" cy="80" rx="7" ry="4.5" fill="#4a3b40" />
-            <!-- ears -->
-            <path d="M56 33l3-16 11 11z" fill="#4a3b40" />
-            <path d="M84 34l1-16-12 9z" fill="#4a3b40" />
-            <!-- head -->
-            <circle cx="70" cy="45" r="18" fill="#f2e4d4" />
-            <!-- dark face mask -->
-            <ellipse cx="72" cy="52" rx="12" ry="10" fill="#4a3b40" opacity="0.92" />
-            <!-- eyes -->
-            <ellipse cx="63" cy="42" rx="3.6" ry="2.8" fill="#6f9fd0" transform="rotate(-12 63 42)" />
-            <ellipse cx="77" cy="41" rx="3.6" ry="2.8" fill="#6f9fd0" transform="rotate(8 77 41)" />
-            <circle cx="63" cy="42" r="1.3" fill="#20303f" />
-            <circle cx="77" cy="41" r="1.3" fill="#20303f" />
-            <!-- muzzle -->
-            <circle cx="72" cy="50" r="1.9" fill="#e0879b" />
-          </g>
+        <svg viewBox="-12 -12 124 124" width="88" height="88" aria-hidden="true" focusable="false">
+          <use href="#cat-art" filter="url(#wc-bleed)" opacity="0.34"></use>
+          <use href="#cat-art" filter="url(#wc-paint)" opacity="0.94"></use>
         </svg>
       </span>
     </div>
@@ -92,7 +123,6 @@
     } catch (e) {
       /* private mode: the loader simply shows again next time */
     }
-    // remove it from the document once its fade-out has finished
     window.setTimeout(function () {
       el.remove();
     }, 2000);
@@ -112,6 +142,13 @@
     background: var(--color-bg);
     /* dismisses on its own, with or without JavaScript */
     animation: loader-out 1.5s ease-in 1.05s forwards;
+  }
+
+  .loader-defs {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
   }
 
   .orbit {
@@ -135,7 +172,7 @@
     position: absolute;
     top: 0;
     left: 50%;
-    margin-left: -40px;
+    margin-left: -44px;
     display: block;
     /* cancel the parent's rotation so each animal stays upright */
     animation: orbit-spin 2.6s linear infinite reverse;
