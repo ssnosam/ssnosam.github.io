@@ -12,12 +12,12 @@
 <div class="loader" id="site-loader" aria-hidden="true">
   <svg
     class="scene"
-    viewBox="0 0 320 132"
+    viewBox="0 0 320 150"
     width="320"
-    height="132"
+    height="150"
     fill="none"
     stroke="#2b2226"
-    stroke-width="3"
+    stroke-width="1.7"
     stroke-linecap="round"
     stroke-linejoin="round"
     aria-hidden="true"
@@ -26,74 +26,112 @@
     <defs>
       <!-- a plain rect does the wiping, so the fill keeps its round ends -->
       <clipPath id="barClip">
-        <rect class="clip-rect" x="112" y="66" width="96" height="18" />
+        <rect class="clip-rect" x="128" y="84" width="76" height="15" />
       </clipPath>
     </defs>
 
-    <!-- ── cat, sitting at the left, watching the bar ── -->
+    <!-- ── Siamese cat: lean seated profile, large ears, fine hatching
+             standing in for the points ── -->
     <g class="cat">
-      <!-- tail, hinged at the body -->
-      <path class="tail" d="M78 92c14 2 20-6 17-16" />
-      <!-- body -->
-      <path d="M44 94c-2-14 6-24 18-24s20 10 18 24z" fill="#fdf8f8" />
-      <!-- front paws -->
-      <path d="M54 94v-5M70 94v-5" stroke-width="2.4" />
-      <!-- ears first, so the head's fill hides where they join -->
-      <path d="M49 40l-3-14 15 8M75 40l3-14-15 8" fill="#fdf8f8" />
-      <!-- head -->
-      <circle cx="62" cy="52" r="18" fill="#fdf8f8" />
-      <!-- face -->
+      <!-- tail, hinged where it meets the haunch -->
+      <path class="tail" d="M88 114c12 1 18-6 17-15-1-6-5-9-9-8" stroke-width="1.6" />
+
+
+      <!-- body: narrow chest, haunch swelling behind -->
+      <path
+        d="M56 118c-4-13-3-26 3-34 5-6 13-8 20-6 9 2 14 10 14 20 0 8-2 15-5 20z"
+        fill="#fdf8f8"
+      />
+      <!-- haunch and foreleg contours -->
+      <path d="M82 118c2-9 3-18 1-25" stroke-width="0.9" opacity="0.6" />
+      <path d="M64 118v-11M72 118v-11" stroke-width="1.1" />
+
+      <!-- head, then ears over it: the ear fill covers the skull line so
+           they read as part of the head rather than floating above it -->
+      <ellipse cx="70" cy="70" rx="15" ry="16" fill="#fdf8f8" />
+      <path d="M56 60l-3-25 17 15" fill="#fdf8f8" />
+      <path d="M84 59l6-24-14 13" fill="#fdf8f8" />
+      <path d="M59 55l-2-13 8 8M82 54l3-12-7 6" stroke-width="0.8" opacity="0.7" />
+
+      <!-- almond eyes -->
       <g class="blink">
-        <path d="M55 50v3M69 50v3" stroke-width="2.6" />
+        <path d="M60 68c2-3 6-3 8 0-2 3-6 3-8 0zM74 68c2-3 6-3 8 0-2 3-6 3-8 0z" stroke-width="1.1" />
       </g>
-      <path d="M60.5 58h3l-1.5 2z" fill="#2b2226" stroke-width="1.6" />
-      <path d="M62 61c-2 2-5 1-5-1M62 61c2 2 5 1 5-1" stroke-width="1.8" />
-      <!-- whiskers -->
-      <g stroke-width="1.6">
-        <path d="M50 58l-11-3M50 62l-11 2M74 58l11-3M74 62l11 2" />
+      <circle cx="64" cy="68.2" r="0.9" fill="#2b2226" stroke="none" />
+      <circle cx="78" cy="68.2" r="0.9" fill="#2b2226" stroke="none" />
+
+      <!-- muzzle -->
+      <path d="M68.6 76h2.8l-1.4 1.8z" fill="#2b2226" stroke-width="0.9" />
+      <path d="M70 78c-1.6 1.8-4 1-4-1M70 78c1.6 1.8 4 1 4-1" stroke-width="0.9" />
+      <g stroke-width="0.7" opacity="0.8">
+        <path d="M58 76l-12-3M58 79l-11 3M82 76l12-3M82 79l11 3" />
+      </g>
+
+      <!-- whip shading: the mask and points, suggested rather than filled -->
+      <g stroke-width="0.7" opacity="0.5">
+        <path d="M60 60c3-2 6-3 10-3s7 1 10 3" />
+        <path d="M62 63c3-2 5-2 8-2s5 0 8 2" />
+        <path d="M86 110c2-6 2-12 1-17" />
+        <path d="M89 108c1-5 1-10 0-14" />
       </g>
     </g>
 
     <!-- ── loading bar ── -->
-    <rect x="112" y="66" width="96" height="18" rx="9" fill="#fdf8f8" />
+    <rect x="128" y="84" width="76" height="15" rx="7.5" fill="#fdf8f8" />
     <rect
       class="bar-fill"
-      x="112"
-      y="66"
-      width="96"
-      height="18"
-      rx="9"
+      x="128"
+      y="84"
+      width="76"
+      height="15"
+      rx="7.5"
       fill="#e7c3d2"
       stroke="none"
       clip-path="url(#barClip)"
     />
-    <rect x="112" y="66" width="96" height="18" rx="9" />
+    <rect x="128" y="84" width="76" height="15" rx="7.5" />
 
-    <!-- ── rabbit, sitting at the right, watching too ── -->
+    <!-- ── Dutch rabbit: compact seated form, saddle and blaze drawn as
+             boundaries rather than blocks of colour ── -->
     <g class="rabbit">
-      <!-- ears -->
-      <g class="ears">
-        <path d="M248 44c-4-13-4-24-1-26s7 8 8 20" fill="#fdf8f8" />
-        <path d="M262 42c2-13 5-23 8-24s3 10-1 21" fill="#fdf8f8" />
-      </g>
       <!-- body -->
-      <path d="M232 94c-2-15 8-26 22-26s24 11 22 26z" fill="#fdf8f8" />
+      <path
+        d="M226 118c-3-14 2-27 12-32 8-4 18-2 24 5 6 8 7 19 4 27z"
+        fill="#fdf8f8"
+      />
       <!-- cotton tail -->
-      <circle cx="279" cy="82" r="7" fill="#fdf8f8" />
-      <!-- head -->
-      <circle cx="250" cy="58" r="15" fill="#fdf8f8" />
-      <!-- face -->
-      <path d="M244 56v3" stroke-width="2.6" />
-      <path d="M238.5 62h3l-1.5 2z" fill="#2b2226" stroke-width="1.6" />
-      <g stroke-width="1.6">
-        <path d="M236 64l-10-2M236 67l-9 3" />
+      <circle cx="268" cy="104" r="6.5" fill="#fdf8f8" />
+      <!-- forelegs -->
+      <path d="M238 118v-9M250 118v-9" stroke-width="1.1" />
+
+      <!-- head, then ears over it -->
+      <ellipse cx="242" cy="76" rx="13" ry="12.5" fill="#fdf8f8" />
+      <g class="ears">
+        <path d="M238 68c-5-17-6-29-2-32 4-2 8 11 9 25" fill="#fdf8f8" />
+        <path d="M250 66c2-16 6-28 10-29 4 0 3 13-2 25" fill="#fdf8f8" />
+        <path d="M240 62c-3-11-4-19-2-21M250 60c2-11 4-18 6-19" stroke-width="0.8" opacity="0.7" />
       </g>
-      <!-- front paws -->
-      <path d="M244 94v-5M258 94v-5" stroke-width="2.4" />
+
+      <!-- the Dutch saddle boundary across the shoulder -->
+      <path d="M252 92c3 8 3 18 1 26" stroke-width="1" opacity="0.75" />
+
+      <!-- eye, nose, whiskers -->
+      <circle cx="236" cy="74" r="2.4" stroke-width="1.1" />
+      <circle cx="236" cy="74" r="0.9" fill="#2b2226" stroke="none" />
+      <path d="M230.4 81h2.4l-1.2 1.6z" fill="#2b2226" stroke-width="0.8" />
+      <g stroke-width="0.7" opacity="0.8">
+        <path d="M228 82l-11-2M228 85l-10 3" />
+      </g>
+
+      <!-- whip shading on the saddle -->
+      <g stroke-width="0.7" opacity="0.45">
+        <path d="M256 96c2 7 2 15 1 21" />
+        <path d="M260 99c1 6 1 12 0 17" />
+      </g>
     </g>
 
     <!-- ground line -->
-    <path d="M28 94h264" stroke-width="2.4" opacity="0.35" />
+    <path d="M30 118h262" stroke-width="1.2" opacity="0.4" />
   </svg>
 
   <p class="loader-note">just a moment</p>
