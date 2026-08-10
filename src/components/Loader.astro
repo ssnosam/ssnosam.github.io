@@ -1,7 +1,6 @@
 ---
 /**
- * Brief page-load animation: a Dutch rabbit and a Siamese cat circling each
- * other, painted as loose watercolour studies. Original drawings; the painterly
+ * Brief page-load animation: a Dutch rabbit chasing a Siamese cat, painted as loose watercolour studies. Original drawings; the painterly
  * treatment (layered washes, tonal modelling, soft lost edges) follows the
  * conventions of the medium rather than any particular artist's work.
  *
@@ -230,21 +229,21 @@
     </defs>
   </svg>
 
-  <div class="orbit">
-    <div class="orbiter orbiter-rabbit">
-      <span class="critter">
-        <svg viewBox="-14 -14 128 128" width="118" height="118" aria-hidden="true" focusable="false">
-          <use href="#rabbit-art" filter="url(#wc-bleed)" opacity="0.3"></use>
-          <use href="#rabbit-art" filter="url(#wc-paint)"></use>
+  <div class="chase">
+    <div class="runner runner-cat">
+      <span class="gait">
+        <svg viewBox="-14 -14 128 128" width="112" height="112" aria-hidden="true" focusable="false">
+          <use href="#cat-art" filter="url(#wc-bleed)" opacity="0.3"></use>
+          <use href="#cat-art" filter="url(#wc-paint)"></use>
         </svg>
       </span>
     </div>
 
-    <div class="orbiter orbiter-cat">
-      <span class="critter">
-        <svg viewBox="-14 -14 128 128" width="118" height="118" aria-hidden="true" focusable="false">
-          <use href="#cat-art" filter="url(#wc-bleed)" opacity="0.3"></use>
-          <use href="#cat-art" filter="url(#wc-paint)"></use>
+    <div class="runner runner-rabbit">
+      <span class="gait">
+        <svg viewBox="-14 -14 128 128" width="112" height="112" aria-hidden="true" focusable="false">
+          <use href="#rabbit-art" filter="url(#wc-bleed)" opacity="0.3"></use>
+          <use href="#rabbit-art" filter="url(#wc-paint)"></use>
         </svg>
       </span>
     </div>
@@ -290,41 +289,83 @@
     overflow: hidden;
   }
 
-  .orbit {
+  /* A straight run across the frame: the cat leads, the rabbit gives chase.
+     Travel is linear so the pace stays even; the bounce lives separately in
+     the gait, which keeps the motion fluid rather than mechanical. */
+  .chase {
+    --track: 360px;
     position: relative;
-    width: 250px;
-    height: 250px;
+    width: var(--track);
+    height: 150px;
+    overflow: hidden;
   }
 
-  .orbiter {
+  .runner {
     position: absolute;
-    inset: 0;
-    animation: orbit-spin 2.8s linear infinite;
+    bottom: 8px;
+    left: 0;
+    animation: run 2.9s linear infinite;
+    /* both start part-way along, so the pair is already on screen at load
+       rather than the rabbit trailing in from off-frame */
+    animation-delay: -0.62s;
   }
 
-  /* half a lap apart, so they face each other across the circle */
-  .orbiter-cat {
-    animation-delay: -1.4s;
+  /* a further head start, so the rabbit is always trailing */
+  .runner-cat {
+    animation-delay: -1.04s;
   }
 
-  .critter {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    margin-left: -59px;
+  .gait {
     display: block;
-    /* cancel the parent's rotation so each animal stays upright */
-    animation: orbit-spin 2.8s linear infinite reverse;
+    animation: pad 0.66s ease-in-out infinite alternate;
   }
 
-  /* must match the parent's offset, or the counter-rotation lands 180 out
-     and the cat rides upside down */
-  .orbiter-cat .critter {
-    animation-delay: -1.4s;
+  /* the rabbit hops: shorter cycle, higher arc */
+  .runner-rabbit .gait {
+    animation: hop 0.44s cubic-bezier(0.33, 0, 0.5, 1) infinite alternate;
   }
 
-  .orbiter-rabbit .critter svg {
+  .runner-rabbit .gait svg {
     transform: scaleX(-1);
+  }
+
+  @keyframes run {
+    from {
+      transform: translateX(-140px);
+    }
+    to {
+      transform: translateX(calc(var(--track) + 140px));
+    }
+  }
+
+  @keyframes pad {
+    from {
+      transform: translateY(1px);
+    }
+    to {
+      transform: translateY(-4px);
+    }
+  }
+
+  @keyframes hop {
+    from {
+      transform: translateY(4px) rotate(-1.5deg);
+    }
+    to {
+      transform: translateY(-10px) rotate(2deg);
+    }
+  }
+
+  @media (max-width: 760px) {
+    .chase {
+      --track: 250px;
+      height: 130px;
+    }
+
+    .runner svg {
+      width: 92px;
+      height: 92px;
+    }
   }
 
   .loader-note {
@@ -332,12 +373,6 @@
     font-family: var(--font-hand);
     font-size: 1.35rem;
     color: var(--color-text-muted);
-  }
-
-  @keyframes orbit-spin {
-    to {
-      transform: rotate(360deg);
-    }
   }
 
   @keyframes loader-out {
