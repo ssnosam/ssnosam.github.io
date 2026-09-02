@@ -6,10 +6,20 @@ import { site, skills, tools, education, personalInterests } from '../data/site.
 const entries = await getCollection('experience');
 entries.sort((a, b) => b.data.startDate.valueOf() - a.data.startDate.valueOf());
 
+const volunteerEntries = await getCollection('volunteering');
+volunteerEntries.sort((a, b) => b.data.startDate.valueOf() - a.data.startDate.valueOf());
+
 // Pre-render each entry's markdown body so the résumé shows the same
 // detail as the timeline on the homepage.
 const roles = await Promise.all(
   entries.map(async (entry) => ({
+    data: entry.data,
+    Content: (await render(entry)).Content,
+  }))
+);
+
+const volunteerRoles = await Promise.all(
+  volunteerEntries.map(async (entry) => ({
     data: entry.data,
     Content: (await render(entry)).Content,
   }))
@@ -55,6 +65,25 @@ function formatDate(date: Date | null) {
                 </span>
               </div>
               {data.note && <p class="note">{data.note}</p>}
+              <div class="role-body">
+                <Content />
+              </div>
+            </article>
+          ))
+        }
+
+        <h2 class="section-heading volunteer-heading">Volunteering</h2>
+        {
+          volunteerRoles.map(({ data, Content }) => (
+            <article class="role">
+              <div class="role-head">
+                <h3>
+                  {data.role} at {data.organization}
+                </h3>
+                <span class="dates">
+                  {formatDate(data.startDate)} to {formatDate(data.endDate)}
+                </span>
+              </div>
               <div class="role-body">
                 <Content />
               </div>
@@ -192,6 +221,11 @@ function formatDate(date: Date | null) {
     padding-bottom: var(--space-2);
     margin-bottom: var(--space-4);
     border-bottom: 1px solid var(--color-border);
+  }
+
+  /* a second heading inside the main column needs space above it */
+  .volunteer-heading {
+    margin-top: var(--space-6);
   }
 
   /* Experience */
@@ -336,7 +370,7 @@ function formatDate(date: Date | null) {
 
     :global(body) {
       background: #fff;
-      font-size: 10.5pt;
+      font-size: 10pt;
       -webkit-print-color-adjust: exact;
       print-color-adjust: exact;
     }
@@ -380,18 +414,23 @@ function formatDate(date: Date | null) {
 
     .section-heading {
       font-size: 8.5pt;
-      margin-bottom: var(--space-3);
+      padding-bottom: var(--space-1);
+      margin-bottom: var(--space-2);
       break-after: avoid;
     }
 
     .main-col {
-      margin-bottom: var(--space-5);
+      margin-bottom: var(--space-4);
+    }
+
+    .volunteer-heading {
+      margin-top: var(--space-3);
     }
 
     /* Keep each job (heading, note, and bullets) on one page. */
     .role {
       break-inside: avoid;
-      margin-bottom: var(--space-4);
+      margin-bottom: var(--space-3);
     }
 
     .role-head h3 {
@@ -405,8 +444,12 @@ function formatDate(date: Date | null) {
 
     /* keep printed bullets tight so the resume stays two pages */
     .role-body :global(li) {
-      margin-bottom: 2pt;
-      line-height: 1.35;
+      margin-bottom: 1.5pt;
+      line-height: 1.3;
+    }
+
+    .role-body :global(p) {
+      margin-bottom: 3pt;
     }
 
     /* Supporting sections flow into two tidy columns under the experience.

@@ -34,6 +34,7 @@ export const tools = [
   'Replit',
   'Figma',
   'Adobe Suite',
+  'Canva',
   'Atlassian (Confluence, Jira)',
   'Notion',
   'Coda',

@@ -1,0 +1,128 @@
+---
+import { getCollection, render } from 'astro:content';
+
+const entries = await getCollection('volunteering');
+entries.sort((a, b) => b.data.startDate.valueOf() - a.data.startDate.valueOf());
+
+const roles = await Promise.all(
+  entries.map(async (entry) => ({
+    data: entry.data,
+    Content: (await render(entry)).Content,
+  }))
+);
+
+function formatDate(date: Date | null) {
+  if (!date) return 'Present';
+  return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' });
+}
+---
+
+<section id="volunteering">
+  <div class="container">
+    <h2>
+      <span class="highlight">Volunteering</span>
+      <span class="heading-emoji" aria-hidden="true">🐾</span>
+    </h2>
+    <p class="lead">
+      Animal welfare is where I spend my time outside of work, usually with a clipboard in one hand
+      and a rabbit in the other.
+    </p>
+    <div class="volunteer-list">
+      {
+        roles.map(({ data, Content }) => (
+          <article class="volunteer-item">
+            <div class="org-line">
+              <h3>{data.organization}</h3>
+              {data.cause && <span class="cause">{data.cause}</span>}
+            </div>
+            <p class="role">{data.role}</p>
+            <p class="dates">
+              {formatDate(data.startDate)} – {formatDate(data.endDate)}
+            </p>
+            <div class="prose">
+              <Content />
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .lead {
+    font-size: var(--text-lg);
+    line-height: var(--leading-body);
+    max-width: var(--measure);
+    margin-bottom: var(--space-6);
+  }
+
+  .volunteer-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-6);
+    align-items: start;
+  }
+
+  .volunteer-item {
+    padding-left: var(--space-4);
+    border-left: 2px solid var(--color-highlight);
+  }
+
+  .org-line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-2) var(--space-3);
+  }
+
+  .org-line h3 {
+    margin: 0;
+  }
+
+  .cause {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-label);
+    color: var(--color-accent);
+  }
+
+  .role {
+    margin: var(--space-1) 0 0;
+    color: var(--color-text);
+  }
+
+  .dates {
+    margin: 0 0 var(--space-3);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+
+  .prose :global(ul) {
+    margin: 0;
+    padding-left: 1.1rem;
+  }
+
+  .prose :global(li) {
+    margin-bottom: var(--space-2);
+    line-height: var(--leading-body);
+  }
+
+  .prose :global(li)::marker {
+    color: var(--color-accent);
+  }
+
+  .heading-emoji {
+    font-size: 0.55em;
+    vertical-align: middle;
+  }
+
+  /* two columns of dense bullets get cramped well before phone widths */
+  @media (max-width: 860px) {
+    .volunteer-list {
+      grid-template-columns: 1fr;
+      gap: var(--space-5);
+    }
+  }
+</style>

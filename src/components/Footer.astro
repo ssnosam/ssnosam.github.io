@@ -25,10 +25,14 @@ const year = new Date().getFullYear();
     gap: var(--space-3);
   }
 
+  /* signed off in the same hand as the sticky note; Cedarville's small
+     x-height and fine strokes need extra size to hold up at footer scale */
   .made-with {
     margin: 0;
-    font-size: var(--text-sm);
-    color: var(--color-text-muted);
+    font-family: var(--font-hand);
+    font-size: 1.3rem;
+    line-height: 1.4;
+    color: var(--color-ink);
   }
 
   .copyright {
