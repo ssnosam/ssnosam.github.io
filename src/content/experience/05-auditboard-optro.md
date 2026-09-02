@@ -6,8 +6,6 @@ endDate: null
 note: "Formerly AuditBoard, which was acquired and rebranded to Optro in March 2026"
 ---
 
-As a member of the design team at Optro, I am responsible for the user experience of multiple product solutions.
-
 - Leading end-to-end product design for enterprise platform initiatives, turning complex data and technical workflows into intuitive, user-centric experiences
 - Facilitating continuous feedback channels for the design organization as well as product teams
 - Working in close partnership with product management, engineering, and UX research to guide discovery, design execution, and feature validation across the platform suite
