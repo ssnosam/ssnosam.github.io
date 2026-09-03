@@ -15,12 +15,11 @@ interface Props {
 }
 
 const { item, index = 0 } = Astro.props;
-const { entry, title, role, startDate, endDate, note, kind } = item;
+const { entry, title, role, startDate, endDate, note } = item;
 const { Content } = await render(entry);
 
 // an open end date means this is a role Shelby holds today
 const isCurrent = endDate === null;
-const isVolunteer = kind === 'volunteer';
 
 function formatDate(date: Date | null) {
   if (!date) return 'Present';
@@ -32,13 +31,14 @@ function formatDate(date: Date | null) {
   class={`timeline-item reveal ${isCurrent ? 'is-current' : ''}`}
   style={`--reveal-delay: ${index * 0.08}s`}
 >
-  <p class="dates">{formatDate(startDate)} – {formatDate(endDate)}</p>
+  <p class="dates">
+    <span>{formatDate(startDate)}</span> <span>&ndash; {formatDate(endDate)}</span>
+  </p>
   <div class="timeline-marker" aria-hidden="true"></div>
   <div class="timeline-body">
     <div class="company-line">
       <h3>{title}</h3>
       {isCurrent && <span class="current-badge">Current</span>}
-      {isVolunteer && <span class="kind-badge">Volunteer</span>}
     </div>
     <p class="role">{role}</p>
     {note && <p class="note">{note}</p>}
@@ -51,8 +51,8 @@ function formatDate(date: Date | null) {
 <style>
   /* dates | marker rail | body */
   .timeline-item {
-    --dates-col: 9.5rem;
-    --rail-gap: var(--space-4);
+    --dates-col: var(--timeline-dates-col, 9.5rem);
+    --rail-gap: var(--timeline-rail-gap, var(--space-4));
     display: grid;
     grid-template-columns: var(--dates-col) 1.25rem 1fr;
     column-gap: var(--rail-gap);
@@ -91,22 +91,6 @@ function formatDate(date: Date | null) {
     gap: var(--space-2);
   }
 
-  /* Quieter than the Current badge: this labels what kind of role it is,
-     so it should not compete with the status chip beside it. */
-  .kind-badge {
-    font-family: var(--font-body);
-    font-size: var(--text-xs);
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.09em;
-    color: var(--color-text-muted);
-    background: var(--color-bg);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-pill);
-    padding: 0.15rem 0.6rem;
-    white-space: nowrap;
-  }
-
   .current-badge {
     font-family: var(--font-body);
     font-size: var(--text-xs);
@@ -139,6 +123,12 @@ function formatDate(date: Date | null) {
     line-height: var(--leading-body);
     color: var(--color-text-muted);
     font-variant-numeric: tabular-nums;
+  }
+
+  /* In the narrow two-column gutter the stamp has to wrap. Keeping each date
+     whole means it breaks between them rather than stranding a month. */
+  .dates span {
+    white-space: nowrap;
   }
 
   .role {
