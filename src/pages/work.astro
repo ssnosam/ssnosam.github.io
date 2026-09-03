@@ -3,12 +3,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import StickyNote from '../components/StickyNote.astro';
+import Philosophy from '../components/Philosophy.astro';
 import { site } from '../data/site.config';
 ---
 
 <BaseLayout
-  title={`Work Examples | ${site.name}`}
-  description="Selected projects and case studies from Shelby Mason, Senior Product Designer. Currently in progress."
+  title={`My Work | ${site.name}`}
+  description="How Shelby Mason approaches product design, plus selected projects and case studies. Currently in progress."
 >
   <Nav />
   <main>
@@ -33,6 +34,7 @@ import { site } from '../data/site.config';
         </div>
       </div>
     </section>
+    <Philosophy />
   </main>
   <Footer />
 </BaseLayout>
