@@ -2,8 +2,32 @@
 import { getCollection } from 'astro:content';
 import TimelineItem from './TimelineItem.astro';
 
-const entries = await getCollection('experience');
-entries.sort((a, b) => b.data.startDate.valueOf() - a.data.startDate.valueOf());
+// Paid roles and volunteer roles run down one timeline, ordered by when each
+// began. The two collections name their fields differently, so they are
+// normalised here and the kind is carried through for the badge.
+const jobs = await getCollection('experience');
+const volunteering = await getCollection('volunteering');
+
+const items = [
+  ...jobs.map((entry) => ({
+    entry,
+    title: entry.data.company,
+    role: entry.data.role,
+    startDate: entry.data.startDate,
+    endDate: entry.data.endDate,
+    note: entry.data.note,
+    kind: 'work' as const,
+  })),
+  ...volunteering.map((entry) => ({
+    entry,
+    title: entry.data.organization,
+    role: entry.data.role,
+    startDate: entry.data.startDate,
+    endDate: entry.data.endDate,
+    note: undefined,
+    kind: 'volunteer' as const,
+  })),
+].sort((a, b) => b.startDate.valueOf() - a.startDate.valueOf());
 ---
 
 <section id="experience">
@@ -13,7 +37,7 @@ entries.sort((a, b) => b.data.startDate.valueOf() - a.data.startDate.valueOf());
       <span class="heading-emoji" aria-hidden="true">🌱</span>
     </h2>
     <div class="timeline">
-      {entries.map((entry, i) => <TimelineItem entry={entry} index={i} />)}
+      {items.map((item, i) => <TimelineItem item={item} index={i} />)}
     </div>
   </div>
 </section>
@@ -25,5 +49,4 @@ entries.sort((a, b) => b.data.startDate.valueOf() - a.data.startDate.valueOf());
        leaving the descriptions at a comfortable measure */
     max-width: 50rem;
   }
-
 </style>

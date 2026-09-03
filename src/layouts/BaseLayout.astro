@@ -52,6 +52,39 @@ const { title = site.title, description = site.description } = Astro.props;
         );
 
         items.forEach((el) => observer.observe(el));
+
+        // The observer only fires when an element's intersection actually
+        // changes. A jump that carries something from below the fold to above
+        // it in one step never intersects, so that content would stay
+        // invisible: reachable by scrolling back, but blank in the meantime.
+        // This sweep catches anything already at or past the fold and detaches
+        // itself once there is nothing left to reveal.
+        let pending = items.length;
+        const sweep = () => {
+          pending = 0;
+          items.forEach((el) => {
+            if (el.classList.contains('is-visible')) return;
+            if (el.getBoundingClientRect().top < window.innerHeight) {
+              el.classList.add('is-visible');
+              observer.unobserve(el);
+            } else {
+              pending += 1;
+            }
+          });
+          if (pending === 0) window.removeEventListener('scroll', onScroll);
+        };
+
+        let ticking = false;
+        const onScroll = () => {
+          if (ticking) return;
+          ticking = true;
+          requestAnimationFrame(() => {
+            sweep();
+            ticking = false;
+          });
+        };
+
+        window.addEventListener('scroll', onScroll, { passive: true });
       }
 
       // A hash landing (say /work#philosophy) skips past sections that were

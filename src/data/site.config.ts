@@ -36,6 +36,8 @@ export const skills = [
 
 export const tools = [
   'Claude',
+  'Gemini',
+  'Notebook LM',
   'Replit',
   'Figma',
   'Adobe Suite',
@@ -43,13 +45,17 @@ export const tools = [
   'Atlassian (Confluence, Jira)',
   'Notion',
   'Coda',
+  'Google Suite',
 ];
 
 export const education = [
   {
-    school: 'Rochester Institute of Technology',
-    program: 'New Media Design, BFA',
-    detail: 'Visual Culture minor, English immersion',
+    school: 'Rochester Institute of Technology, Graduating Class of 2019',
+    lines: [
+      'Bachelor of Fine Arts in New Media Design',
+      'Minor in Visual Culture',
+      'Immersion in English',
+    ],
   },
 ];
 

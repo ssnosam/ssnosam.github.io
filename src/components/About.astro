@@ -64,8 +64,7 @@ import Polaroid from './Polaroid.astro';
               education.map((item) => (
                 <li>
                   <strong>{item.school}</strong>
-                  <span>{item.program}</span>
-                  <span class="detail">{item.detail}</span>
+                  {item.lines.map((line) => <span>{line}</span>)}
                 </li>
               ))
             }
@@ -204,10 +203,6 @@ import Polaroid from './Polaroid.astro';
     font-size: var(--text-sm);
   }
 
-  .education-list .detail {
-    color: var(--color-text-muted);
-    font-size: var(--text-xs);
-  }
 
   @media (max-width: 800px) {
     .about-grid {

@@ -2,16 +2,25 @@
 import { render } from 'astro:content';
 
 interface Props {
-  entry: any;
+  item: {
+    entry: any;
+    title: string;
+    role: string;
+    startDate: Date;
+    endDate: Date | null;
+    note?: string;
+    kind: 'work' | 'volunteer';
+  };
   index?: number;
 }
 
-const { entry, index = 0 } = Astro.props;
-const { company, role, startDate, endDate, note } = entry.data;
+const { item, index = 0 } = Astro.props;
+const { entry, title, role, startDate, endDate, note, kind } = item;
 const { Content } = await render(entry);
 
-// an open end date means this is the role Shelby holds today
+// an open end date means this is a role Shelby holds today
 const isCurrent = endDate === null;
+const isVolunteer = kind === 'volunteer';
 
 function formatDate(date: Date | null) {
   if (!date) return 'Present';
@@ -27,8 +36,9 @@ function formatDate(date: Date | null) {
   <div class="timeline-marker" aria-hidden="true"></div>
   <div class="timeline-body">
     <div class="company-line">
-      <h3>{company}</h3>
+      <h3>{title}</h3>
       {isCurrent && <span class="current-badge">Current</span>}
+      {isVolunteer && <span class="kind-badge">Volunteer</span>}
     </div>
     <p class="role">{role}</p>
     {note && <p class="note">{note}</p>}
@@ -79,6 +89,22 @@ function formatDate(date: Date | null) {
     align-items: center;
     flex-wrap: wrap;
     gap: var(--space-2);
+  }
+
+  /* Quieter than the Current badge: this labels what kind of role it is,
+     so it should not compete with the status chip beside it. */
+  .kind-badge {
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: var(--color-text-muted);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill);
+    padding: 0.15rem 0.6rem;
+    white-space: nowrap;
   }
 
   .current-badge {

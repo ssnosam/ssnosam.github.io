@@ -99,8 +99,9 @@ function formatDate(date: Date | null) {
             education.map((item) => (
               <div>
                 <p class="school">{item.school}</p>
-                <p class="school-detail">{item.program}</p>
-                <p class="school-detail">{item.detail}</p>
+                {item.lines.map((line) => (
+                  <p class="school-detail">{line}</p>
+                ))}
               </div>
             ))
           }
