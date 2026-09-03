@@ -65,8 +65,9 @@ function formatDate(date: Date | null) {
     position: absolute;
     /* centre the rail under the marker, past the dates column */
     left: calc(var(--dates-col) + var(--rail-gap) + 0.5625rem);
-    /* meets the small dots and runs behind the larger current one */
-    top: 1.15rem;
+    /* starts at the dot centre so it meets both sizes; the marker sits above
+       it, so the run behind the dot never shows */
+    top: 0.8rem;
     bottom: 0;
     width: 2px;
     background: var(--color-border);
@@ -76,6 +77,10 @@ function formatDate(date: Date | null) {
      pulled more attention than the entries themselves. Centred in the
      marker column so it still sits on the rail. */
   .timeline-marker {
+    /* the rail is absolutely positioned, so without a stacking bump it paints
+       over the dot and shows through as a line across it */
+    position: relative;
+    z-index: 1;
     width: 0.625rem;
     height: 0.625rem;
     border-radius: 50%;
