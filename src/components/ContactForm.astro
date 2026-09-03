@@ -8,19 +8,23 @@ const formAction = `https://formspree.io/f/${site.formspreeFormId}`;
 <section id="contact">
   <div class="container contact-grid">
     <div class="prose">
-      <h2>
+      <h2 class="reveal">
         Get in touch
         <span class="heading-emoji" aria-hidden="true">💌</span>
       </h2>
-      <p>
+      <p class="reveal" style="--reveal-delay: 0.08s">
         Have a project in mind or just want to say hello? Send me a message, or reach me directly at{' '}
         <a href={`mailto:${site.email}`}>{site.email}</a>.
       </p>
-      <SocialLinks class="contact-socials" />
+      <div class="reveal" style="--reveal-delay: 0.16s">
+        <SocialLinks class="contact-socials" />
+      </div>
     </div>
 
     <form
       id="contact-form"
+      class="reveal"
+      style="--reveal-delay: 0.12s"
       action={formAction}
       method="POST"
       data-formspree
@@ -83,11 +87,6 @@ const formAction = `https://formspree.io/f/${site.formspreeFormId}`;
 
   :global(.contact-socials) {
     margin-top: var(--space-4);
-  }
-
-  .heading-emoji {
-    font-size: 0.55em;
-    vertical-align: middle;
   }
 
   form {

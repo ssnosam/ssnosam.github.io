@@ -16,8 +16,8 @@ import { site } from '../data/site.config';
     <section id="work">
       <div class="container work-grid">
         <div class="prose">
-          <h2>Work Examples</h2>
-          <p class="lead">
+          <h2 class="reveal">Work Examples</h2>
+          <p class="lead reveal" style="--reveal-delay: 0.08s">
             This is where I'll be sharing my best projects and case studies: the problems, the
             process, and what I learned along the way.
           </p>
@@ -29,7 +29,7 @@ import { site } from '../data/site.config';
           <a href={`mailto:${site.email}`} class="btn">Ask me about my work</a>
         </div>
 
-        <div class="work-aside">
+        <div class="work-aside reveal" style="--reveal-delay: 0.16s">
           <StickyNote rotate={-5}>Under construction!</StickyNote>
         </div>
       </div>

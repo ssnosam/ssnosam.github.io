@@ -8,12 +8,12 @@ entries.sort((a, b) => b.data.startDate.valueOf() - a.data.startDate.valueOf());
 
 <section id="experience">
   <div class="container">
-    <h2>
+    <h2 class="reveal">
       Experience
       <span class="heading-emoji" aria-hidden="true">🌱</span>
     </h2>
     <div class="timeline">
-      {entries.map((entry) => <TimelineItem entry={entry} />)}
+      {entries.map((entry, i) => <TimelineItem entry={entry} index={i} />)}
     </div>
   </div>
 </section>
@@ -26,8 +26,4 @@ entries.sort((a, b) => b.data.startDate.valueOf() - a.data.startDate.valueOf());
     max-width: 50rem;
   }
 
-  .heading-emoji {
-    font-size: 0.55em;
-    vertical-align: middle;
-  }
 </style>

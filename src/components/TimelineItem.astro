@@ -3,9 +3,10 @@ import { render } from 'astro:content';
 
 interface Props {
   entry: any;
+  index?: number;
 }
 
-const { entry } = Astro.props;
+const { entry, index = 0 } = Astro.props;
 const { company, role, startDate, endDate, note } = entry.data;
 const { Content } = await render(entry);
 
@@ -18,7 +19,10 @@ function formatDate(date: Date | null) {
 }
 ---
 
-<article class={`timeline-item ${isCurrent ? 'is-current' : ''}`}>
+<article
+  class={`timeline-item reveal ${isCurrent ? 'is-current' : ''}`}
+  style={`--reveal-delay: ${index * 0.08}s`}
+>
   <p class="dates">{formatDate(startDate)} – {formatDate(endDate)}</p>
   <div class="timeline-marker" aria-hidden="true"></div>
   <div class="timeline-body">

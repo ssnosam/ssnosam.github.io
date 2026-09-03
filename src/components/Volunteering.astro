@@ -19,14 +19,14 @@ function formatDate(date: Date | null) {
 
 <section id="volunteering">
   <div class="container">
-    <h2>
+    <h2 class="reveal">
       Volunteering
       <span class="heading-emoji" aria-hidden="true">🐾</span>
     </h2>
     <div class="volunteer-list">
       {
-        roles.map(({ data, Content }) => (
-          <article class="volunteer-item">
+        roles.map(({ data, Content }, i) => (
+          <article class="volunteer-item reveal" style={`--reveal-delay: ${i * 0.1}s`}>
             <div class="org-line">
               <h3>{data.organization}</h3>
               {data.cause && <span class="cause">{data.cause}</span>}
@@ -101,11 +101,6 @@ function formatDate(date: Date | null) {
 
   .prose :global(li)::marker {
     color: var(--color-accent);
-  }
-
-  .heading-emoji {
-    font-size: 0.55em;
-    vertical-align: middle;
   }
 
   /* two columns of dense bullets get cramped well before phone widths */

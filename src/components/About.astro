@@ -8,10 +8,9 @@ import Polaroid from './Polaroid.astro';
 <section id="about">
   <div class="container about-grid">
     <div class="prose">
-      <h2>About me</h2>
-      <p class="tagline">{site.tagline}</p>
+      <h2 class="reveal">About me</h2>
 
-      <ul class="quick-facts">
+      <ul class="quick-facts reveal" style="--reveal-delay: 0.08s">
         {
           quickFacts.map((fact) => (
             <li>
@@ -24,13 +23,19 @@ import Polaroid from './Polaroid.astro';
         }
       </ul>
 
-      <p class="tilde" aria-hidden="true">~</p>
+      <p class="tilde reveal" style="--reveal-delay: 0.14s" aria-hidden="true">~</p>
 
-      {site.bio.map((paragraph) => <p>{paragraph}</p>)}
-      <ResumeCTA />
+      {site.bio.map((paragraph, i) => (
+        <p class="reveal" style={`--reveal-delay: ${0.2 + i * 0.08}s`}>
+          {paragraph}
+        </p>
+      ))}
+      <div class="reveal" style="--reveal-delay: 0.36s">
+        <ResumeCTA />
+      </div>
     </div>
 
-    <div class="about-media">
+    <div class="about-media reveal" style="--reveal-delay: 0.12s">
       <Polaroid
         src="/shelby.jpg"
         alt="Shelby Mason bundled up in a winter coat, with a city skyline behind her"
@@ -39,7 +44,7 @@ import Polaroid from './Polaroid.astro';
       <StickyNote rotate={5} class="about-note">Hi there, I'm Shelby :)</StickyNote>
     </div>
 
-    <div class="about-lists">
+    <div class="about-lists reveal" style="--reveal-delay: 0.2s">
         <div>
           <h3>Expertise</h3>
           <ul>
@@ -95,13 +100,6 @@ import Polaroid from './Polaroid.astro';
   .about-lists {
     grid-column: 2;
     grid-row: 2;
-  }
-
-  .tagline {
-    font-family: var(--font-display);
-    font-size: var(--text-h3);
-    line-height: var(--leading-snug);
-    color: var(--color-text);
   }
 
   .quick-facts {

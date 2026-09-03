@@ -18,11 +18,11 @@ const principles = [
 <section id="philosophy">
   <div class="container">
     <div class="prose">
-      <h2>
+      <h2 class="reveal">
         Design philosophy
         <span class="heading-emoji" aria-hidden="true">✨</span>
       </h2>
-      <p class="lead">
+      <p class="lead reveal" style="--reveal-delay: 0.08s">
         I work closely with customers, product managers, and engineers to validate hypotheses and
         proposed solutions. It's a multidisciplinary effort grounded in empathy, curiosity, and
         iteration.
@@ -30,8 +30,8 @@ const principles = [
     </div>
     <div class="principles">
       {
-        principles.map((p) => (
-          <div class="principle">
+        principles.map((p, i) => (
+          <div class="principle reveal" style={`--reveal-delay: ${i * 0.1}s`}>
             <div class="title-note">
               <span class="tape" aria-hidden="true" />
               <h3>
@@ -136,8 +136,4 @@ const principles = [
     }
   }
 
-  .heading-emoji {
-    font-size: 0.55em;
-    vertical-align: middle;
-  }
 </style>

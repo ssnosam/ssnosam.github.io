@@ -1,14 +1,19 @@
 ---
 import { site } from '../data/site.config';
 
-// rooted at "/" so the anchors also work from /work and other pages
+// Anchors are rooted at "/" so they still resolve from /work and /resume.
+// `spy` names the homepage section a link watches while scrolling; links to
+// other pages get `match` instead and are marked active server-side.
 const links = [
-  { label: 'About', href: '/#about' },
-  { label: 'Experience', href: '/#experience' },
-  { label: 'My Work', href: '/work' },
-  { label: 'Philosophy', href: '/work#philosophy' },
-  { label: 'Contact', href: '/#contact' },
+  { label: 'About', href: '/#about', spy: 'about' },
+  { label: 'Experience', href: '/#experience', spy: 'experience' },
+  { label: 'My Work & Philosophy', href: '/work', match: '/work' },
+  { label: 'Résumé', href: '/resume', match: '/resume', accent: true },
+  { label: 'Contact', href: '/#contact', spy: 'contact' },
 ];
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isHome = path === '/';
 ---
 
 <header class="nav">
@@ -19,17 +24,77 @@ const links = [
         {
           links.map((link) => (
             <li>
-              <a href={link.href}>{link.label}</a>
+              <a
+                href={link.href}
+                class:list={[
+                  { 'resume-link': link.accent },
+                  { 'is-active': link.match !== undefined && path === link.match },
+                ]}
+                data-spy={isHome ? link.spy : undefined}
+              >
+                {link.label}
+              </a>
             </li>
           ))
         }
-        <li>
-          <a href="/resume" class="resume-link">Résumé</a>
-        </li>
       </ul>
     </nav>
   </div>
 </header>
+
+<script>
+  // Scroll spy: highlight the nav link for whichever section the reader is in.
+  // Only sections that actually have a link are tracked, so scrolling through
+  // Volunteering (which has no link of its own) keeps Experience lit rather
+  // than blinking the highlight off.
+  const spied = Array.from(document.querySelectorAll<HTMLAnchorElement>('a[data-spy]'));
+
+  if (spied.length > 0) {
+    const targets = spied
+      .map((link) => {
+        const section = document.getElementById(link.dataset.spy as string);
+        return section ? { link, section } : null;
+      })
+      .filter((pair): pair is { link: HTMLAnchorElement; section: HTMLElement } => pair !== null);
+
+    if (targets.length > 0) {
+      const setActive = (active: HTMLAnchorElement | null) => {
+        targets.forEach(({ link }) => link.classList.toggle('is-active', link === active));
+      };
+
+      const update = () => {
+        // The line the reader is reading at, a third of the way down the screen.
+        const line = window.scrollY + window.innerHeight / 3;
+        let current = null as HTMLAnchorElement | null;
+
+        for (const { link, section } of targets) {
+          if (section.offsetTop <= line) current = link;
+        }
+
+        // Pin the last link once the page is scrolled to the bottom, otherwise
+        // a short final section can never reach the reading line.
+        const atBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 2;
+        if (atBottom) current = targets[targets.length - 1].link;
+
+        setActive(current);
+      };
+
+      let ticking = false;
+      const onScroll = () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          update();
+          ticking = false;
+        });
+      };
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll, { passive: true });
+      update();
+    }
+  }
+</script>
 
 <style>
   .nav {
@@ -73,6 +138,7 @@ const links = [
   }
 
   nav a {
+    position: relative;
     color: var(--color-text-muted);
     font-weight: 500;
     font-size: var(--text-sm);
@@ -80,16 +146,47 @@ const links = [
 
   nav a:hover {
     color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  /* The current section's link keeps a rule beneath it. It grows from the
+     centre so the highlight slides between links as the reader scrolls. */
+  nav a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -0.35rem;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--color-accent);
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  nav a.is-active {
+    color: var(--color-accent);
+  }
+
+  nav a.is-active::after {
+    transform: scaleX(1);
   }
 
   .resume-link {
     color: var(--color-accent);
   }
 
-  /* On phones the five links plus the name can't share one row, so the bar
-     stacks and the links wrap. Two stacked rows are too tall to pin to the
-     top of a phone screen, so the bar scrolls away here instead of sticking,
-     leaving the full viewport for reading. */
+  @media (prefers-reduced-motion: reduce) {
+    nav a::after {
+      transition: none;
+    }
+  }
+
+  /* On phones the links plus the name can't share one row, so the bar stacks
+     and the links wrap. Two stacked rows are too tall to pin to the top of a
+     phone screen, so the bar scrolls away here instead of sticking, leaving
+     the full viewport for reading. */
   @media (max-width: 760px) {
     .nav {
       position: static;
@@ -113,6 +210,10 @@ const links = [
       display: inline-block;
       padding: var(--space-2) 0;
       font-size: var(--text-sm);
+    }
+
+    nav a::after {
+      bottom: 0.35rem;
     }
   }
 </style>

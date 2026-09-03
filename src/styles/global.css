@@ -212,6 +212,49 @@ section[id] {
   -webkit-box-decoration-break: clone;
 }
 
+/* Section headings pair a word with a small emoji. The span sits flush against
+   the text node, so the gap has to come from the style rather than markup. */
+.heading-emoji {
+  font-size: 0.55em;
+  vertical-align: middle;
+  margin-left: 0.4em;
+}
+
+/* Content eases in as it enters the viewport. The hidden state is gated behind
+   .js, set by an inline script before paint, so that without scripting every
+   section still renders plainly instead of staying invisible. Anyone who asks
+   for reduced motion gets the finished state with no transition at all. */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.7s cubic-bezier(0.23, 1, 0.32, 1),
+    transform 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+  transition-delay: var(--reveal-delay, 0s);
+}
+
+.js .reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js .reveal,
+  .js .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Printing must never inherit a mid-animation state. */
+@media print {
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
 /* Ethereal button: soft gradient, a faint bloom, and a light sweep on hover. */
 .btn {
   position: relative;
