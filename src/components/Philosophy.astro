@@ -32,10 +32,12 @@ const principles = [
       {
         principles.map((p) => (
           <div class="principle">
-            <span class="tape" aria-hidden="true" />
-            <h3>
-              <span class="highlight">{p.title}</span>
-            </h3>
+            <div class="title-note">
+              <span class="tape" aria-hidden="true" />
+              <h3>
+                <span class="highlight">{p.title}</span>
+              </h3>
+            </div>
             <p>{p.body}</p>
           </div>
         ))
@@ -51,40 +53,44 @@ const principles = [
     margin: 0;
   }
 
-  /* Two columns rather than three: at three the notes get narrow enough that
-     the body copy drops to roughly 30 characters a line, well under a
-     comfortable measure. Three notes across two columns also reads more like
-     a pinboard than a rigid row. */
+  /* Two columns rather than three: at three the body copy drops to roughly 30
+     characters a line, well under a comfortable measure. */
   .principles {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-5);
-    /* let notes in a row match heights: the shorter one keeps a little blank
-       paper at the bottom, which is how a real note looks */
-    align-items: stretch;
+    gap: var(--space-6) var(--space-5);
+    align-items: start;
     margin: var(--space-6) 0 0;
   }
 
-  .principle {
+  /* The note carries only the title; the body sits on the page beneath it. */
+  .title-note {
     position: relative;
+    width: 100%;
+    max-width: 19rem;
+    /* tall enough for the longest title's three lines, so every note is the
+       same height and the paragraphs beneath them start on a shared line */
+    min-height: 11.5rem;
     padding: var(--space-5) var(--space-4) var(--space-4);
     background: var(--color-note);
     border: 1px solid var(--color-note-edge);
     box-shadow: 3px 4px 10px rgba(43, 34, 38, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
-  /* Slight, uneven tilts so the notes look placed by hand. Kept under two
-     degrees: these hold real paragraphs, and more tilt costs legibility. */
-  .principle:nth-child(1) {
-    transform: rotate(-1.1deg);
+  /* Slight, uneven tilts so the notes look placed by hand. */
+  .principle:nth-child(1) .title-note {
+    transform: rotate(-1.8deg);
   }
 
-  .principle:nth-child(2) {
-    transform: rotate(0.8deg);
+  .principle:nth-child(2) .title-note {
+    transform: rotate(1.4deg);
   }
 
-  .principle:nth-child(3) {
-    transform: rotate(-0.6deg);
+  .principle:nth-child(3) .title-note {
+    transform: rotate(-1deg);
   }
 
   .tape {
@@ -101,14 +107,23 @@ const principles = [
     transform: translateX(-50%) rotate(2.5deg);
   }
 
-  .principle h3 {
-    font-size: var(--text-h3);
-    margin-bottom: var(--space-3);
+  /* Cedarville has a small x-height and fine strokes, so the handwritten
+     title needs more size and leading than the print scale would give it.
+     The faint counter-rotation keeps it from sitting square to the paper. */
+  .title-note h3 {
+    margin: 0;
+    font-family: var(--font-hand);
+    font-size: 1.5rem;
+    font-weight: 400;
+    line-height: 1.65;
+    color: var(--color-ink);
+    text-align: center;
+    transform: rotate(-1deg);
   }
 
-  .principle p {
-    margin: 0;
-    color: var(--color-text);
+  .principle > p {
+    margin: var(--space-4) 0 0;
+    line-height: var(--leading-body);
   }
 
   @media (max-width: 800px) {
@@ -116,8 +131,7 @@ const principles = [
       grid-template-columns: 1fr;
     }
 
-    /* a lone note at full container width reads as a slab, not a note */
-    .principle {
+    .principle > p {
       max-width: 34rem;
     }
   }
