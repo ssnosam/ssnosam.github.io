@@ -65,22 +65,33 @@ function formatDate(date: Date | null) {
     position: absolute;
     /* centre the rail under the marker, past the dates column */
     left: calc(var(--dates-col) + var(--rail-gap) + 0.5625rem);
-    top: 1.5rem;
+    /* meets the small dots and runs behind the larger current one */
+    top: 1.15rem;
     bottom: 0;
     width: 2px;
     background: var(--color-border);
   }
 
+  /* Past roles get a small, soft dot: at full size and full accent they
+     pulled more attention than the entries themselves. Centred in the
+     marker column so it still sits on the rail. */
   .timeline-marker {
-    width: 1.25rem;
-    height: 1.25rem;
+    width: 0.625rem;
+    height: 0.625rem;
     border-radius: 50%;
-    background: var(--color-accent);
-    margin-top: 0.2rem;
+    background: var(--color-highlight);
+    border: 1px solid var(--color-accent-soft);
+    justify-self: center;
+    margin-top: 0.5rem;
   }
 
-  /* the role Shelby holds now: a halo on the marker and a small badge */
+  /* the role Shelby holds now: full size, solid, and haloed */
   .is-current .timeline-marker {
+    width: 1.25rem;
+    height: 1.25rem;
+    background: var(--color-accent);
+    border: none;
+    margin-top: 0.2rem;
     box-shadow: 0 0 0 5px var(--color-accent-wash);
   }
 
