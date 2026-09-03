@@ -1,6 +1,6 @@
 ---
 organization: "Rabbit Advocates"
-role: "Marketing Communications Manager"
+role: "Marketing & Communications Manager"
 startDate: 2026-08-01
 endDate: null
 cause: "Animal Welfare"
