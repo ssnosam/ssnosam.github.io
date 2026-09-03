@@ -9,6 +9,7 @@ const experience = defineCollection({
     startDate: z.coerce.date(),
     endDate: z.coerce.date().nullable(),
     note: z.string().optional(),
+    summary: z.string().optional(),
   }),
 });
 
@@ -20,6 +21,7 @@ const volunteering = defineCollection({
     startDate: z.coerce.date(),
     endDate: z.coerce.date().nullable(),
     cause: z.string().optional(),
+    summary: z.string().optional(),
   }),
 });
 

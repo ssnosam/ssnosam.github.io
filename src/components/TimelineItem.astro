@@ -9,14 +9,17 @@ interface Props {
     startDate: Date;
     endDate: Date | null;
     note?: string;
+    summary?: string;
     kind: 'work' | 'volunteer';
   };
   index?: number;
 }
 
 const { item, index = 0 } = Astro.props;
-const { entry, title, role, startDate, endDate, note } = item;
+const { entry, title, role, startDate, endDate, note, summary } = item;
 const { Content } = await render(entry);
+
+const detailsId = `details-${entry.id.replace(/[^a-z0-9]+/gi, '-')}`;
 
 // an open end date means this is a role Shelby holds today
 const isCurrent = endDate === null;
@@ -42,8 +45,16 @@ function formatDate(date: Date | null) {
     </div>
     <p class="role">{role}</p>
     {note && <p class="note">{note}</p>}
-    <div class="prose">
-      <Content />
+    {summary && <p class="summary">{summary}</p>}
+    <button class="details-toggle" type="button" aria-expanded="false" aria-controls={detailsId}>
+      <span class="details-sign" aria-hidden="true">+</span> Read more
+    </button>
+    <div class="details" id={detailsId}>
+      <div class="details-inner">
+        <div class="prose">
+          <Content />
+        </div>
+      </div>
     </div>
   </div>
 </article>
@@ -147,6 +158,65 @@ function formatDate(date: Date | null) {
     white-space: nowrap;
   }
 
+  .summary {
+    margin-bottom: var(--space-2);
+  }
+
+  .details-toggle {
+    display: inline-block;
+    padding: var(--space-1) 0;
+    margin-bottom: var(--space-1);
+    background: none;
+    border: none;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-accent);
+    cursor: pointer;
+  }
+
+  .details-toggle:hover {
+    color: var(--color-accent-ink);
+  }
+
+  .details-sign {
+    display: inline-block;
+    width: 0.75em;
+  }
+
+  /* 0fr to 1fr animates to the content's own height, so nothing has to be
+     measured in script and a resize can't leave the panel clipped. */
+  .details {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .details.is-open {
+    grid-template-rows: 1fr;
+  }
+
+  .details-inner {
+    overflow: hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .details {
+      transition: none;
+    }
+  }
+
+  /* nothing collapses on paper */
+  @media print {
+    .details {
+      grid-template-rows: 1fr;
+    }
+
+    .details-toggle {
+      display: none;
+    }
+  }
+
   .role {
     font-weight: 600;
     color: var(--color-text);
@@ -213,3 +283,19 @@ function formatDate(date: Date | null) {
     }
   }
 </style>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.details-toggle').forEach((btn) => {
+    const panel = document.getElementById(btn.getAttribute('aria-controls') as string);
+    if (!panel) return;
+
+    btn.addEventListener('click', () => {
+      const open = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!open));
+      panel.classList.toggle('is-open', !open);
+      btn.innerHTML = open
+        ? '<span class="details-sign" aria-hidden="true">+</span> Read more'
+        : '<span class="details-sign" aria-hidden="true">\u2013</span> Less';
+    });
+  });
+</script>

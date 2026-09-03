@@ -16,6 +16,7 @@ const work = [
     startDate: entry.data.startDate,
     endDate: entry.data.endDate,
     note: entry.data.note,
+    summary: entry.data.summary,
     kind: 'work' as const,
   })),
 ].sort((a, b) => b.startDate.valueOf() - a.startDate.valueOf());
@@ -28,6 +29,7 @@ const volunteer = [
     startDate: entry.data.startDate,
     endDate: entry.data.endDate,
     note: undefined,
+    summary: entry.data.summary,
     kind: 'volunteer' as const,
   })),
 ].sort((a, b) => b.startDate.valueOf() - a.startDate.valueOf());
@@ -62,19 +64,18 @@ const columns = [
 </section>
 
 <style>
-  /* Two tracks side by side. Each column is roughly half the page, so the
-     date gutter is pulled in tight: at the full-width 9.5rem it would leave
-     the descriptions around 33 characters a line, well under a readable
-     measure. */
+  /* Stacked by default: one track after the other, each with the full-width
+     date gutter. */
   .timeline-columns {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    column-gap: var(--space-4);
+    grid-template-columns: 1fr;
+    row-gap: var(--space-6);
     align-items: start;
     margin-top: var(--space-5);
-    /* wide enough for the longest stamp, "– Mar 2024", without clipping */
-    --timeline-dates-col: 4.75rem;
-    --timeline-rail-gap: var(--space-2);
+  }
+
+  .timeline {
+    max-width: 50rem;
   }
 
   .column-label {
@@ -87,18 +88,22 @@ const columns = [
     margin-bottom: var(--space-4);
   }
 
-  /* Stacked, the columns get the page to themselves, so the full-width
-     gutter comes back. */
-  @media (max-width: 900px) {
+  /* Side by side only when the page is genuinely wide. Two tracks halve the
+     width available to each, so the date gutter has to pull in: below about
+     1100px the descriptions drop under 45 characters a line, which is why
+     the columns wait for the room rather than appearing at tablet size. */
+  @media (min-width: 1100px) {
     .timeline-columns {
-      grid-template-columns: 1fr;
-      row-gap: var(--space-6);
-      --timeline-dates-col: 9.5rem;
-      --timeline-rail-gap: var(--space-4);
+      grid-template-columns: 1fr 1fr;
+      column-gap: var(--space-4);
+      row-gap: 0;
+      /* wide enough for the longest stamp, "– Mar 2024", without clipping */
+      --timeline-dates-col: 4.75rem;
+      --timeline-rail-gap: var(--space-2);
     }
 
     .timeline {
-      max-width: 50rem;
+      max-width: none;
     }
   }
 </style>
