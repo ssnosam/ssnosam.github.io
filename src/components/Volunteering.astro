@@ -23,10 +23,6 @@ function formatDate(date: Date | null) {
       Volunteering
       <span class="heading-emoji" aria-hidden="true">🐾</span>
     </h2>
-    <p class="lead">
-      Animal welfare is where I spend my time outside of work, usually with a clipboard in one hand
-      and a rabbit in the other.
-    </p>
     <div class="volunteer-list">
       {
         roles.map(({ data, Content }) => (
@@ -50,18 +46,12 @@ function formatDate(date: Date | null) {
 </section>
 
 <style>
-  .lead {
-    font-size: var(--text-lg);
-    line-height: var(--leading-body);
-    max-width: var(--measure);
-    margin-bottom: var(--space-6);
-  }
-
   .volunteer-list {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--space-6);
     align-items: start;
+    margin-top: var(--space-5);
   }
 
   .volunteer-item {
