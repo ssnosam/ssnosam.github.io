@@ -26,12 +26,7 @@ import Polaroid from './Polaroid.astro';
 
       <p class="tilde" aria-hidden="true">~</p>
 
-      <p>{site.description}</p>
-      <p>
-        I have 8 years of experience in user research and software product development, with an
-        emphasis on data and sustainability initiatives. I enjoy working with diverse teams to
-        address complex challenges through human-centered design and an ever-growing toolkit.
-      </p>
+      {site.bio.map((paragraph) => <p>{paragraph}</p>)}
       <ResumeCTA />
     </div>
 

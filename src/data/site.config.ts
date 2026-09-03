@@ -4,8 +4,13 @@ export const site = {
   tagline: 'Senior Product Designer',
   email: 'hello@shelby-mason.com',
   location: 'Portland, Oregon',
+  // short enough for a search result; the full bio lives in `bio` below
   description:
-    "I'm a curious person drawn to understanding people and their experiences. I like learning how things work, being creative, and finding ways to make life easier for myself and others. I believe that good design can help provide a sense of peace.",
+    'Senior Product Designer with over 8 years designing scalable digital products and enterprise software across GRC and ESG technology.',
+  bio: [
+    "I'm a curious and creative person with over 8 years of experience designing scalable digital products and enterprise software solutions across complex industries, including Governance, Risk, and Compliance (GRC) and Environmental, Social, and Governance (ESG) technology. My expertise lies in end-to-end product design, product discovery, systems thinking, and interactive prototyping.",
+    'Throughout my career, from serving as a founding designer at Hatch Data through its acquisition by Measurabl, to leading platform design initiatives at Optro, I have specialized in turning intricate, data-heavy workflows into intuitive, user-centric experiences. I partner closely with product management, engineering, and data science teams to align strategic goals with user needs, drive product iteration, and elevate design.',
+  ],
   social: {
     linkedin: 'https://www.linkedin.com/in/ssnosam/',
     github: 'https://github.com/ssnosam',
