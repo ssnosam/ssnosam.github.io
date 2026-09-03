@@ -16,21 +16,26 @@ const principles = [
 ---
 
 <section id="philosophy">
-  <div class="container prose">
-    <h2>
-      <span class="highlight">Design philosophy</span>
-      <span class="heading-emoji" aria-hidden="true">✨</span>
-    </h2>
-    <p class="lead">
-      I work closely with customers, product managers, and engineers to validate hypotheses and
-      proposed solutions. It's a multidisciplinary effort grounded in empathy, curiosity, and
-      iteration.
-    </p>
+  <div class="container">
+    <div class="prose">
+      <h2>
+        Design philosophy
+        <span class="heading-emoji" aria-hidden="true">✨</span>
+      </h2>
+      <p class="lead">
+        I work closely with customers, product managers, and engineers to validate hypotheses and
+        proposed solutions. It's a multidisciplinary effort grounded in empathy, curiosity, and
+        iteration.
+      </p>
+    </div>
     <div class="principles">
       {
         principles.map((p) => (
           <div class="principle">
-            <h3>{p.title}</h3>
+            <span class="tape" aria-hidden="true" />
+            <h3>
+              <span class="highlight">{p.title}</span>
+            </h3>
             <p>{p.body}</p>
           </div>
         ))
@@ -46,19 +51,75 @@ const principles = [
     margin: 0;
   }
 
+  /* Two columns rather than three: at three the notes get narrow enough that
+     the body copy drops to roughly 30 characters a line, well under a
+     comfortable measure. Three notes across two columns also reads more like
+     a pinboard than a rigid row. */
   .principles {
     display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--space-5);
+    /* let notes in a row match heights: the shorter one keeps a little blank
+       paper at the bottom, which is how a real note looks */
+    align-items: stretch;
     margin: var(--space-6) 0 0;
+  }
+
+  .principle {
+    position: relative;
+    padding: var(--space-5) var(--space-4) var(--space-4);
+    background: var(--color-note);
+    border: 1px solid var(--color-note-edge);
+    box-shadow: 3px 4px 10px rgba(43, 34, 38, 0.1);
+  }
+
+  /* Slight, uneven tilts so the notes look placed by hand. Kept under two
+     degrees: these hold real paragraphs, and more tilt costs legibility. */
+  .principle:nth-child(1) {
+    transform: rotate(-1.1deg);
+  }
+
+  .principle:nth-child(2) {
+    transform: rotate(0.8deg);
+  }
+
+  .principle:nth-child(3) {
+    transform: rotate(-0.6deg);
+  }
+
+  .tape {
+    position: absolute;
+    top: -0.55rem;
+    left: 50%;
+    width: 3.25rem;
+    height: 1.1rem;
+    transform: translateX(-50%) rotate(-3deg);
+    background: rgba(43, 34, 38, 0.82);
+  }
+
+  .principle:nth-child(2) .tape {
+    transform: translateX(-50%) rotate(2.5deg);
   }
 
   .principle h3 {
     font-size: var(--text-h3);
-    margin-bottom: var(--space-2);
+    margin-bottom: var(--space-3);
   }
 
   .principle p {
     margin: 0;
+    color: var(--color-text);
+  }
+
+  @media (max-width: 800px) {
+    .principles {
+      grid-template-columns: 1fr;
+    }
+
+    /* a lone note at full container width reads as a slab, not a note */
+    .principle {
+      max-width: 34rem;
+    }
   }
 
   .heading-emoji {
