@@ -1,6 +1,10 @@
 ---
 const principles = [
   {
+    title: 'Start with people',
+    body: "Understanding context, experiences, and pain points isn't just an initial phase, it's the heartbeat of every design decision I make. I like to meet with customers continuously to stay grounded in real needs.",
+  },
+  {
     title: 'Design is a pillar, not a service',
     body: "I push for design to sit as an equal partner alongside product and engineering, a three-legged stool rather than an afterthought. In practice that's meant driving teams onto a shared design tool, running weekly critiques, and opening public feedback channels so design decisions stay visible and collaborative.",
   },
@@ -93,6 +97,10 @@ const principles = [
     transform: rotate(-1deg);
   }
 
+  .principle:nth-child(4) .title-note {
+    transform: rotate(1.2deg);
+  }
+
   .tape {
     position: absolute;
     top: -0.55rem;
@@ -105,6 +113,10 @@ const principles = [
 
   .principle:nth-child(2) .tape {
     transform: translateX(-50%) rotate(2.5deg);
+  }
+
+  .principle:nth-child(4) .tape {
+    transform: translateX(-50%) rotate(1.5deg);
   }
 
   /* Cedarville has a small x-height and fine strokes, so the handwritten
