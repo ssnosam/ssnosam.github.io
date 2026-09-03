@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&family=Karla:ital,wght@0,400;0,500;0,600;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap');
 
 :root {
   /* color */
@@ -19,8 +19,8 @@
 
   /* type: two families for all UI text. The handwriting face is decorative
      only, confined to the sticky note and polaroid caption. */
-  --font-display: 'Fraunces', serif;
-  --font-body: 'Inter', sans-serif;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'Karla', 'Helvetica Neue', Arial, sans-serif;
   --font-hand: 'Cedarville Cursive', 'Snell Roundhand', cursive;
 
   /* type scale, fixed steps so nothing drifts between components */
@@ -37,8 +37,10 @@
   --leading-snug: 1.25; /* h3 */
   --leading-body: 1.6; /* paragraphs */
 
-  /* measure: keeps prose inside 45-75 characters per line */
-  --measure: 60ch;
+  /* measure: keeps prose inside 45-75 characters per line. Tuned per body
+     face: ch is the width of "0", and Karla's is narrow relative to its
+     average glyph, so it fits more characters per ch than Inter did. */
+  --measure: 56ch;
   --tracking-label: 0.08em;
 
   /* spacing (4/8pt scale) */
