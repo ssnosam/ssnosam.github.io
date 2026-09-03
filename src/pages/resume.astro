@@ -66,6 +66,7 @@ function formatDate(date: Date | null) {
               </div>
               {data.note && <p class="note">{data.note}</p>}
               <div class="role-body">
+                {data.summary && <p>{data.summary}</p>}
                 <Content />
               </div>
             </article>
@@ -85,6 +86,7 @@ function formatDate(date: Date | null) {
                 </span>
               </div>
               <div class="role-body">
+                {data.summary && <p>{data.summary}</p>}
                 <Content />
               </div>
             </article>
