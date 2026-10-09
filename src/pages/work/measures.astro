@@ -1,7 +1,7 @@
 ---
 // NOTE: the <ReviewNote> callouts flag copy drafted from the original deck's
 // screens and diagrams rather than written from memory: the dates, the request
-// counts, the persona, the design decisions, and the reflection. Correct or
+// counts, the persona, and the design decisions. Correct or
 // replace those, then delete the notes before this page is published or
 // presented. Copy lives in src/data/measures.ts and is shared with the slide
 // view at ./measures/present.
@@ -263,24 +263,6 @@ import userFlow from '../../assets/work/measures/user-flow.png';
       </div>
     </section>
 
-    <section id="reflection">
-      <div class="container">
-        <h2 class="reveal">What I'd do differently</h2>
-        <ReviewNote>
-          Drafted from the artifacts. The strongest version of this section is the one only you can
-          write, and interviewers weight it heavily.
-        </ReviewNote>
-        <div class="prose reveal">
-          {
-            cs.reflection.map((r) => (
-              <p>
-                <strong>{r.lead}</strong> {r.body}
-              </p>
-            ))
-          }
-        </div>
-      </div>
-    </section>
   </main>
   <Footer />
 </BaseLayout>
@@ -489,8 +471,7 @@ import userFlow from '../../assets/work/measures/user-flow.png';
     color: var(--color-text-muted);
   }
 
-  .takeaways strong,
-  #reflection strong {
+  .takeaways strong {
     color: var(--color-text);
     font-weight: 600;
   }

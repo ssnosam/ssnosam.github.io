@@ -290,18 +290,6 @@ export const takeaways = [
   },
 ];
 
-// draft: the strongest version of this is the one only Shelby can write.
-export const reflection = [
-  {
-    lead: 'I’d instrument the close before shipping it.',
-    body: 'We knew how often measures were closed wrong only because the advisory team checked by hand. Tracking which reasons people chose from day one would have shown sooner which statuses still confused people.',
-  },
-  {
-    lead: 'I’d take on the field next.',
-    body: 'The journey map kept pointing at the engineer away from a desk. The mobile list was a start, but the biggest open opportunity was letting the engineer update and verify a measure from where the work happens.',
-  },
-];
-
 // Speaker notes for the slide view, keyed by slide id. Press N to show them.
 export const notes: Record<string, string> = {
   title:
