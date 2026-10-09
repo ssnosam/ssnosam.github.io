@@ -1,0 +1,192 @@
+---
+/* Decision 1: creating a report by conversation. Every guess the assistant
+   makes lands in something you can check and edit. */
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+
+const steps = ['Report details', 'Audit data scoping', 'Build content blocks', 'Transfer to template'];
+const scope = [
+  ['Travel and Expense', 'Closed'],
+  ['Vendor Master', 'Closed'],
+  ['Credit Administration', 'Fieldwork'],
+];
+const content = [
+  'Project Details',
+  'AI-Generated Project Summary',
+  'Project Statuses',
+  'Quarterly Audit Results',
+  'Open High Priority Issues',
+];
+---
+
+<div
+  class:list={['pm', 'mock-create', className]}
+  role="img"
+  aria-label="Creating a report in Optro. On the left, a four-step stepper is on step 3, Build content blocks. On the right, the Optro Assistant: the user asked to scope 9 audits and their related issues, and the assistant shows the proposed scope as a checked table, then a checklist of suggested content blocks with a Generate Draft button."
+>
+  <div class="pm-window">
+    <div class="pm-bar"><i></i><i></i><i></i><span>Optro · Create report</span></div>
+    <div class="layout">
+      <div class="guide">
+        <ol class="stepper">
+          {
+            steps.map((s, i) => (
+              <li class:list={{ done: i < 2, on: i === 2 }}>
+                <span class="dot">{i < 2 ? '✓' : i + 1}</span>
+                {s}
+              </li>
+            ))
+          }
+        </ol>
+        <div class="help">
+          <p class="pm-label">Step 3</p>
+          <p class="help-title">Build content blocks</p>
+          <div class="pm-lines"><i style="width: 92%"></i><i style="width: 78%"></i><i style="width: 60%"></i></div>
+        </div>
+      </div>
+      <div class="pm-chat chat">
+        <p class="pm-label">Optro Assistant</p>
+        <p class="pm-say">Scope these 9 OpsAudits and their related issues, action plans and risks</p>
+        <div class="card">
+          <p class="card-title">Proposed scope <span class="pm-chip system">9 audits</span></p>
+          <table class="pm-table">
+            <tbody>
+              {
+                scope.map(([a, s]) => (
+                  <tr>
+                    <td><span class="pm-check">{a}</span></td>
+                    <td>{s}</td>
+                  </tr>
+                ))
+              }
+              <tr><td colspan="2" class="more">+ 6 more</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="pm-ask">What content should be generated?</p>
+        <div class="card">
+          <div class="list">
+            {content.map((c) => <span class="pm-check">{c}</span>)}
+          </div>
+          <div class="pm-actions"><span class="pm-btn">Generate Draft</span></div>
+        </div>
+        <p class="pm-input">Ask Optro Assistant…</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .layout {
+    display: grid;
+    grid-template-columns: 14em 1fr;
+  }
+
+  .guide {
+    display: grid;
+    gap: 1em;
+    align-content: start;
+    padding: 1em;
+    border-right: 1px solid var(--pm-line);
+    background: var(--pm-canvas);
+  }
+
+  .stepper {
+    display: grid;
+    gap: 0.55em;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.8em;
+    color: var(--pm-muted);
+  }
+
+  .stepper li {
+    display: flex;
+    align-items: center;
+    gap: 0.55em;
+  }
+
+  .dot {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 1.6em;
+    height: 1.6em;
+    border-radius: 50%;
+    border: 1px solid var(--pm-faint);
+    font-size: 0.85em;
+    background: var(--pm-bg);
+  }
+
+  .stepper .done .dot {
+    border-color: var(--pm-blue);
+    color: var(--pm-blue);
+  }
+
+  .stepper .on {
+    color: var(--pm-text);
+    font-weight: 600;
+  }
+
+  .stepper .on .dot {
+    border-color: var(--pm-blue);
+    background: var(--pm-blue);
+    color: #fff;
+  }
+
+  .help {
+    padding: 0.75em;
+    border-radius: 0.5em;
+    background: var(--pm-bg);
+    box-shadow: inset 3px 0 0 var(--pm-blue);
+  }
+
+  .help-title {
+    margin: 0.2em 0 0.5em;
+    font-size: 0.85em;
+    font-weight: 600;
+  }
+
+  .chat {
+    padding: 1em;
+  }
+
+  .card {
+    display: grid;
+    gap: 0.6em;
+    padding: 0.7em;
+    border: 1px solid var(--pm-line);
+    border-radius: 0.55em;
+  }
+
+  .card-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    font-size: 0.85em;
+    font-weight: 600;
+  }
+
+  .list {
+    display: grid;
+    gap: 0.35em;
+  }
+
+  .more {
+    color: var(--pm-muted);
+  }
+
+  @media (max-width: 560px) {
+    .layout {
+      grid-template-columns: 1fr;
+    }
+
+    .guide {
+      display: none;
+    }
+  }
+</style>

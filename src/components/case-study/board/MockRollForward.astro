@@ -1,0 +1,89 @@
+---
+/* Decision 3: roll forward regenerates the data and flags the words. */
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<div
+  class:list={['pm', 'mock-roll', className]}
+  role="img"
+  aria-label="A report rolled forward from Q4 2026 to Q1 2027. A banner says 6 sections carried over and data was re-scoped, with 1 regenerated summary and 3 static values to review. The Project Details section is labeled Check static text, and 'Q4 2026' is highlighted. A popover titled Static text from last period suggests replacing Q4 2026 with Q1 2027, with Keep and Replace buttons. Below, the Project Summary is labeled Regenerated and Review regenerated summary."
+>
+  <div class="pm-window">
+    <div class="pm-bar"><i></i><i></i><i></i><span>Optro · Q1 2027 Audit Progress Board Report</span></div>
+    <div class="pm-pad stack">
+      <div class="pm-banner system">
+        <p>
+          <strong>Rolled forward from Q4 2026 Board Report:</strong> 6 sections carried over and data
+          re-scoped to Q1 2027. Review 1 regenerated summary and 3 static values before you share it.
+        </p>
+        <span class="pm-btn ghost">Review next</span>
+      </div>
+
+      <div class="pm-block">
+        <div class="pm-block-head">
+          <b>Project Details</b>
+          <span class="pm-chip amber">Check static text</span>
+          <span class="pm-chip plain">Replace all</span>
+        </div>
+        <p class="pm-text">
+          <span class="pm-flag">Q4 2026</span> Audit Committee. Covers audit activity from Oct 1 to Dec 31,
+          prepared by Internal Audit for the <span class="pm-flag">Oct 22, 2026</span> meeting.
+        </p>
+      </div>
+
+      <div class="pm-pop pop">
+        <p class="pm-pop-title">Static text from last period</p>
+        <p class="pm-pop-sub">Project Details · from reporting period</p>
+        <div class="pm-compare">
+          <div><p class="pm-label">Current text</p><b>Q4 2026</b></div>
+          <em>&rarr;<br />Suggested for Q1 2027</em>
+          <div><p class="pm-label">Suggested text</p><b>Q1 2027</b></div>
+        </div>
+        <div class="pm-actions">
+          <span class="pm-btn ghost">Keep</span>
+          <span class="pm-btn">Replace</span>
+        </div>
+      </div>
+
+      <div class="pm-block">
+        <div class="pm-block-head">
+          <b>Project Summary</b>
+          <span class="pm-chip system">Regenerated</span>
+          <span class="pm-chip amber">Review regenerated summary</span>
+        </div>
+        <div class="pm-lines"><i style="width: 97%"></i><i style="width: 90%"></i><i style="width: 54%"></i></div>
+      </div>
+
+      <div class="pm-block">
+        <div class="pm-block-head">
+          <b>Audit Plan Changes</b>
+          <span class="pm-chip plain">Carried over</span>
+        </div>
+        <div class="pm-lines"><i style="width: 80%"></i></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .stack {
+    display: grid;
+    gap: 0.7em;
+    background: var(--pm-canvas);
+  }
+
+  .pop {
+    width: min(21em, 100%);
+    margin: -0.3em 0 0 2em;
+  }
+
+  @media (max-width: 560px) {
+    .pop {
+      margin-left: 0;
+    }
+  }
+</style>

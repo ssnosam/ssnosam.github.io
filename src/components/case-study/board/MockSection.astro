@@ -1,0 +1,143 @@
+---
+/* Drafting: ask for a section in plain language, get a configured block back. */
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+
+const issues = [
+  ['SOD payables', 'High'],
+  ['Missing anti-virus signature report', 'High'],
+  ['Policies not properly documented', 'High'],
+  ['Vendor master changes not reviewed', 'Medium'],
+  ['Backup restoration not tested', 'Low'],
+];
+---
+
+<div
+  class:list={['pm', 'mock-section', className]}
+  role="img"
+  aria-label="Asking the Optro Assistant for a list of open issues by magnitude. It asks which columns to include and how to sort, with one-click answers. What comes back is a configured block: an Open Issues section with its data source, filter, and columns in the normal editor, and the table it produces, labeled as AI-generated content."
+>
+  <div class="row">
+    <div class="pm-window ask">
+      <div class="pm-pad pm-chat">
+        <p class="pm-label">Optro Assistant</p>
+        <p class="pm-say">A list of open issues by magnitude</p>
+        <p class="pm-ask">Which columns should this table include?</p>
+        <span class="pm-option is-on">Title, Status, Magnitude</span>
+        <span class="pm-option">Title, Magnitude, Created Date</span>
+        <p class="pm-ask">How should the table be sorted?</p>
+        <span class="pm-option is-on">By Magnitude (highest first)</span>
+        <span class="pm-option">No particular order</span>
+      </div>
+    </div>
+
+    <span class="arrow" aria-hidden="true">&rarr;</span>
+
+    <div class="pm-window result">
+      <div class="config">
+        <p class="pm-label">Content configuration</p>
+        <dl>
+          <div><dt>Section title</dt><dd>Open Issues</dd></div>
+          <div><dt>Data</dt><dd>Issues</dd></div>
+          <div><dt>Filter</dt><dd>Status = Open</dd></div>
+          <div><dt>Columns</dt><dd>Title, Status, Magnitude</dd></div>
+          <div><dt>Sort</dt><dd>Magnitude, highest first</dd></div>
+        </dl>
+      </div>
+      <div class="pm-pad out">
+        <div class="pm-block-head">
+          <b>Open Issues</b>
+          <span class="pm-chip ai">AI Generated Content</span>
+        </div>
+        <table class="pm-table">
+          <thead><tr><th>Title of issue</th><th>Status</th><th>Magnitude</th></tr></thead>
+          <tbody>
+            {
+              issues.map(([t, m]) => (
+                <tr>
+                  <td>{t}</td>
+                  <td>Open</td>
+                  <td>{m}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .row {
+    display: grid;
+    grid-template-columns: 17em auto 1fr;
+    gap: 1em;
+    align-items: center;
+  }
+
+  .arrow {
+    font-size: 1.4em;
+    color: var(--pm-muted);
+  }
+
+  .result {
+    display: grid;
+    grid-template-columns: 13em 1fr;
+  }
+
+  .config {
+    padding: 1em 0.9em;
+    border-right: 1px solid var(--pm-line);
+    background: var(--pm-canvas);
+  }
+
+  .config dl {
+    display: grid;
+    gap: 0.55em;
+    margin: 0.6em 0 0;
+  }
+
+  .config dt {
+    font-size: 0.68em;
+    color: var(--pm-muted);
+  }
+
+  .config dd {
+    margin: 0.1em 0 0;
+    padding: 0.3em 0.5em;
+    border: 1px solid var(--pm-line);
+    border-radius: 0.35em;
+    background: var(--pm-bg);
+    font-size: 0.78em;
+  }
+
+  .out {
+    align-self: start;
+  }
+
+  @media (max-width: 760px) {
+    .row {
+      grid-template-columns: 1fr;
+    }
+
+    .arrow {
+      justify-self: center;
+      transform: rotate(90deg);
+    }
+  }
+
+  @media (max-width: 560px) {
+    .result {
+      grid-template-columns: 1fr;
+    }
+
+    .config {
+      border-right: 0;
+      border-bottom: 1px solid var(--pm-line);
+    }
+  }
+</style>

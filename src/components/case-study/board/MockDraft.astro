@@ -1,0 +1,149 @@
+---
+/* The report editor the moment the agent hands over a draft. */
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+
+const sections = [
+  'Project Details',
+  'Project Summary',
+  'Project Statuses',
+  'Quarterly Audit Results',
+  'Open High Priority Issues',
+  'Property Audits by Region',
+];
+---
+
+<div
+  class:list={['pm', 'mock-draft', className]}
+  role="img"
+  aria-label="The Optro report editor for a Q4 2026 Audit Progress Board Report. A banner says the assistant built 6 sections from 9 audits and that AI-written content is marked for review. A sidebar lists the six sections; the main panel shows a project summary tagged as AI-generated and awaiting review, above a table of audit statuses."
+>
+  <div class="pm-window">
+    <div class="pm-bar"><i></i><i></i><i></i><span>Optro · Reports</span></div>
+    <div class="pm-pad head">
+      <p class="pm-crumb">Audit / Reports</p>
+      <div class="title-row">
+        <p class="pm-h">Q4 2026 Audit Progress Board Report</p>
+        <span class="pm-btn ghost">Preview</span>
+        <span class="pm-btn">Save</span>
+      </div>
+      <div class="pm-tabs">
+        <span>Details</span><span class="is-on">Editor</span><span>Data</span><span>Activity Log</span>
+      </div>
+    </div>
+    <div class="body">
+      <aside class="side">
+        <p class="pm-label">Content configuration</p>
+        <ol>
+          {sections.map((s) => <li>{s}</li>)}
+        </ol>
+      </aside>
+      <div class="main">
+        <div class="pm-banner system">
+          <p>
+            <strong>Draft generated.</strong> Optro Assistant built 6 sections from 9 OpsAudits. AI-written
+            content is marked for review before you share it.
+          </p>
+        </div>
+        <div class="pm-block">
+          <div class="pm-block-head">
+            <b>Project Summary</b>
+            <span class="pm-chip ai">AI Summary</span>
+            <span class="pm-chip amber">Review before sharing</span>
+          </div>
+          <p class="pm-text">
+            Nine audits are in scope this quarter. Travel and Expense and Vendor Master reviews closed
+            on schedule; Credit Administration moved into fieldwork in September.
+          </p>
+        </div>
+        <div class="pm-block">
+          <div class="pm-block-head">
+            <b>Project Statuses</b>
+            <span class="pm-chip system">Live data</span>
+          </div>
+          <table class="pm-table">
+            <thead><tr><th>Audit</th><th>Status</th><th>Key findings</th></tr></thead>
+            <tbody>
+              <tr><td>Travel and Expense</td><td><span class="pm-chip green">Closed</span></td><td>2</td></tr>
+              <tr><td>Vendor Master</td><td><span class="pm-chip green">Closed</span></td><td>1</td></tr>
+              <tr><td>Credit Administration</td><td><span class="pm-chip plain">Fieldwork</span></td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .head {
+    padding-bottom: 0;
+  }
+
+  .title-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+  }
+
+  .title-row .pm-h {
+    margin-right: auto;
+  }
+
+  .body {
+    display: grid;
+    grid-template-columns: 12.5em 1fr;
+    background: var(--pm-canvas);
+  }
+
+  .side {
+    padding: 1em 0.9em;
+    border-right: 1px solid var(--pm-line);
+    background: var(--pm-bg);
+  }
+
+  .side ol {
+    display: grid;
+    gap: 0.35em;
+    margin: 0.6em 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.8em;
+  }
+
+  .side li {
+    padding: 0.3em 0.5em;
+    border-radius: 0.35em;
+    color: var(--pm-muted);
+  }
+
+  .side li:nth-child(2) {
+    background: var(--pm-blue-wash);
+    color: var(--pm-blue);
+    font-weight: 600;
+  }
+
+  .main {
+    display: grid;
+    gap: 0.7em;
+    padding: 0.9em;
+    align-content: start;
+  }
+
+  @media (max-width: 560px) {
+    .body {
+      grid-template-columns: 1fr;
+    }
+
+    .side {
+      display: none;
+    }
+
+    .title-row .pm-btn {
+      display: none;
+    }
+  }
+</style>

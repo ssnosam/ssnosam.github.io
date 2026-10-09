@@ -1,0 +1,106 @@
+---
+/* Where the agent sits: five rungs, from suggesting to acting silently. The
+   bars climb with autonomy; the last one is drawn empty, because nothing a
+   board sees changes without a person. Sizes are in em, so the slide view
+   scales the whole ladder by setting one font-size. */
+interface Props {
+  rungs: { name: string; body: string; empty?: boolean }[];
+  class?: string;
+}
+
+const { rungs, class: className = '' } = Astro.props;
+---
+
+<ol class:list={['ladder', className]}>
+  {
+    rungs.map((r, i) => (
+      <li class:list={['rung', { 'is-empty': r.empty }]} style={`--step: ${i}`}>
+        <span class="bar" aria-hidden="true" />
+        <span class="num">Rung {i}</span>
+        <h3>{r.name}</h3>
+        <p>{r.body}</p>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .ladder {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 1em;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 1rem;
+  }
+
+  .rung {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Each bar sits on a shared baseline and rises a step higher than the last. */
+  .bar {
+    display: block;
+    height: calc(2em + var(--step) * 1.6em);
+    margin-top: calc((4 - var(--step)) * 1.6em);
+    margin-bottom: 1em;
+    border-radius: 0.4em;
+    background: color-mix(in srgb, var(--iris-system) calc(30% + var(--step) * 20%), var(--iris-system-wash));
+  }
+
+  .is-empty .bar {
+    background: none;
+    border: 1.5px dashed var(--iris-person);
+  }
+
+  .num {
+    font-size: 0.75em;
+    font-weight: 600;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--iris-system-ink);
+  }
+
+  .is-empty .num,
+  .is-empty h3 {
+    color: var(--iris-person-ink);
+  }
+
+  h3 {
+    margin: 0.3em 0 0.4em;
+    font-size: 1.15em;
+    line-height: 1.25;
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.875em;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 760px) {
+    .ladder {
+      grid-template-columns: 1fr;
+      gap: 0.9em;
+    }
+
+    .rung {
+      display: grid;
+      grid-template-columns: 4.5em 1fr;
+      column-gap: 1em;
+      align-items: start;
+    }
+
+    /* On a phone the bars turn sideways: width carries the climb. */
+    .bar {
+      grid-row: span 3;
+      align-self: stretch;
+      height: auto;
+      min-height: 3em;
+      margin: 0;
+      width: calc(1.2em + var(--step) * 0.8em);
+    }
+  }
+</style>

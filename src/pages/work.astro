@@ -8,8 +8,18 @@ import { site } from '../data/site.config';
 
 import disclosureTile from '../assets/work/disclosure/disclosure-tile.png';
 import measuresTile from '../assets/work/measures/measures-tile.png';
+import boardTile from '../assets/work/board-reporting/board-reporting-tile.png';
 
 const projects = [
+  {
+    href: '/work/board-reporting',
+    title: 'Automated Board Reporting',
+    disciplines: ['Product Design', 'Agentic AI', 'UX Lead'],
+    summary:
+      "An agent that assembles an audit team's board report from live data in Optro, while the people who sign it stay the authors.",
+    image: boardTile,
+    imageAlt: 'An abstract report card: blue bars that climb, a violet signature, and a violet check mark.',
+  },
   {
     href: '/work/disclosure',
     title: 'Disclosure',
@@ -49,6 +59,12 @@ const projects = [
             More are on the way. In the meantime, my <a href="/resume">résumé</a> covers the rest of
             the work in brief, and I'm always happy to walk through any of it in person.
           </p>
+          <p class="visuals-note reveal" style="--reveal-delay: 0.14s">
+            A note on the visuals: some screens are abstracted or recreated rather than shown as
+            shipped. In B2B SaaS, design and user experience are key differentiators, so I keep
+            proprietary product work private and focus on the problems, decisions, and reasoning
+            behind it.
+          </p>
         </div>
 
         <div class="projects">
@@ -80,6 +96,13 @@ const projects = [
   .lead {
     font-size: var(--text-lg);
     line-height: var(--leading-body);
+  }
+
+  .visuals-note {
+    margin-top: var(--space-4);
+    padding-left: var(--space-3);
+    border-left: 2px solid var(--color-highlight);
+    font-size: var(--text-sm);
   }
 
   .projects {

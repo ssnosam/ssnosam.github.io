@@ -1,0 +1,40 @@
+/* The Automated Board Reporting case study tells its story in two colors:
+   blue for what the system owns (data, generated content) and violet for
+   what the person owns (their deck, their edits, their judgement). The same
+   pair carries the original Figma deck. Only the color tokens change: type,
+   spacing, and every shared component stay as the rest of the site has
+   them. Applied to <body> via BaseLayout's `theme`. */
+.theme-iris {
+  --color-bg: #f6f7fc;
+  --color-text: #1d2233;
+  --color-text-muted: #555d74;
+  --color-border: #e2e5f1;
+  --color-accent: #3a5fc8; /* 5.6:1 on white */
+  --color-accent-soft: #7d93d9;
+  --color-accent-ink: #283f8f;
+  --color-accent-wash: #eef1fb;
+  --color-grid: rgba(58, 95, 200, 0.05);
+  --color-highlight: #d7dcf6;
+  --color-ink: #2a2f42;
+
+  --iris-wash: #f1f3fb;
+  --iris-wash-deep: #e6e9f6;
+
+  /* system: data and generated content */
+  --iris-system: #4a78e0;
+  --iris-system-ink: #2c56b8; /* 6.1:1 on white */
+  --iris-system-wash: #e9effd;
+
+  /* person: the deck, edits, and judgement */
+  --iris-person: #8a63d2;
+  --iris-person-ink: #6741b0; /* 6.6:1 on white */
+  --iris-person-wash: #f2ecfc;
+
+  /* warm accent for flags that wait on a person */
+  --iris-amber: #c98a1b;
+  --iris-amber-ink: #8a5a06; /* 5.9:1 on white */
+  --iris-amber-wash: #fdf4e2;
+
+  /* the deep gradient of the title, reframe, and closing slides */
+  --iris-night: #151a2e;
+}

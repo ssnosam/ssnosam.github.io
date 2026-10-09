@@ -1,0 +1,317 @@
+---
+/* Low-detail product sketches for the places where the shape matters more
+   than the words: the creation wizard, the report editor, and the PowerPoint
+   add-in in the two forms we tested (a menu, or hashtag placeholders). */
+interface Props {
+  kind: 'wizard' | 'editor' | 'addin' | 'hashtag';
+  class?: string;
+}
+
+const { kind, class: className = '' } = Astro.props;
+
+const labels = {
+  wizard: 'A sketch of the creation wizard: a four-step stepper across the top, and a form for scoping audits and choosing content blocks.',
+  editor: 'A sketch of the report editor: Details, Editor, and Data tabs, a list of sections on the left, and configured blocks on the right.',
+  addin: 'A sketch of PowerPoint with the Optro add-in open beside the slide: a menu of content blocks, one of them dropped onto the slide as a chart and a table.',
+  hashtag: 'A sketch of PowerPoint where the template holds hashtag placeholders, such as #OpenIssues, that the add-in fills with data.',
+};
+const ppt = kind === 'addin' || kind === 'hashtag';
+---
+
+<div class:list={['pm', 'schematic', `is-${kind}`, className]} role="img" aria-label={labels[kind]}>
+  <div class="pm-window">
+    <div class:list={['pm-bar', { ppt }]}><i></i><i></i><i></i><span>{ppt ? 'PowerPoint' : 'Optro'}</span></div>
+
+    {
+      kind === 'wizard' && (
+        <div class="pm-pad wiz">
+          <ol class="steps">
+            <li class="on" />
+            <li class="on" />
+            <li />
+            <li />
+          </ol>
+          <div class="form">
+            <span class="field" />
+            <span class="field short" />
+            <div class="picks">
+              <span class="pm-check">Audits</span>
+              <span class="pm-check">Issues</span>
+              <span class="pm-check">Action plans</span>
+            </div>
+          </div>
+          <div class="pm-actions"><span class="pm-btn">Next</span></div>
+        </div>
+      )
+    }
+
+    {
+      kind === 'editor' && (
+        <div class="ed">
+          <div class="pm-tabs tabs">
+            <span>Details</span><span class="is-on">Editor</span><span>Data</span>
+          </div>
+          <div class="ed-body">
+            <div class="ed-side">
+              <i class="on" /><i /><i /><i />
+            </div>
+            <div class="ed-main">
+              <div class="pm-block"><div class="pm-lines"><i style="width: 40%" /><i style="width: 90%" /><i style="width: 75%" /></div></div>
+              <div class="pm-block">
+                <div class="grid">
+                  {Array.from({ length: 9 }).map(() => <i />)}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+    }
+
+    {
+      ppt && (
+        <div class="ppt-body">
+          <div class="thumbs"><i /><i class="on" /><i /></div>
+          <div class="ppt-slide">
+            <span class="slide-title">Management Action Plans</span>
+            {kind === 'addin' ? (
+              <div class="slide-art">
+                <span class="pie" />
+                <span class="mini-table"><i /><i /><i /><i /></span>
+              </div>
+            ) : (
+              <div class="slide-art tags">
+                <span class="tag">#ActionPlanStatus</span>
+                <span class="tag">#OpenIssues</span>
+              </div>
+            )}
+          </div>
+          {kind === 'addin' && (
+            <div class="addin">
+              <p class="pm-label">Content blocks</p>
+              <span class="pm-option is-on">Action plan status</span>
+              <span class="pm-option">Open issues</span>
+              <span class="pm-option">Audit results</span>
+            </div>
+          )}
+        </div>
+      )
+    }
+  </div>
+</div>
+
+<style>
+  /* A sketch stretched across a wide column reads as empty, not simple. */
+  .schematic {
+    max-width: 34em;
+  }
+
+  .ppt {
+    background: #f3eee9;
+  }
+
+  /* Wizard */
+  .wiz {
+    display: grid;
+    gap: 0.9em;
+  }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.4em;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .steps li {
+    height: 0.35em;
+    border-radius: 1em;
+    background: var(--pm-line);
+  }
+
+  .steps .on {
+    background: var(--pm-blue);
+  }
+
+  .form {
+    display: grid;
+    gap: 0.5em;
+  }
+
+  .field {
+    height: 1.8em;
+    border: 1px solid var(--pm-line);
+    border-radius: 0.4em;
+  }
+
+  .field.short {
+    width: 60%;
+  }
+
+  .picks {
+    display: grid;
+    gap: 0.3em;
+    margin-top: 0.3em;
+  }
+
+  /* Editor */
+  .tabs {
+    padding: 0.7em 1em 0;
+  }
+
+  .ed-body {
+    display: grid;
+    grid-template-columns: 5.5em 1fr;
+    background: var(--pm-canvas);
+  }
+
+  .ed-side {
+    display: grid;
+    gap: 0.4em;
+    align-content: start;
+    padding: 0.8em 0.6em;
+    background: var(--pm-bg);
+    border-right: 1px solid var(--pm-line);
+  }
+
+  .ed-side i {
+    height: 0.9em;
+    border-radius: 0.25em;
+    background: #eceef4;
+  }
+
+  .ed-side i.on {
+    background: var(--pm-blue-wash);
+    box-shadow: inset 2px 0 0 var(--pm-blue);
+  }
+
+  .ed-main {
+    display: grid;
+    gap: 0.5em;
+    padding: 0.7em;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.3em;
+  }
+
+  .grid i {
+    height: 0.7em;
+    border-radius: 0.2em;
+    background: #e8ebf2;
+  }
+
+  .grid i:nth-child(-n + 3) {
+    background: #d9deea;
+  }
+
+  /* PowerPoint */
+  .ppt-body {
+    display: grid;
+    grid-template-columns: 2.4em minmax(0, 1fr) auto;
+    gap: 0.6em;
+    padding: 0.7em;
+    background: #f1f1f3;
+  }
+
+  .thumbs {
+    display: grid;
+    gap: 0.35em;
+    align-content: start;
+  }
+
+  .thumbs i {
+    aspect-ratio: 16 / 10;
+    border-radius: 0.15em;
+    background: #fff;
+    box-shadow: 0 0 0 1px var(--pm-line);
+  }
+
+  .thumbs i.on {
+    box-shadow: 0 0 0 2px #c55a2b;
+  }
+
+  .ppt-slide {
+    min-width: 0;
+    display: grid;
+    gap: 0.6em;
+    align-content: start;
+    aspect-ratio: 16 / 10;
+    padding: 0.8em 0.9em;
+    background: #fff;
+    box-shadow: 0 0 0 1px var(--pm-line);
+  }
+
+  .slide-title {
+    font-size: 0.85em;
+    font-weight: 700;
+    color: #2b3a67;
+  }
+
+  .slide-art {
+    display: flex;
+    gap: 1em;
+    align-items: center;
+  }
+
+  .pie {
+    flex: none;
+    width: 3.4em;
+    height: 3.4em;
+    border-radius: 50%;
+    background: conic-gradient(#d2a54b 0 41%, #4b78c6 41% 63%, #4bae86 63% 80%, #8a63d2 80% 100%);
+  }
+
+  .mini-table {
+    display: grid;
+    flex: 1;
+    gap: 0.3em;
+  }
+
+  .mini-table i {
+    height: 0.5em;
+    border-radius: 0.2em;
+    background: #e8ebf2;
+  }
+
+  .tags {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.45em;
+  }
+
+  .tag {
+    padding: 0.2em 0.5em;
+    border: 1px dashed #b9a2e6;
+    border-radius: 0.3em;
+    background: var(--pm-violet-wash);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.72em;
+    color: var(--pm-violet);
+  }
+
+  .addin {
+    display: grid;
+    gap: 0.35em;
+    align-content: start;
+    width: 7.6em;
+    padding: 0.55em;
+    background: #fff;
+    box-shadow: 0 0 0 1px var(--pm-line);
+  }
+
+  .addin .pm-option {
+    font-size: 0.66em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .addin .pm-label {
+    font-size: 0.62em;
+  }
+</style>

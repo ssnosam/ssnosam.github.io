@@ -1,0 +1,117 @@
+---
+/* Nine block combinations collapse into two primitives and two functions. */
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<figure
+  class:list={['functions', className]}
+  role="img"
+  aria-label="Nine block combinations become two primitives, Table and Text, times two functions, Count and AI Summary, that work inside either."
+>
+  <div class="col">
+    <div class="nine" aria-hidden="true">
+      {Array.from({ length: 9 }).map(() => <i />)}
+    </div>
+    <span class="cap">9 block combinations</span>
+  </div>
+  <span class="arrow" aria-hidden="true">&rarr;</span>
+  <div class="col">
+    <div class="prims">
+      <span class="prim">Table</span>
+      <span class="prim">Text</span>
+    </div>
+    <span class="cap">2 primitives</span>
+  </div>
+  <span class="times" aria-hidden="true">&times;</span>
+  <div class="col">
+    <div class="prims">
+      <span class="fn">Count</span>
+      <span class="fn">AI Summary</span>
+    </div>
+    <span class="cap">2 functions</span>
+  </div>
+</figure>
+
+<style>
+  .functions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.2em;
+    margin: 0;
+    font-size: 1rem;
+  }
+
+  .col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6em;
+  }
+
+  .nine {
+    display: grid;
+    grid-template-columns: repeat(3, 1.6em);
+    gap: 0.35em;
+  }
+
+  .nine i {
+    height: 1.6em;
+    border-radius: 0.3em;
+    background: var(--color-highlight);
+  }
+
+  .prims {
+    display: grid;
+    gap: 0.5em;
+  }
+
+  .prim,
+  .fn {
+    padding: 0.45em 0.9em;
+    border-radius: 0.4em;
+    font-weight: 600;
+    font-size: 0.95em;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .prim {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+  }
+
+  .fn {
+    background: var(--iris-system-wash);
+    color: var(--iris-system-ink);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.8em;
+  }
+
+  .cap {
+    white-space: nowrap;
+    font-size: 0.75em;
+    font-weight: 600;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  .arrow,
+  .times {
+    font-size: 1.4em;
+    color: var(--color-text-muted);
+    padding-bottom: 1.2em;
+  }
+
+  /* On a phone the nine blocks take the first row, and the two-by-two the next. */
+  @media (max-width: 480px) {
+    .arrow {
+      display: none;
+    }
+  }
+</style>

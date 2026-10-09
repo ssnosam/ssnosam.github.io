@@ -1,0 +1,151 @@
+---
+/* The trust layer, one small panel per part: version history, the activity
+   log, and the regeneration warning. `part` picks which one to draw. */
+interface Props {
+  part: 'Version history' | 'Activity log' | 'Regeneration warning' | string;
+  class?: string;
+}
+
+const { part, class: className = '' } = Astro.props;
+---
+
+{
+  part === 'Version history' && (
+    <div
+      class:list={['pm', 'mock-trust', className]}
+      role="img"
+      aria-label="Version history: the current version, a named version called Pre-read sent to Audit Committee from Sep 18, and an automatic version, Edited Project Summary."
+    >
+      <div class="pm-window pm-pad panel">
+        <p class="pm-h">Version history</p>
+        <div class="ver current">
+          <div class="pm-block-head">
+            <b>Current version</b>
+            <span class="pm-chip green">Current</span>
+          </div>
+          <small>Last edited by Dana Ortiz</small>
+        </div>
+        <div class="ver">
+          <div class="pm-block-head">
+            <b>Pre-read sent to Audit Committee</b>
+            <span class="pm-chip person">Named</span>
+          </div>
+          <small>Sep 18, 2026 · 1 section differs from current</small>
+        </div>
+        <div class="ver">
+          <div class="pm-block-head">
+            <b>Edited Project Summary</b>
+            <span class="pm-chip plain">Auto</span>
+          </div>
+          <small>Sep 17, 2026</small>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+{
+  part === 'Activity log' && (
+    <div
+      class:list={['pm', 'mock-trust', className]}
+      role="img"
+      aria-label="Activity log: the assistant regenerated the project summary; a person applied a data change; a person reverted a change with a rationale; a person named a version."
+    >
+      <div class="pm-window pm-pad panel">
+        <p class="pm-h">Activity log</p>
+        <div class="pm-feed">
+          <div class="pm-row">
+            <span class="pm-avatar agent">AI</span>
+            <p>
+              Optro Assistant regenerated <b>Project Summary</b>
+              <small>Sep 22 · from new Q1 data</small>
+            </p>
+          </div>
+          <div class="pm-row">
+            <span class="pm-avatar">DO</span>
+            <p>
+              Dana Ortiz applied a data change to <b>Project Statuses</b>
+              <small>Sep 21 · Credit Administration</small>
+            </p>
+          </div>
+          <div class="pm-row">
+            <span class="pm-avatar">MR</span>
+            <p>
+              Marcus Reid reverted a change in <b>Open Issues</b>
+              <small>“Board saw the pre-read figure”</small>
+            </p>
+          </div>
+          <div class="pm-row">
+            <span class="pm-avatar">DO</span>
+            <p>
+              Dana Ortiz named a version
+              <small>Pre-read sent to Audit Committee</small>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+{
+  part === 'Regeneration warning' && (
+    <div
+      class:list={['pm', 'mock-trust', className]}
+      role="img"
+      aria-label="A warning inside a block's content configuration: Editing will regenerate this block. Its underlying data has changed, so saving any edit regenerates it using the latest data. Use View Changes to review the difference first."
+    >
+      <div class="pm-window pm-pad panel">
+        <p class="pm-crumb">&larr; Back to content configuration</p>
+        <p class="pm-h">Content configuration</p>
+        <div class="pm-banner amber warn">
+          <p>
+            <strong>Editing will regenerate this block.</strong> Its underlying data has changed. Saving
+            any edit regenerates it using the latest data, replacing what’s in the report now. Use View
+            Changes to review the difference first.
+          </p>
+        </div>
+        <p class="pm-label field">Section title</p>
+        <p class="pm-input">Open Issues</p>
+      </div>
+    </div>
+  )
+}
+
+<style>
+  .panel {
+    display: grid;
+    gap: 0.6em;
+    align-content: start;
+    height: 100%;
+  }
+
+  .ver {
+    padding: 0.55em 0.7em;
+    border-left: 2px solid var(--pm-line);
+  }
+
+  .ver.current {
+    border-left-color: var(--pm-blue);
+    background: var(--pm-canvas);
+    border-radius: 0 0.4em 0.4em 0;
+  }
+
+  .ver .pm-block-head {
+    margin-bottom: 0.1em;
+    font-size: 0.9em;
+  }
+
+  .ver small {
+    font-size: 0.75em;
+    color: var(--pm-muted);
+  }
+
+  .warn {
+    flex-direction: column;
+  }
+
+  .field {
+    margin-top: 0.3em;
+  }
+</style>

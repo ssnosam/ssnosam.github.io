@@ -1,0 +1,85 @@
+---
+/* Decision 2: when data changes, the agent proposes and a person commits. */
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<div
+  class:list={['pm', 'mock-redline', className]}
+  role="img"
+  aria-label="The report editor after audit data changed. An amber banner explains that sections marked Pending Review have newer data, with a Review changes button. The Project Summary is marked Pending Review and shows an inline redline: 'has not started' struck through, replaced by 'moved into fieldwork on Sep 19'. A Data Refresh popover compares the original value, Not started, with the updated value, Fieldwork, updated Sep 19, 2026, with Revert and Apply to Report buttons."
+>
+  <div class="pm-window">
+    <div class="pm-bar"><i></i><i></i><i></i><span>Optro · Q4 2026 Audit Progress Board Report</span></div>
+    <div class="pm-pad stack">
+      <div class="pm-banner amber">
+        <p>
+          <strong>Underlying data has changed since this report was generated.</strong> Sections marked
+          Pending Review have newer data. Review the changes to decide what to keep.
+        </p>
+        <span class="pm-btn ghost">Review changes</span>
+      </div>
+
+      <div class="pm-block">
+        <div class="pm-block-head">
+          <b>Project Summary</b>
+          <span class="pm-chip amber">Pending Review</span>
+        </div>
+        <p class="pm-text">
+          Nine audits are in scope this quarter. Travel and Expense and Vendor Master closed on schedule.{' '}
+          <span class="pm-del">Credit Administration Audit has not started.</span>{' '}
+          <span class="pm-ins">Credit Administration Audit moved into fieldwork on Sep 19.</span>
+        </p>
+      </div>
+
+      <div class="pm-pop pop">
+        <p class="pm-pop-title">Data Refresh</p>
+        <p class="pm-pop-sub">Credit Administration Audit · phase</p>
+        <div class="pm-compare">
+          <div><p class="pm-label">Original value</p><b>Not started</b></div>
+          <em>&rarr;<br />Updated Sep 19, 2026</em>
+          <div><p class="pm-label">Updated value</p><b>Fieldwork</b></div>
+        </div>
+        <div class="pm-actions">
+          <span class="pm-btn ghost">Revert</span>
+          <span class="pm-btn">Apply to Report</span>
+        </div>
+      </div>
+
+      <div class="pm-block faded">
+        <div class="pm-block-head">
+          <b>Project Statuses</b>
+          <span class="pm-chip amber">Pending Review</span>
+        </div>
+        <div class="pm-lines"><i style="width: 96%"></i><i style="width: 88%"></i></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .stack {
+    position: relative;
+    display: grid;
+    gap: 0.7em;
+    background: var(--pm-canvas);
+  }
+
+  .pop {
+    width: min(21em, 100%);
+    margin: -0.3em 0 0 2em;
+  }
+
+  .faded {
+    opacity: 0.6;
+  }
+
+  @media (max-width: 560px) {
+    .pop {
+      margin-left: 0;
+    }
+  }
+</style>

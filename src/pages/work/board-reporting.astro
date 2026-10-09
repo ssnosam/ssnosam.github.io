@@ -1,0 +1,1113 @@
+---
+// Copy lives in src/data/board-reporting.ts and is shared with the slide view
+// at ./board-reporting/present. The product mockups in
+// src/components/case-study/board/ redraw the Optro screens in HTML with
+// invented sample data.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import CaseStudyHero from '../../components/case-study/CaseStudyHero.astro';
+import CaseStudyMeta from '../../components/case-study/CaseStudyMeta.astro';
+import CaseStudyNav from '../../components/case-study/CaseStudyNav.astro';
+import StatBlock from '../../components/case-study/StatBlock.astro';
+import TensionCall from '../../components/case-study/board/TensionCall.astro';
+import BoardCycle from '../../components/case-study/board/BoardCycle.astro';
+import AutonomyLadder from '../../components/case-study/board/AutonomyLadder.astro';
+import Milestones from '../../components/case-study/board/Milestones.astro';
+import FunctionsDiagram from '../../components/case-study/board/FunctionsDiagram.astro';
+import MockDraft from '../../components/case-study/board/MockDraft.astro';
+import MockCreate from '../../components/case-study/board/MockCreate.astro';
+import MockSection from '../../components/case-study/board/MockSection.astro';
+import MockRedline from '../../components/case-study/board/MockRedline.astro';
+import MockRollForward from '../../components/case-study/board/MockRollForward.astro';
+import MockTrust from '../../components/case-study/board/MockTrust.astro';
+import MockSchematic from '../../components/case-study/board/MockSchematic.astro';
+import { site } from '../../data/site.config';
+import * as cs from '../../data/board-reporting';
+import '../../styles/theme-iris.css';
+import '../../styles/product-mock.css';
+
+import tile from '../../assets/work/board-reporting/board-reporting-tile.png';
+
+const placeKinds = ['wizard', 'editor', 'addin'] as const;
+const [functionsDecision, familiarDecision, refreshDecision] = cs.mvpDecisions;
+const [createDecision, proposeDecision, rollDecision] = cs.agentDecisions;
+---
+
+<BaseLayout
+  title={`${cs.title} | ${site.name}`}
+  description="Designing an agent that assembles an internal audit team's board report from live data in Optro, while the people who sign it stay the authors."
+  theme="theme-iris"
+>
+  <Nav />
+  <main>
+    <section id="board-reporting" class="intro">
+      <div class="container">
+        <div class="toolbar">
+          <a href="/work" class="back-link">&larr; Back to my work</a>
+          <a href="/work/board-reporting/present" class="present-link">
+            Present as slides <span aria-hidden="true">&rarr;</span>
+          </a>
+        </div>
+
+        <CaseStudyHero
+          title={cs.title}
+          summary={cs.tagline}
+          art={tile}
+          artAlt="An abstract report card: blue bars that climb, a violet signature, and a violet check mark."
+        >
+          <p>{cs.intro}</p>
+        </CaseStudyHero>
+
+        <div class="meta-block">
+          <CaseStudyMeta items={cs.meta} class="meta-four" />
+        </div>
+
+        <CaseStudyNav />
+      </div>
+    </section>
+
+    <section id="glance" class="wash">
+      <div class="container">
+        <div class="thesis reveal">
+          <p class="system">{cs.thesis.system}</p>
+          <p class="person">{cs.thesis.person}</p>
+        </div>
+        <div class="reveal" style="--reveal-delay: 0.08s">
+          <MockDraft class="hero-mock" />
+        </div>
+        <p class="legend reveal" style="--reveal-delay: 0.12s">
+          <span class="owner system">System-owned: data and generated content</span>
+          <span class="owner person">Person-owned: their deck, edits, and judgement</span>
+        </p>
+      </div>
+    </section>
+
+    <section id="problem">
+      <div class="container">
+        <div class="split">
+          <div class="prose reveal">
+            <h2>The problem</h2>
+            <p class="lead">{cs.problem.lead}</p>
+            {cs.problem.body.map((p) => <p>{p}</p>)}
+          </div>
+          <div class="stat-card reveal" style="--reveal-delay: 0.08s">
+            <StatBlock stats={[cs.problem.stat]} class="single-stat" />
+          </div>
+        </div>
+        <div class="section-figures reveal" style="--reveal-delay: 0.1s">
+          <BoardCycle steps={cs.cycle} />
+        </div>
+        <div class="why reveal" style="--reveal-delay: 0.12s">
+          <p class="eyebrow">Why it mattered</p>
+          <p class="why-lead">{cs.whyItMattered.lead}</p>
+          <ul>
+            {cs.whyItMattered.points.map((p) => <li>{p}</li>)}
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="people">
+      <div class="container">
+        <h2 class="reveal">Three people, one deck</h2>
+        <ol class="people">
+          {
+            cs.people.map((p, i) => (
+              <li class="reveal" style={`--reveal-delay: ${i * 0.08}s`}>
+                <span class="role">{p.role}</span>
+                <h3>{p.job}</h3>
+                <p>{p.body}</p>
+              </li>
+            ))
+          }
+        </ol>
+        <p class="takeaway reveal">{cs.peopleTakeaway}</p>
+      </div>
+    </section>
+
+    <section id="challenge" class="wash">
+      <div class="container split-wide">
+        <div class="prose reveal">
+          <h2>The challenge</h2>
+          <p class="lead">Four questions where a reasonable person could go either way.</p>
+          <p>
+            If a question had an obvious answer, it was a requirement. These were the ones every
+            answer pulled on the others, and the fourth was the hardest.
+          </p>
+        </div>
+        <ol class="questions reveal" style="--reveal-delay: 0.08s">
+          {cs.questions.map((q, i) => <li class:list={{ loud: i === cs.questions.length - 1 }}>{q}</li>)}
+        </ol>
+      </div>
+    </section>
+
+    <section id="discovery">
+      <div class="container">
+        <div class="prose reveal">
+          <h2>Discovery</h2>
+          <p>
+            I started wide, then converged on something we could test. In February the whole UX team
+            riffed on the problem before anyone committed to a direction. By May the shape was a
+            creation wizard plus our PowerPoint add-in, and instead of iterating internally, we put
+            two concepts in front of customers.
+          </p>
+        </div>
+        <div class="section-figures reveal" style="--reveal-delay: 0.08s">
+          <Milestones items={cs.timeline} />
+        </div>
+
+        <div class="concept">
+          <div class="prose reveal">
+            <h3>{cs.conceptTest.title}</h3>
+            <p>{cs.conceptTest.who}</p>
+          </div>
+          <div class="options">
+            {
+              cs.conceptTest.options.map((o, i) => (
+                <figure class="option reveal" style={`--reveal-delay: ${i * 0.08}s`}>
+                  <MockSchematic kind={o.id === 'A' ? 'addin' : 'hashtag'} />
+                  <figcaption>
+                    <span class="option-id">
+                      Option {o.id} · {o.name}
+                      {o.result && <span class="result">{o.result}</span>}
+                    </span>
+                    {o.body}
+                  </figcaption>
+                </figure>
+              ))
+            }
+          </div>
+          <p class="asked reveal">
+            <span class="eyebrow">What we asked</span>
+            {cs.conceptTest.asked.join(' ')}
+          </p>
+        </div>
+
+        <blockquote class="quote reveal">
+          <p>“{cs.quote.text}”</p>
+          <footer>{cs.quote.who} · {cs.quote.org}</footer>
+        </blockquote>
+
+        <div class="learnings reveal">
+          <h3>What research said about automation</h3>
+          <table>
+            <thead>
+              <tr><th scope="col">What we heard</th><th scope="col">So I…</th></tr>
+            </thead>
+            <tbody>
+              {
+                cs.learnings.map((l) => (
+                  <tr>
+                    <td>{l.heard}</td>
+                    <td>{l.so}</td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="reframe" class="night">
+      <div class="container">
+        <div class="reframe reveal">
+          <p class="eyebrow">The reframe</p>
+          <p class="before"><s>{cs.reframe.before}</s></p>
+          <p class="after">{cs.reframe.after}</p>
+          <p class="body">{cs.reframe.body}</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="ladder">
+      <div class="container">
+        <div class="prose reveal">
+          <h2>Where the agent sits</h2>
+          <p class="lead">{cs.ladder.title}</p>
+          <p>{cs.ladder.lead}</p>
+        </div>
+        <div class="section-figures reveal" style="--reveal-delay: 0.08s">
+          <AutonomyLadder rungs={cs.ladder.rungs} />
+        </div>
+      </div>
+    </section>
+
+    <section id="foundation" class="wash">
+      <div class="container">
+        <div class="prose reveal">
+          <p class="eyebrow status">Shipped, in beta</p>
+          <h2>The foundation we shipped</h2>
+          <p>{cs.foundation.lead}</p>
+        </div>
+        <ol class="places">
+          {
+            cs.foundation.places.map((p, i) => (
+              <li class="reveal" style={`--reveal-delay: ${i * 0.08}s`}>
+                <MockSchematic kind={placeKinds[i]} />
+                <span class="verb">{p.verb}</span>
+                <h3>{p.title}</h3>
+                <p>{p.body}</p>
+              </li>
+            ))
+          }
+        </ol>
+
+        <div class="mvp">
+          <div class="prose reveal">
+            <h3 class="mvp-title">Three MVP decisions the agent inherits</h3>
+          </div>
+          <TensionCall {...functionsDecision}>
+            <div class="diagram-card"><FunctionsDiagram /></div>
+          </TensionCall>
+          <TensionCall {...familiarDecision} flip index={1}>
+            <MockSchematic kind="addin" />
+          </TensionCall>
+          <TensionCall {...refreshDecision} index={2} />
+        </div>
+      </div>
+    </section>
+
+    <section id="agent">
+      <div class="container">
+        <div class="prose reveal">
+          <h2>Designing the agent</h2>
+          <p>
+            On top of that foundation, I designed and prototyped the agentic layer: creating a report
+            by conversation, drafting sections, reviewing data changes, and rolling a report forward
+            to the next quarter. Three decisions shaped it.
+          </p>
+        </div>
+
+        <div class="agent-decisions">
+          <TensionCall {...createDecision} class="wide-visual">
+            <MockCreate />
+          </TensionCall>
+
+          <div class="drafting reveal">
+            <p class="eyebrow kicker">Drafting</p>
+            <h3>{cs.drafting.title}</h3>
+            <p class="drafting-lead">{cs.drafting.lead}</p>
+            <MockSection class="drafting-mock" />
+            <ol class="points">
+              {
+                cs.drafting.points.map((p, i) => (
+                  <li>
+                    <span class="num">{String(i + 1).padStart(2, '0')} · {p.label}</span>
+                    {p.body}
+                  </li>
+                ))
+              }
+            </ol>
+          </div>
+
+          <TensionCall {...proposeDecision} flip class="wide-visual">
+            <MockRedline />
+          </TensionCall>
+
+          <TensionCall {...rollDecision} class="wide-visual">
+            <MockRollForward />
+          </TensionCall>
+        </div>
+      </div>
+    </section>
+
+    <section id="trust" class="wash">
+      <div class="container">
+        <div class="prose reveal">
+          <h2>The trust layer</h2>
+          <p class="lead">{cs.trust.title}</p>
+          <p>{cs.trust.lead}</p>
+        </div>
+        <ol class="trust">
+          {
+            cs.trust.parts.map((t, i) => (
+              <li class="reveal" style={`--reveal-delay: ${i * 0.08}s`}>
+                <MockTrust part={t.label} />
+                <span class="verb">{t.label}</span>
+                <h3>{t.title}</h3>
+                <p>{t.body}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
+    <section id="framework">
+      <div class="container">
+        <div class="prose reveal">
+          <h2>How I design agentic features</h2>
+          <p class="lead">{cs.checklist.title}</p>
+          <p>{cs.checklist.lead}</p>
+        </div>
+        <div class="checklist reveal" style="--reveal-delay: 0.08s">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col" colspan="2">The question</th>
+                <th scope="col" class="answer-col">{cs.checklist.example}’s answer</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                cs.checklist.rows.map((r) => (
+                  <tr>
+                    <th scope="row" class="key">{r.key}</th>
+                    <td class="question">{r.question}</td>
+                    <td class="answer">{r.answer}</td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="beyond">
+      <div class="container">
+        <h2 class="reveal">What outlasts this feature</h2>
+        <ol class="beyond">
+          {
+            cs.beyond.map((b, i) => (
+              <li class="reveal" style={`--reveal-delay: ${i * 0.06}s`}>
+                <span class="num">{String(i + 1).padStart(2, '0')}</span>
+                <h3>{b.title}</h3>
+                <p>{b.body}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
+    <section id="landed">
+      <div class="container">
+        <h2 class="reveal">Where it landed</h2>
+        <div class="landed reveal" style="--reveal-delay: 0.08s">
+          <div class="landed-status">
+            {cs.landed.lines.map((l, i) => <p class:list={['status-line', { now: i === 1 }]}>{l}</p>)}
+            <p class="landed-body">{cs.landed.body}</p>
+          </div>
+          <div>
+            <p class="eyebrow">What I’d measure</p>
+            <ol class="measures">
+              {cs.landed.measures.map((m) => <li>{m}</li>)}
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+  main section {
+    padding: var(--space-7) 0;
+  }
+
+  .intro {
+    padding-top: var(--space-5);
+  }
+
+  .wash {
+    background: linear-gradient(180deg, var(--iris-wash) 0%, var(--color-surface) 100%);
+  }
+
+  main > section.wash::before,
+  main > section.wash + section::before,
+  main > section.night::before,
+  main > section.night + section::before {
+    display: none;
+  }
+
+  .toolbar {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+    margin-bottom: var(--space-5);
+    font-size: var(--text-sm);
+  }
+
+  .present-link {
+    font-weight: 500;
+  }
+
+  .meta-block {
+    margin-top: var(--space-5);
+  }
+
+  .meta-block :global(.meta-four) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .lead {
+    font-size: var(--text-lg);
+    color: var(--color-text);
+  }
+
+  h3 {
+    color: var(--color-text);
+  }
+
+  .section-figures {
+    margin-top: var(--space-5);
+  }
+
+  /* At a glance: the thesis in the two colors the rest of the page uses. */
+  .thesis {
+    max-width: 46rem;
+    margin-bottom: var(--space-5);
+  }
+
+  .thesis p {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--text-h2);
+    line-height: 1.3;
+  }
+
+  .thesis .system {
+    color: var(--color-text);
+  }
+
+  .thesis .person {
+    color: var(--iris-person-ink);
+  }
+
+  .hero-mock {
+    font-size: 14px;
+  }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-5);
+    margin: var(--space-4) 0 0;
+    font-size: var(--text-xs);
+  }
+
+  .owner {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .owner::before {
+    content: '';
+    width: 0.65rem;
+    height: 0.65rem;
+    border-radius: 50%;
+  }
+
+  .owner.system::before {
+    background: var(--iris-system);
+  }
+
+  .owner.person::before {
+    background: var(--iris-person);
+  }
+
+  /* Problem */
+  .split {
+    display: grid;
+    grid-template-columns: 1fr 19rem;
+    column-gap: var(--space-7);
+    align-items: center;
+  }
+
+  .stat-card {
+    padding: var(--space-5);
+    border-radius: var(--radius-md);
+    background: var(--iris-wash);
+  }
+
+  .stat-card :global(.single-stat) {
+    grid-template-columns: 1fr;
+  }
+
+  .stat-card :global(.value) {
+    font-size: clamp(3rem, 6vw, 4rem);
+    color: var(--color-accent-ink);
+    white-space: nowrap;
+  }
+
+  .why {
+    max-width: var(--measure);
+    margin-top: var(--space-6);
+    padding: var(--space-4) var(--space-5);
+    border-left: 2px solid var(--color-highlight);
+  }
+
+  .why-lead {
+    color: var(--color-text);
+  }
+
+  .why ul {
+    margin: 0;
+    padding-left: 1.1em;
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+
+  .why li + li {
+    margin-top: var(--space-2);
+  }
+
+  /* People */
+  .people {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+    margin: var(--space-5) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .people li {
+    position: relative;
+    padding: var(--space-4);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+
+  .people li + li::before {
+    content: '→';
+    position: absolute;
+    left: calc(-1 * var(--space-4) + 0.25rem);
+    top: 50%;
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+  }
+
+  .role {
+    display: block;
+    margin-bottom: var(--space-2);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+
+  .people p {
+    margin: 0;
+    font-size: var(--text-sm);
+  }
+
+  .takeaway {
+    max-width: 46rem;
+    margin: var(--space-5) 0 0;
+    font-family: var(--font-display);
+    font-size: var(--text-h3);
+    line-height: 1.4;
+    color: var(--color-text);
+  }
+
+  /* Challenge */
+  .split-wide {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
+    column-gap: var(--space-7);
+    align-items: start;
+  }
+
+  .questions {
+    display: grid;
+    gap: var(--space-4);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: q;
+  }
+
+  .questions li {
+    display: grid;
+    grid-template-columns: 2.25rem 1fr;
+    color: var(--color-text);
+    counter-increment: q;
+  }
+
+  .questions li::before {
+    content: '0' counter(q);
+    padding-top: 0.2rem;
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--color-accent-soft);
+  }
+
+  .questions .loud {
+    font-family: var(--font-display);
+    font-size: var(--text-h3);
+    line-height: 1.35;
+  }
+
+  /* Discovery */
+  .concept {
+    margin-top: var(--space-7);
+  }
+
+  .options {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-5);
+    margin-top: var(--space-4);
+  }
+
+  .option {
+    margin: 0;
+  }
+
+  .option figcaption {
+    margin-top: var(--space-3);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+
+  .option-id {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-1);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--color-text);
+  }
+
+  .result {
+    padding: 0.1rem 0.5rem;
+    border-radius: var(--radius-pill);
+    background: var(--color-accent);
+    color: #fff;
+    letter-spacing: 0.02em;
+    text-transform: none;
+  }
+
+  .asked {
+    max-width: var(--measure);
+    margin: var(--space-5) 0 0;
+    font-size: var(--text-sm);
+  }
+
+  .asked .eyebrow {
+    display: block;
+    margin-bottom: var(--space-1);
+  }
+
+  .quote {
+    max-width: 50rem;
+    margin: var(--space-7) 0;
+    padding: 0 0 0 var(--space-5);
+    border-left: 3px solid var(--iris-system);
+  }
+
+  .quote p {
+    margin-bottom: var(--space-3);
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(1.4rem, 2.6vw, 1.85rem);
+    line-height: 1.4;
+    color: var(--color-text);
+  }
+
+  .quote footer {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  .learnings table,
+  .checklist table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--text-sm);
+  }
+
+  .learnings th,
+  .checklist thead th {
+    padding: 0 var(--space-4) var(--space-2) 0;
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    text-align: left;
+    color: var(--color-text-muted);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .learnings th:last-child,
+  .checklist .answer-col {
+    color: var(--color-accent);
+  }
+
+  .learnings td,
+  .checklist tbody th,
+  .checklist td {
+    padding: var(--space-3) var(--space-4) var(--space-3) 0;
+    border-bottom: 1px solid var(--color-border);
+    vertical-align: top;
+    line-height: var(--leading-body);
+    color: var(--color-text-muted);
+  }
+
+  .learnings td {
+    width: 50%;
+  }
+
+  .learnings td:last-child,
+  .checklist .answer {
+    color: var(--color-text);
+    font-weight: 500;
+  }
+
+  /* Reframe: the one dark band, after the cover of the original deck. */
+  .night {
+    background:
+      radial-gradient(40rem 26rem at 100% 0%, rgba(138, 99, 210, 0.45) 0%, transparent 65%),
+      radial-gradient(38rem 26rem at 0% 100%, rgba(74, 120, 224, 0.45) 0%, transparent 65%),
+      var(--iris-night);
+  }
+
+  .reframe {
+    max-width: 48rem;
+  }
+
+  .reframe .eyebrow {
+    color: #aab6dc;
+  }
+
+  .reframe .before {
+    margin-bottom: var(--space-2);
+    font-size: var(--text-lg);
+    color: #8f99b8;
+  }
+
+  .reframe .after {
+    margin-bottom: var(--space-4);
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 3.6vw, 2.6rem);
+    line-height: 1.25;
+    color: #fff;
+  }
+
+  .reframe .body {
+    max-width: var(--measure);
+    margin: 0;
+    color: #c9d0e6;
+  }
+
+  /* Foundation */
+  .status {
+    color: var(--color-accent);
+  }
+
+  .places,
+  .trust {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-5);
+    margin: var(--space-5) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .places :global(.pm),
+  .trust :global(.pm) {
+    margin-bottom: var(--space-4);
+  }
+
+  /* Matching heights, so the three captions start on one line. */
+  .places :global(.pm) {
+    height: 13.75rem;
+  }
+
+  .trust :global(.pm) {
+    height: 16rem;
+  }
+
+  .places :global(.pm-window),
+  .trust :global(.pm-window) {
+    height: 100%;
+  }
+
+  .places :global(.pm-window) {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .places :global(.pm-window > :last-child) {
+    flex: 1;
+  }
+
+  .trust :global(.pm) {
+    font-size: 12px;
+  }
+
+  .verb {
+    display: block;
+    margin-bottom: var(--space-1);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+
+  .places h3,
+  .trust h3 {
+    margin-bottom: var(--space-2);
+  }
+
+  .places p,
+  .trust p {
+    margin: 0;
+    font-size: var(--text-sm);
+  }
+
+  .mvp {
+    margin-top: var(--space-7);
+  }
+
+  .mvp-title {
+    margin-bottom: var(--space-4);
+  }
+
+  .diagram-card {
+    padding: var(--space-5);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+
+  /* Agent */
+  .agent-decisions {
+    margin-top: var(--space-6);
+  }
+
+  /* Wide mockups get more of the row than the default split gives them. */
+  .agent-decisions :global(.wide-visual) {
+    grid-template-columns: minmax(0, 19rem) minmax(0, 1fr);
+  }
+
+  .agent-decisions :global(.wide-visual.flip) {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 19rem);
+  }
+
+  .drafting {
+    margin-top: var(--space-7);
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .drafting + :global(.decision) {
+    margin-top: var(--space-7);
+  }
+
+  .kicker {
+    margin-bottom: var(--space-2);
+    color: var(--color-accent);
+  }
+
+  .drafting-lead {
+    max-width: var(--measure);
+    margin-bottom: var(--space-5);
+  }
+
+  .points {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-5);
+    margin: var(--space-5) 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: var(--text-sm);
+    color: var(--color-text);
+  }
+
+  .num {
+    display: block;
+    margin-bottom: var(--space-1);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+
+  /* Framework */
+  .checklist {
+    margin-top: var(--space-5);
+  }
+
+  .checklist .key {
+    width: 7rem;
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    text-align: left;
+    color: var(--color-accent);
+  }
+
+  .checklist .question {
+    width: 34%;
+  }
+
+  /* Beyond */
+  .beyond {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-5) var(--space-6);
+    margin: var(--space-5) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .beyond .num {
+    font-family: var(--font-display);
+    font-size: var(--text-h2);
+    font-weight: 400;
+    letter-spacing: 0;
+    color: var(--color-accent-soft);
+  }
+
+  .beyond h3 {
+    margin-bottom: var(--space-2);
+  }
+
+  .beyond p {
+    margin: 0;
+    font-size: var(--text-sm);
+  }
+
+  /* Landed */
+  .landed {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr);
+    gap: var(--space-7);
+    margin-top: var(--space-5);
+    padding: var(--space-6) var(--space-5);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+    background:
+      radial-gradient(36rem 20rem at 100% 0%, var(--iris-person-wash) 0%, transparent 70%),
+      radial-gradient(30rem 18rem at 0% 100%, var(--iris-system-wash) 0%, transparent 70%),
+      var(--color-surface);
+  }
+
+  .status-line {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--text-h2);
+    line-height: 1.3;
+    color: var(--color-text);
+  }
+
+  .status-line.now {
+    color: var(--color-accent);
+  }
+
+  .landed-body {
+    margin: var(--space-4) 0 0;
+  }
+
+  .measures {
+    display: grid;
+    gap: var(--space-3);
+    margin: var(--space-3) 0 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: m;
+  }
+
+  .measures li {
+    display: grid;
+    grid-template-columns: 2.25rem 1fr;
+    color: var(--color-text);
+    counter-increment: m;
+  }
+
+  .measures li::before {
+    content: '0' counter(m);
+    padding-top: 0.15rem;
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--color-accent-soft);
+  }
+
+  @media (max-width: 1000px) {
+    .meta-block :global(.meta-four) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .agent-decisions :global(.wide-visual),
+    .agent-decisions :global(.wide-visual.flip) {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 900px) {
+    .split,
+    .split-wide,
+    .landed {
+      grid-template-columns: 1fr;
+      row-gap: var(--space-5);
+    }
+
+    .people,
+    .places,
+    .trust,
+    .points,
+    .options,
+    .beyond {
+      grid-template-columns: 1fr;
+    }
+
+    .people li + li::before {
+      content: '↓';
+      left: var(--space-4);
+      top: calc(-1 * var(--space-4) - 0.1rem);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .hero-mock {
+      font-size: 12px;
+    }
+
+    .meta-block :global(.meta-four) {
+      grid-template-columns: 1fr;
+    }
+
+    /* Tables fold into stacked rows on a phone. */
+    .learnings thead,
+    .checklist thead {
+      display: none;
+    }
+
+    .learnings tr,
+    .checklist tr {
+      display: grid;
+      padding: var(--space-3) 0;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .learnings td,
+    .checklist tbody th,
+    .checklist td {
+      width: auto;
+      padding: 0 0 var(--space-1);
+      border: 0;
+    }
+  }
+</style>

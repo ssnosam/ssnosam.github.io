@@ -1,0 +1,1615 @@
+---
+// Slide view of the Automated Board Reporting case study, for presenting in
+// interviews. Same copy as /work/board-reporting (src/data/board-reporting.ts).
+//
+// Keys: ← → / Space / PageUp PageDown to move, Home End to jump, F for
+// fullscreen, S for the five-minute cut, A to add the
+// appendix, Esc to return to the case study page. The URL hash is the slide
+// id (say #ladder), so a link opens on that slide in any mode.
+// Printing (Cmd+P → Save as PDF) gives one slide per page, appendix included.
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import BoardCycle from '../../../components/case-study/board/BoardCycle.astro';
+import AutonomyLadder from '../../../components/case-study/board/AutonomyLadder.astro';
+import Milestones from '../../../components/case-study/board/Milestones.astro';
+import FunctionsDiagram from '../../../components/case-study/board/FunctionsDiagram.astro';
+import MockDraft from '../../../components/case-study/board/MockDraft.astro';
+import MockCreate from '../../../components/case-study/board/MockCreate.astro';
+import MockSection from '../../../components/case-study/board/MockSection.astro';
+import MockRedline from '../../../components/case-study/board/MockRedline.astro';
+import MockRollForward from '../../../components/case-study/board/MockRollForward.astro';
+import MockTrust from '../../../components/case-study/board/MockTrust.astro';
+import MockSchematic from '../../../components/case-study/board/MockSchematic.astro';
+import { site } from '../../../data/site.config';
+import * as cs from '../../../data/board-reporting';
+import '../../../styles/theme-iris.css';
+import '../../../styles/product-mock.css';
+
+const main = [
+  'title',
+  'glance',
+  'problem',
+  'people',
+  'challenge',
+  'quote',
+  'research',
+  'reframe',
+  'ladder',
+  'foundation',
+  'create',
+  'drafting',
+  'propose',
+  'roll',
+  'trust',
+  'checklist',
+  'beyond',
+  'landed',
+  'close',
+];
+const appendix = [
+  'appendix-why',
+  'appendix-timeline',
+  'appendix-concept',
+  'appendix-functions',
+  'appendix-familiar',
+  'appendix-refresh',
+];
+const num = (id: string) =>
+  main.includes(id) ? String(main.indexOf(id)).padStart(2, '0') : `A${appendix.indexOf(id) + 1}`;
+
+const placeKinds = ['wizard', 'editor', 'addin'] as const;
+const [functionsDecision, familiarDecision, refreshDecision] = cs.mvpDecisions;
+const agent = Object.fromEntries(cs.agentDecisions.map((d) => [d.id, d]));
+const agentMocks = { create: MockCreate, propose: MockRedline, roll: MockRollForward };
+---
+
+<BaseLayout
+  title={`${cs.title} (slides) | ${site.name}`}
+  description="Slide presentation of the Automated Board Reporting case study."
+  theme="theme-iris"
+>
+  <div class="deck" data-deck>
+    <div class="stage" data-stage>
+      <article class="slide slide-night slide-title" data-id="title">
+        <div class="title-body">
+          <p class="eyebrow">Case study · Documents intelligence platform</p>
+          <h1>{cs.title}</h1>
+          <p class="tagline">{cs.tagline}</p>
+        </div>
+        <div class="title-art" aria-hidden="true">
+          <span class="ring ring-outer"></span>
+          <span class="ring ring-inner"></span>
+          <span class="disc"></span>
+        </div>
+      </article>
+
+      <article class="slide" data-id="glance">
+        <div class="glance">
+          <div>
+            <p class="eyebrow kicker">At a glance</p>
+            <p class="glance-thesis">
+              {cs.thesis.system}
+              <span>{cs.thesis.person}</span>
+            </p>
+            <dl class="glance-meta">
+              {
+                cs.meta.map((m) => (
+                  <div>
+                    <dt>{m.label}</dt>
+                    <dd>{m.lines.join(', ')}</dd>
+                  </div>
+                ))
+              }
+            </dl>
+          </div>
+          <MockDraft class="glance-mock" />
+        </div>
+      </article>
+
+      <article class="slide" data-id="problem">
+        <p class="eyebrow kicker">The problem</p>
+        <div class="problem">
+          <div>
+            <p class="big-stat">{cs.problem.stat.value}</p>
+            <p class="big-stat-label"><strong>hours per board cycle</strong>About 75% of it spent just gathering data.</p>
+          </div>
+          <p class="problem-lead">{cs.problem.lead}</p>
+        </div>
+        <BoardCycle steps={cs.cycle} class="deck-cycle" />
+      </article>
+
+      <article class="slide" data-id="people">
+        <p class="eyebrow kicker">Who it’s for</p>
+        <h2>Three people, one deck.</h2>
+        <ol class="people">
+          {
+            cs.people.map((p) => (
+              <li>
+                <span class="role">{p.role}</span>
+                <h3>{p.job}</h3>
+                <p>{p.body}</p>
+              </li>
+            ))
+          }
+        </ol>
+        <p class="people-takeaway">{cs.peopleTakeaway}</p>
+      </article>
+
+      <article class="slide" data-id="challenge">
+        <div class="challenge">
+          <div>
+            <p class="eyebrow kicker">The challenge</p>
+            <h2 class="challenge-title">Four questions where a reasonable person could go either way.</h2>
+          </div>
+          <ol class="questions">
+            {cs.questions.map((q, i) => <li class:list={{ loud: i === cs.questions.length - 1 }}>{q}</li>)}
+          </ol>
+        </div>
+      </article>
+
+      <article class="slide slide-night slide-quote" data-id="quote">
+        <span class="quote-mark" aria-hidden="true">“</span>
+        <blockquote>
+          <p>{cs.quote.text}</p>
+          <footer>{cs.quote.who} · {cs.quote.org}</footer>
+        </blockquote>
+      </article>
+
+      <article class="slide" data-id="research">
+        <p class="eyebrow kicker">What we learned</p>
+        <h2>What research said about automation</h2>
+        <table class="deck-table">
+          <thead>
+            <tr><th scope="col">What we heard</th><th scope="col" class="accent">So I…</th></tr>
+          </thead>
+          <tbody>
+            {
+              cs.learnings.map((l) => (
+                <tr>
+                  <td>{l.heard}</td>
+                  <td class="strong">{l.so}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </article>
+
+      <article class="slide slide-night slide-reframe" data-id="reframe">
+        <p class="eyebrow">The reframe</p>
+        <p class="reframe-before"><s>{cs.reframe.before}</s></p>
+        <p class="reframe-after">{cs.reframe.after}</p>
+        <p class="reframe-motto">{cs.tagline}</p>
+      </article>
+
+      <article class="slide" data-id="ladder">
+        <p class="eyebrow kicker">Where the agent sits</p>
+        <h2>{cs.ladder.title}</h2>
+        <p class="sub">{cs.ladder.lead}</p>
+        <div class="fill">
+          <AutonomyLadder rungs={cs.ladder.rungs} class="deck-ladder" />
+        </div>
+      </article>
+
+      <article class="slide" data-id="foundation">
+        <div class="head-row">
+          <div>
+            <p class="eyebrow kicker">The foundation · Shipped, in beta</p>
+            <h2>{cs.foundation.title}</h2>
+            <p class="sub">{cs.foundation.lead}</p>
+          </div>
+          <p class="legend">
+            <span class="owner system">System-owned: data and generated content</span>
+            <span class="owner person">Person-owned: their deck, edits, and judgement</span>
+          </p>
+        </div>
+        <ol class="places">
+          {
+            cs.foundation.places.map((p, i) => (
+              <li>
+                <MockSchematic kind={placeKinds[i]} class="place-mock" />
+                <span class="role">{p.verb}</span>
+                <h3>{p.title}</h3>
+                <p>{p.body}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </article>
+
+      {
+        (['create', 'propose', 'roll'] as const).map((id) => {
+          const d = agent[id];
+          const Mock = agentMocks[id];
+          return (
+            <article class:list={['slide', 'slide-decision', { flip: id === 'propose' }]} data-id={id}>
+              <figure class="decision-visual">
+                <Mock class="decision-mock" />
+                {d.caption && <figcaption>{d.caption}</figcaption>}
+              </figure>
+              <div class="decision-copy">
+                <p class="eyebrow kicker">{d.eyebrow}</p>
+                <h2>{d.title}</h2>
+                <dl>
+                  <dt>The tension</dt>
+                  <dd>{d.tension}</dd>
+                  <dt class="call">The call</dt>
+                  <dd class="call">{d.call}</dd>
+                  <dt>The cost</dt>
+                  <dd>{d.cost}</dd>
+                </dl>
+              </div>
+            </article>
+          );
+        })
+      }
+
+      <article class="slide" data-id="drafting">
+        <p class="eyebrow kicker">Drafting</p>
+        <h2>{cs.drafting.title}</h2>
+        <p class="sub">{cs.drafting.lead}</p>
+        <MockSection class="drafting-mock" />
+        <ol class="points">
+          {
+            cs.drafting.points.map((p, i) => (
+              <li>
+                <span class="role">{String(i + 1).padStart(2, '0')} · {p.label}</span>
+                {p.body}
+              </li>
+            ))
+          }
+        </ol>
+      </article>
+
+      <article class="slide" data-id="trust">
+        <p class="eyebrow kicker">The trust layer</p>
+        <h2>{cs.trust.title}</h2>
+        <ol class="trust">
+          {
+            cs.trust.parts.map((t) => (
+              <li>
+                <MockTrust part={t.label} class="trust-mock" />
+                <span class="role">{t.label}</span>
+                <h3>{t.title}</h3>
+                <p>{t.body}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </article>
+
+      <article class="slide" data-id="checklist">
+        <p class="eyebrow kicker">How I design agentic features</p>
+        <h2>{cs.checklist.title}</h2>
+        <p class="sub">{cs.checklist.lead}</p>
+        <table class="deck-table checklist">
+          <thead>
+            <tr>
+              <th scope="col" colspan="2">The question</th>
+              <th scope="col" class="accent">{cs.checklist.example}’s answer</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              cs.checklist.rows.map((r) => (
+                <tr>
+                  <th scope="row" class="row-key">{r.key}</th>
+                  <td class="question">{r.question}</td>
+                  <td class="strong">{r.answer}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </article>
+
+      <article class="slide" data-id="beyond">
+        <p class="eyebrow kicker">Beyond the feature</p>
+        <h2>What I built that outlasts this feature.</h2>
+        <ol class="beyond">
+          {
+            cs.beyond.map((b, i) => (
+              <li>
+                <span class="beyond-num">{String(i + 1).padStart(2, '0')}</span>
+                <h3>{b.title}</h3>
+                <p>{b.body}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </article>
+
+      <article class="slide" data-id="landed">
+        <div class="landed">
+          <div>
+            <p class="eyebrow kicker">Where it landed</p>
+            {cs.landed.lines.map((l, i) => <p class:list={['landed-line', { now: i === 1 }]}>{l}</p>)}
+            <p class="landed-body">{cs.landed.body}</p>
+          </div>
+          <div>
+            <p class="eyebrow kicker">What I’d measure</p>
+            <ol class="measures">
+              {cs.landed.measures.map((m) => <li>{m}</li>)}
+            </ol>
+          </div>
+        </div>
+      </article>
+
+      <article class="slide slide-night slide-title slide-close" data-id="close">
+        <div class="title-body">
+          <h1>Thank you!</h1>
+          <p class="tagline">Questions?</p>
+          <p class="contact">{site.email}</p>
+        </div>
+        <div class="title-art" aria-hidden="true">
+          <span class="ring ring-outer"></span>
+          <span class="ring ring-inner"></span>
+          <span class="disc"></span>
+        </div>
+      </article>
+
+      <!-- Appendix: skipped unless A is pressed, there if someone asks for depth. -->
+      <article class="slide slide-appendix" data-id="appendix-why">
+        <p class="eyebrow kicker">Why it mattered</p>
+        <p class="statement">{cs.whyItMattered.lead}</p>
+        <ul class="why">
+          {cs.whyItMattered.points.map((p) => <li>{p}</li>)}
+        </ul>
+      </article>
+
+      <article class="slide slide-appendix" data-id="appendix-timeline">
+        <p class="eyebrow kicker">Discovery</p>
+        <h2>I started wide, then converged on something we could test.</h2>
+        <div class="fill">
+          <Milestones items={cs.timeline} class="deck-milestones" />
+        </div>
+      </article>
+
+      <article class="slide slide-appendix" data-id="appendix-concept">
+        <p class="eyebrow kicker">Concept test</p>
+        <h2>{cs.conceptTest.title}</h2>
+        <p class="sub">{cs.conceptTest.who}</p>
+        <div class="options">
+          {
+            cs.conceptTest.options.map((o) => (
+              <figure>
+                <p class="role">
+                  Option {o.id} · {o.name}
+                  {o.result && <span class="result">{o.result}</span>}
+                </p>
+                <MockSchematic kind={o.id === 'A' ? 'addin' : 'hashtag'} class="option-mock" />
+              </figure>
+            ))
+          }
+        </div>
+      </article>
+
+      {
+        [
+          { d: functionsDecision, id: 'appendix-functions' },
+          { d: familiarDecision, id: 'appendix-familiar' },
+          { d: refreshDecision, id: 'appendix-refresh' },
+        ].map(({ d, id }) => (
+          <article class="slide slide-appendix slide-decision" data-id={id}>
+            <div class="decision-copy">
+              <p class="eyebrow kicker">{d.eyebrow}</p>
+              <h2>{d.title}</h2>
+              <dl>
+                <dt>The tension</dt>
+                <dd>{d.tension}</dd>
+                <dt class="call">The call</dt>
+                <dd class="call">
+                  {Array.isArray(d.call) ? <ul>{d.call.map((c) => <li>{c}</li>)}</ul> : d.call}
+                </dd>
+                <dt>The cost</dt>
+                <dd>{d.cost}</dd>
+              </dl>
+            </div>
+            <figure class="decision-visual">
+              {id === 'appendix-functions' && <FunctionsDiagram class="deck-functions" />}
+              {id === 'appendix-familiar' && <MockSchematic kind="addin" class="decision-mock" />}
+              {id === 'appendix-refresh' && <MockRedline class="decision-mock" />}
+            </figure>
+          </article>
+        ))
+      }
+    </div>
+
+    <footer class="chrome" data-chrome aria-hidden="true">
+      <span class="chrome-left"><span data-num>01</span> · <span data-section>{cs.title}</span></span>
+      <span class="chrome-right"><span class="rule"></span>{site.name}</span>
+    </footer>
+    <div class="progress" aria-hidden="true"><span data-progress></span></div>
+  </div>
+
+  <nav class="controls" aria-label="Slide controls">
+    <button type="button" data-prev aria-label="Previous slide">&larr;</button>
+    <span class="count" data-count aria-live="polite">1 / {main.length}</span>
+    <button type="button" data-next aria-label="Next slide">&rarr;</button>
+    <button type="button" data-short-toggle aria-pressed="false" title="Five-minute cut (S)">5 min</button>
+    <button type="button" data-appendix-toggle aria-pressed="false" title="Include the appendix (A)">Appendix</button>
+    <button type="button" data-fullscreen title="Fullscreen (F)">Fullscreen</button>
+    <a href="/work/board-reporting">Exit</a>
+  </nav>
+
+  <script type="application/json" id="deck-config" set:html={JSON.stringify({
+    nums: Object.fromEntries([...main, ...appendix].map((id) => [id, num(id)])),
+    main,
+    appendix,
+    short: cs.shortCut,
+  })} />
+</BaseLayout>
+
+<script>
+  type Config = {
+    nums: Record<string, string>;
+    main: string[];
+    appendix: string[];
+    short: string[];
+  };
+
+  const deck = document.querySelector<HTMLElement>('[data-deck]')!;
+  const stage = document.querySelector<HTMLElement>('[data-stage]')!;
+  const slides = new Map(
+    Array.from(stage.querySelectorAll<HTMLElement>('.slide')).map((s) => [s.dataset.id!, s])
+  );
+  const chrome = document.querySelector<HTMLElement>('[data-chrome]')!;
+  const numEl = document.querySelector<HTMLElement>('[data-num]')!;
+  const sectionEl = document.querySelector<HTMLElement>('[data-section]')!;
+  const countEl = document.querySelector<HTMLElement>('[data-count]')!;
+  const progressEl = document.querySelector<HTMLElement>('[data-progress]')!;
+  const shortToggle = document.querySelector<HTMLButtonElement>('[data-short-toggle]')!;
+  const appendixToggle = document.querySelector<HTMLButtonElement>('[data-appendix-toggle]')!;
+  const config: Config = JSON.parse(document.getElementById('deck-config')!.textContent || '{}');
+  const title = sectionEl.textContent;
+
+  const W = 1600;
+  const H = 900;
+  let short = false;
+  let withAppendix = false;
+  let order: string[] = [];
+  let index = 0;
+
+  // The running order: the full talk or the five-minute cut, with the
+  // appendix after the closing slide when it's switched on.
+  function build() {
+    const body = short ? config.short : config.main;
+    order = withAppendix ? [...body, ...config.appendix] : body;
+    shortToggle.setAttribute('aria-pressed', String(short));
+    appendixToggle.setAttribute('aria-pressed', String(withAppendix));
+  }
+
+  // Fit the fixed 1600×900 stage to the window, so every slide lays out
+  // identically on any screen.
+  function fit() {
+    const scale = Math.min(window.innerWidth / W, window.innerHeight / H);
+    deck.style.setProperty('--scale', String(scale));
+  }
+
+  function show(i: number) {
+    index = Math.max(0, Math.min(order.length - 1, i));
+    const id = order[index];
+    slides.forEach((s, key) => {
+      const active = key === id;
+      s.classList.toggle('is-active', active);
+      s.setAttribute('aria-hidden', String(!active));
+      s.inert = !active;
+    });
+    const slide = slides.get(id)!;
+    const bare = id === 'title' || id === 'close';
+    chrome.classList.toggle('is-hidden', bare);
+    chrome.classList.toggle('on-night', slide.classList.contains('slide-night'));
+    numEl.textContent = config.nums[id] ?? '';
+    sectionEl.textContent = slide.classList.contains('slide-appendix') ? 'Appendix' : title;
+    countEl.textContent = `${index + 1} / ${order.length}`;
+    progressEl.style.width = `${((index + 1) / order.length) * 100}%`;
+    history.replaceState(null, '', `#${id}`);
+  }
+
+  // Switching modes keeps you on the same slide when it's in the new order,
+  // or on the nearest slide before it in the full talk when it isn't.
+  function remode(change: () => void) {
+    const current = order[index];
+    change();
+    build();
+    const all = [...config.main, ...config.appendix];
+    let at = order.indexOf(current);
+    for (let k = all.indexOf(current); at < 0 && k >= 0; k--) at = order.indexOf(all[k]);
+    show(Math.max(at, 0));
+  }
+
+  function toggleFullscreen() {
+    if (document.fullscreenElement) document.exitFullscreen();
+    else document.documentElement.requestFullscreen?.();
+  }
+
+  const toggleShort = () => remode(() => (short = !short));
+  const toggleAppendix = () => remode(() => (withAppendix = !withAppendix));
+
+  document.addEventListener('keydown', (e) => {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    switch (e.key) {
+      case 'ArrowRight':
+      case 'ArrowDown':
+      case 'PageDown':
+      case ' ':
+        e.preventDefault();
+        show(index + 1);
+        break;
+      case 'ArrowLeft':
+      case 'ArrowUp':
+      case 'PageUp':
+        e.preventDefault();
+        show(index - 1);
+        break;
+      case 'Home':
+        show(0);
+        break;
+      case 'End':
+        show(order.length - 1);
+        break;
+      case 'f':
+      case 'F':
+        toggleFullscreen();
+        break;
+      case 's':
+      case 'S':
+        toggleShort();
+        break;
+      case 'a':
+      case 'A':
+        toggleAppendix();
+        break;
+      case 'Escape':
+        if (!document.fullscreenElement) location.href = '/work/board-reporting';
+        break;
+    }
+  });
+
+  // A click on the slide itself advances, the way a clicker would.
+  stage.addEventListener('click', (e) => {
+    if ((e.target as HTMLElement).closest('a, button')) return;
+    show(index + 1);
+  });
+
+  let touchX = 0;
+  stage.addEventListener('touchstart', (e) => (touchX = e.touches[0].clientX), { passive: true });
+  stage.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) > 50) show(index + (dx < 0 ? 1 : -1));
+  });
+
+  document.querySelector('[data-prev]')!.addEventListener('click', () => show(index - 1));
+  document.querySelector('[data-next]')!.addEventListener('click', () => show(index + 1));
+  shortToggle.addEventListener('click', toggleShort);
+  appendixToggle.addEventListener('click', toggleAppendix);
+  document.querySelector('[data-fullscreen]')!.addEventListener('click', toggleFullscreen);
+  window.addEventListener('resize', fit);
+
+  // A link straight to an appendix slide opens with the appendix on.
+  const fromHash = decodeURIComponent(location.hash.slice(1));
+  withAppendix = config.appendix.includes(fromHash);
+  build();
+  fit();
+  show(Math.max(order.indexOf(fromHash), 0));
+</script>
+
+<style>
+  /* The slide view owns the whole window: no grid paper, no sheet. Root size
+     goes up so rem-based components read at presentation scale on the stage. */
+  :global(html) {
+    font-size: 20px;
+  }
+
+  :global(body) {
+    padding: 0;
+    background: var(--iris-wash-deep);
+    background-image: none;
+    overflow: hidden;
+  }
+
+  :global(.page-sheet) {
+    max-width: none;
+    margin: 0;
+    background: none;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  /* Slides are always fully shown; the scroll reveal doesn't apply here. */
+  :global(.js) .deck :global(.reveal) {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* White, with blue and violet only as a haze at the corners. */
+  .deck {
+    --scale: 1;
+    --haze:
+      radial-gradient(56rem 34rem at 100% 0%, var(--iris-person-wash) 0%, transparent 62%),
+      radial-gradient(48rem 32rem at 0% 100%, var(--iris-system-wash) 0%, transparent 62%),
+      #fff;
+    --night:
+      radial-gradient(60rem 40rem at 100% 0%, rgba(138, 99, 210, 0.5) 0%, transparent 65%),
+      radial-gradient(56rem 40rem at 0% 100%, rgba(74, 120, 224, 0.5) 0%, transparent 65%),
+      radial-gradient(40rem 30rem at 100% 100%, rgba(201, 138, 27, 0.18) 0%, transparent 70%),
+      var(--iris-night);
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 1600px;
+    height: 900px;
+    transform: translateX(-50%) scale(var(--scale));
+    transform-origin: top center;
+    background: var(--haze);
+    box-shadow: 0 30px 80px -44px rgba(29, 34, 51, 0.3);
+    overflow: hidden;
+  }
+
+  .stage {
+    position: absolute;
+    inset: 0;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 84px 112px 124px;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 0.5s ease,
+      visibility 0s linear 0.5s;
+  }
+
+  .slide.is-active {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.5s ease;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .slide,
+    .slide.is-active {
+      transition: none;
+    }
+  }
+
+  .slide h2 {
+    margin-bottom: 20px;
+    font-size: 54px;
+    font-weight: 400;
+    line-height: 1.12;
+  }
+
+  .slide h3 {
+    font-size: 30px;
+    line-height: 1.2;
+  }
+
+  .slide p {
+    font-size: 24px;
+    line-height: 1.55;
+  }
+
+  .kicker {
+    margin-bottom: 18px;
+    font-size: 17px !important;
+    color: var(--color-accent);
+  }
+
+  .sub {
+    max-width: 1180px;
+    margin: 0 0 28px;
+    color: var(--color-text-muted);
+  }
+
+  .fill {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .role {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+
+  /* Night slides: title, quote, reframe, close */
+  .slide-night {
+    background: var(--night);
+    color: #fff;
+  }
+
+  .slide-night .eyebrow {
+    color: #9fb4ee;
+  }
+
+  .slide-title {
+    justify-content: center;
+    padding-left: 140px;
+  }
+
+  .title-body {
+    position: relative;
+    z-index: 1;
+    max-width: 1040px;
+  }
+
+  .slide-title .eyebrow {
+    margin-bottom: 36px;
+    font-size: 19px;
+  }
+
+  .slide-title h1 {
+    margin-bottom: 32px;
+    font-size: 112px;
+    font-weight: 400;
+    line-height: 1.02;
+    color: #fff;
+  }
+
+  .tagline {
+    font-size: 36px !important;
+    line-height: 1.4 !important;
+    color: #cfd6ee !important;
+  }
+
+  .contact {
+    margin-top: 28px;
+    font-size: 22px !important;
+    color: #9fb4ee !important;
+  }
+
+  /* A soft eclipse after the original deck's cover: a ring of light around a
+     disc, sitting behind the title. */
+  .title-art {
+    position: absolute;
+    right: -60px;
+    top: 50%;
+    width: 760px;
+    height: 760px;
+    transform: translateY(-50%);
+  }
+
+  .ring,
+  .disc {
+    position: absolute;
+    border-radius: 50%;
+  }
+
+  .ring-outer {
+    inset: 0;
+    border: 1.5px solid rgba(255, 255, 255, 0.22);
+    border-left-color: rgba(255, 255, 255, 0.04);
+    border-bottom-color: rgba(255, 255, 255, 0.04);
+  }
+
+  .ring-inner {
+    inset: 150px;
+    border: 1.5px solid rgba(255, 255, 255, 0.35);
+    border-left-color: rgba(255, 255, 255, 0.05);
+    border-bottom-color: rgba(255, 255, 255, 0.05);
+  }
+
+  .disc {
+    inset: 180px;
+    background: radial-gradient(circle at 35% 30%, rgba(160, 140, 220, 0.55) 0%, rgba(70, 70, 130, 0.5) 60%, rgba(40, 44, 80, 0.4) 100%);
+    box-shadow: 0 0 120px 20px rgba(120, 110, 220, 0.25);
+  }
+
+  .slide-close h1 {
+    font-size: 120px;
+  }
+
+  /* At a glance */
+  .glance {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 560px 1fr;
+    gap: 64px;
+    align-items: center;
+  }
+
+  .glance-thesis {
+    margin-bottom: 32px;
+    font-family: var(--font-display);
+    font-size: 36px !important;
+    line-height: 1.25 !important;
+    color: var(--color-text) !important;
+  }
+
+  .glance-thesis span {
+    display: block;
+    margin-top: 16px;
+    color: var(--iris-person-ink);
+  }
+
+  .glance-meta {
+    display: grid;
+    gap: 14px;
+    margin: 0;
+  }
+
+  .glance-meta dt {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+
+  .glance-meta dd {
+    margin: 2px 0 0;
+    font-size: 19px;
+    line-height: 1.45;
+    color: var(--color-text-muted);
+  }
+
+  .slide :global(.glance-mock) {
+    font-size: 15px;
+  }
+
+  /* Problem */
+  .problem {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .big-stat {
+    margin: 0 0 8px;
+    font-family: var(--font-display);
+    font-size: 176px !important;
+    line-height: 1 !important;
+    color: var(--color-accent-ink) !important;
+  }
+
+  .big-stat-label strong {
+    display: block;
+    font-size: 30px;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .problem-lead {
+    margin-top: 20px;
+    font-family: var(--font-display);
+    font-size: 40px !important;
+    line-height: 1.3 !important;
+    color: var(--color-text) !important;
+  }
+
+  .slide :global(.deck-cycle) {
+    font-size: 22px;
+  }
+
+  /* People */
+  .people {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 64px;
+    margin: 36px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .people li {
+    position: relative;
+    padding-top: 22px;
+    border-top: 3px solid var(--color-accent-soft);
+  }
+
+  .people li + li::before {
+    content: '→';
+    position: absolute;
+    left: -46px;
+    top: 66px;
+    font-size: 28px;
+    color: var(--color-text-muted);
+  }
+
+  .people h3 {
+    margin-bottom: 14px;
+  }
+
+  .people p {
+    font-size: 21px;
+    color: var(--color-text-muted);
+  }
+
+  .people-takeaway {
+    margin-top: auto;
+    font-family: var(--font-display);
+    font-size: 34px !important;
+    line-height: 1.35 !important;
+    color: var(--color-text) !important;
+  }
+
+  /* Challenge */
+  .challenge {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 520px 1fr;
+    gap: 96px;
+    align-items: center;
+  }
+
+  .challenge-title {
+    font-size: 54px !important;
+  }
+
+  .questions {
+    display: grid;
+    gap: 34px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: q;
+  }
+
+  .questions li {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    font-size: 26px;
+    line-height: 1.45;
+    color: var(--color-text-muted);
+    counter-increment: q;
+  }
+
+  .questions li::before {
+    content: '0' counter(q);
+    padding-top: 5px;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--color-accent-soft);
+  }
+
+  .questions .loud {
+    font-family: var(--font-display);
+    font-size: 36px;
+    line-height: 1.3;
+    color: var(--color-text);
+  }
+
+  /* Quote */
+  .slide-quote {
+    justify-content: center;
+    padding-left: 200px;
+    padding-right: 240px;
+  }
+
+  .quote-mark {
+    font-family: var(--font-display);
+    font-size: 160px;
+    line-height: 0.6;
+    color: var(--iris-system);
+  }
+
+  .slide-quote blockquote {
+    margin: 24px 0 0;
+  }
+
+  .slide-quote blockquote p {
+    margin-bottom: 40px;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 50px;
+    line-height: 1.35;
+    color: #fff;
+  }
+
+  .slide-quote footer {
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: #aab6dc;
+  }
+
+  /* Tables */
+  .deck-table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+  }
+
+  .deck-table th {
+    padding: 0 32px 14px 0;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    text-align: left;
+    color: var(--color-text-muted);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .deck-table .accent {
+    color: var(--color-accent);
+  }
+
+  .deck-table td,
+  .deck-table tbody th {
+    padding: 20px 32px 20px 0;
+    border-bottom: 1px solid var(--color-border);
+    vertical-align: top;
+    font-size: 23px;
+    line-height: 1.45;
+    color: var(--color-text-muted);
+  }
+
+  .deck-table td {
+    width: 50%;
+  }
+
+  .deck-table .strong {
+    color: var(--color-text);
+    font-weight: 600;
+  }
+
+  .checklist {
+    margin-top: 0;
+  }
+
+  .checklist td,
+  .checklist tbody th {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    font-size: 21px;
+  }
+
+  .checklist .row-key {
+    width: 150px;
+    font-size: 15px !important;
+    font-weight: 600;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--color-accent) !important;
+    padding-top: 19px !important;
+  }
+
+  .checklist .question {
+    width: 34%;
+  }
+
+  /* Reframe */
+  .slide-reframe {
+    justify-content: center;
+    padding-left: 140px;
+    padding-right: 300px;
+  }
+
+  .reframe-before {
+    margin: 24px 0 12px;
+    font-size: 30px !important;
+    color: #8f99b8 !important;
+  }
+
+  .reframe-after {
+    margin-bottom: 56px;
+    font-family: var(--font-display);
+    font-size: 66px !important;
+    line-height: 1.2 !important;
+    color: #fff !important;
+  }
+
+  .reframe-motto {
+    font-size: 18px !important;
+    font-weight: 600;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: #9fb4ee !important;
+  }
+
+  /* Ladder */
+  .slide :global(.deck-ladder) {
+    font-size: 24px;
+    gap: 28px;
+  }
+
+  /* Foundation */
+  .head-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 48px;
+  }
+
+  .legend {
+    display: grid;
+    gap: 8px;
+    align-content: start;
+    flex: none;
+    margin-top: 44px;
+    font-size: 17px !important;
+    color: var(--color-text-muted);
+  }
+
+  .owner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .owner::before {
+    content: '';
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+
+  .owner.system::before {
+    background: var(--iris-system);
+  }
+
+  .owner.person::before {
+    background: var(--iris-person);
+  }
+
+  .places,
+  .trust {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 48px;
+    margin: 8px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .slide :global(.place-mock) {
+    height: 270px;
+    margin-bottom: 26px;
+    font-size: 15px;
+  }
+
+  .slide :global(.place-mock .pm-window) {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .slide :global(.place-mock .pm-window > :last-child) {
+    flex: 1;
+  }
+
+  .places h3,
+  .trust h3 {
+    margin-bottom: 8px;
+  }
+
+  .places p,
+  .trust p {
+    font-size: 20px;
+    color: var(--color-text-muted);
+  }
+
+  /* Decisions: the mockup takes most of the stage, the copy sits beside it. */
+  .slide-decision {
+    display: grid;
+    grid-template-columns: 840px 1fr;
+    gap: 64px;
+    align-items: center;
+    padding-top: 64px;
+    padding-bottom: 100px;
+  }
+
+  .slide-decision.flip .decision-visual {
+    order: 2;
+  }
+
+  .slide-decision.flip {
+    grid-template-columns: 1fr 840px;
+  }
+
+  .slide-appendix.slide-decision {
+    grid-template-columns: 1fr 720px;
+  }
+
+  .decision-visual {
+    margin: 0;
+    min-width: 0;
+  }
+
+  .slide :global(.decision-mock) {
+    font-size: 16px;
+  }
+
+  .decision-visual figcaption {
+    margin-top: 20px;
+    font-size: 19px;
+    line-height: 1.45;
+    color: var(--color-text-muted);
+  }
+
+  .decision-copy h2 {
+    margin-bottom: 28px;
+    font-size: 44px;
+  }
+
+  .decision-copy dl {
+    margin: 0;
+  }
+
+  .decision-copy dt {
+    margin-bottom: 4px;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  .decision-copy dd {
+    margin: 0 0 22px;
+    font-size: 20px;
+    line-height: 1.5;
+    color: var(--color-text-muted);
+  }
+
+  .decision-copy dd:last-child {
+    margin-bottom: 0;
+  }
+
+  .decision-copy dt.call {
+    color: var(--color-accent);
+  }
+
+  .decision-copy dd.call {
+    color: var(--color-text);
+    font-weight: 500;
+  }
+
+  .decision-copy dd ul {
+    margin: 0;
+    padding-left: 22px;
+  }
+
+  .slide :global(.deck-functions) {
+    font-size: 28px;
+    justify-content: center;
+  }
+
+  /* Drafting */
+  .slide :global(.drafting-mock) {
+    font-size: 14.5px;
+  }
+
+  .points {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 48px;
+    margin: 30px 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 20px;
+    line-height: 1.45;
+    color: var(--color-text);
+  }
+
+  .points .role {
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+
+  /* Trust */
+  .trust {
+    flex: 1;
+    align-items: start;
+    margin-top: 16px;
+  }
+
+  .slide :global(.trust-mock) {
+    height: 330px;
+    margin-bottom: 26px;
+    font-size: 15px;
+  }
+
+  .slide :global(.trust-mock .pm-window) {
+    height: 100%;
+  }
+
+  /* Beyond */
+  .beyond {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 44px 96px;
+    align-content: center;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .beyond-num {
+    display: block;
+    margin-bottom: 8px;
+    font-family: var(--font-display);
+    font-size: 40px;
+    line-height: 1;
+    color: var(--color-accent-soft);
+  }
+
+  .beyond h3 {
+    margin-bottom: 10px;
+  }
+
+  .beyond p {
+    font-size: 22px;
+    color: var(--color-text-muted);
+  }
+
+  /* Landed */
+  .landed {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 112px;
+    align-items: center;
+  }
+
+  .landed-line {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 54px !important;
+    line-height: 1.22 !important;
+    color: var(--color-text) !important;
+  }
+
+  .landed-line.now {
+    color: var(--color-accent) !important;
+  }
+
+  .landed-body {
+    margin-top: 32px;
+    color: var(--color-text-muted);
+  }
+
+  .measures {
+    display: grid;
+    gap: 30px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: m;
+  }
+
+  .measures li {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    font-size: 25px;
+    line-height: 1.45;
+    color: var(--color-text);
+    counter-increment: m;
+  }
+
+  .measures li::before {
+    content: '0' counter(m);
+    padding-top: 5px;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--color-accent-soft);
+  }
+
+  /* Appendix */
+  .statement {
+    max-width: 1200px;
+    margin: 16px 0 56px;
+    font-family: var(--font-display);
+    font-size: 54px !important;
+    line-height: 1.25 !important;
+    color: var(--color-text) !important;
+  }
+
+  .why {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 72px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .why li {
+    padding-top: 22px;
+    border-top: 3px solid var(--color-accent-soft);
+    font-size: 24px;
+    line-height: 1.5;
+    color: var(--color-text-muted);
+  }
+
+  .slide :global(.deck-milestones) {
+    font-size: 22px;
+  }
+
+  .options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+  }
+
+  .options figure {
+    margin: 0;
+  }
+
+  .result {
+    padding: 2px 12px;
+    border-radius: var(--radius-pill);
+    background: var(--color-accent);
+    color: #fff;
+    letter-spacing: 0.02em;
+    text-transform: none;
+  }
+
+  .slide :global(.option-mock) {
+    font-size: 19px;
+  }
+
+  /* Chrome: number and section left, name right */
+  .chrome {
+    position: absolute;
+    left: 56px;
+    right: 56px;
+    bottom: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 17px;
+    color: var(--color-text-muted);
+    transition: opacity 0.3s ease;
+  }
+
+  .chrome.is-hidden {
+    opacity: 0;
+  }
+
+  .chrome.on-night {
+    color: #aab6dc;
+  }
+
+  .chrome-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    color: var(--color-text);
+  }
+
+  .on-night .chrome-right {
+    color: #fff;
+  }
+
+  .rule {
+    width: 72px;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.6;
+  }
+
+  .progress {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 3px;
+    background: var(--color-border);
+  }
+
+  .progress span {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, var(--iris-system), var(--iris-person));
+    transition: width 0.45s ease;
+  }
+
+  /* Controls fade in on hover, out of the way while presenting */
+  .controls {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 8px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill);
+    box-shadow: var(--shadow-sm);
+    font-size: 13px;
+    opacity: 0.2;
+    transition: opacity 0.25s ease;
+  }
+
+  .controls:hover,
+  .controls:focus-within {
+    opacity: 1;
+  }
+
+  .controls button,
+  .controls a {
+    padding: 4px 10px;
+    border: 0;
+    border-radius: var(--radius-pill);
+    background: none;
+    font: inherit;
+    color: var(--color-accent-ink);
+    cursor: pointer;
+  }
+
+  .controls button:hover,
+  .controls a:hover,
+  .controls [aria-pressed='true'] {
+    background: var(--color-accent-wash);
+    text-decoration: none;
+  }
+
+  .count {
+    min-width: 4.5em;
+    text-align: center;
+    color: var(--color-text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Print / Save as PDF: one slide per landscape page */
+  @media print {
+    @page {
+      size: 1600px 900px;
+      margin: 0;
+    }
+
+    :global(body) {
+      overflow: visible;
+      background: none;
+    }
+
+    .deck {
+      position: static;
+      transform: none;
+      height: auto;
+      box-shadow: none;
+      background: none;
+    }
+
+    .stage {
+      position: static;
+    }
+
+    .slide {
+      position: relative;
+      width: 1600px;
+      height: 900px;
+      opacity: 1;
+      visibility: visible;
+      break-after: page;
+      background: var(--haze);
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .slide-night {
+      background: var(--night);
+    }
+
+    .slide-decision {
+      display: grid;
+    }
+
+    .chrome,
+    .progress,
+    .controls {
+      display: none;
+    }
+  }
+</style>

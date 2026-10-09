@@ -289,31 +289,3 @@ export const takeaways = [
     body: 'People expect the same polish at work as in the apps they use every day. Patterns from outside enterprise software are worth borrowing.',
   },
 ];
-
-// Speaker notes for the slide view, keyed by slide id. Press N to show them.
-export const notes: Record<string, string> = {
-  title:
-    'Product designer at Hatch Data. Measures is where the platform’s insights become work, and this project was about making that work trustworthy.',
-  problem:
-    'Lead with the number. Half of the automated measures marked as implemented hadn’t been, so the savings we reported weren’t reliable.',
-  goals: 'Three goals: close correctly, show the work, verify the impact. Every later decision maps back to one of these.',
-  approach:
-    'We plotted every piece of feedback onto the lifecycle of a measure. Closing a measure stood out as the stage where the work and the record came apart.',
-  priorities:
-    'Inside that stage we ranked the requests. The top two, revising statuses and adding closed reasons, became the core of the project.',
-  research:
-    'The 45% stat is the key insight: people already wanted to explain themselves, but free-form comments meant the advisory team had to sort them by hand.',
-  journey:
-    'Tom is the engineer doing the work. Most of the opportunities sit in the field and in reporting back to the chief engineer.',
-  brief: 'This is the problem statement the team designed against.',
-  flow: 'The full lifecycle with the feature list mapped onto it. The red dots are where users might drop off.',
-  decisions: 'Four decisions, each with what it cost. Expect follow-up questions here.',
-  'screen-detail':
-    'The measure detail page. Walk through the four callouts: impact, structured close, activity log, attachments.',
-  'screen-list': 'The portfolio view. Status leads, and unassigned measures stand out.',
-  'screen-mobile': 'Mobile for the engineer in the field, straight from the journey map.',
-  outcome:
-    'A 73% drop in improperly resolved measures in the first six months. That’s the result that matters, because it means the reported savings are real.',
-  takeaways: 'Close on what carries forward.',
-  close: 'Thank you. Questions?',
-};

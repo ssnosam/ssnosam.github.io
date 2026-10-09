@@ -4,7 +4,7 @@
 // notes are left out here.
 //
 // Keys: ← → / Space / PageUp PageDown to move, Home End to jump, F for
-// fullscreen, N for speaker notes, Esc to return to the case study page.
+// fullscreen, Esc to return to the case study page.
 // Printing (Cmd+P → Save as PDF) gives one slide per page as a backup.
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import DoubleDiamond from '../../../components/case-study/DoubleDiamond.astro';
@@ -190,17 +190,10 @@ const num = (id: string) => String(sections.indexOf(id)).padStart(2, '0');
     <button type="button" data-prev aria-label="Previous slide">&larr;</button>
     <span class="count" data-count aria-live="polite">1 / {sections.length}</span>
     <button type="button" data-next aria-label="Next slide">&rarr;</button>
-    <button type="button" data-notes-toggle aria-pressed="false">Notes</button>
     <button type="button" data-fullscreen>Fullscreen</button>
     <a href="/work/disclosure">Exit</a>
   </nav>
 
-  <aside class="notes" data-notes hidden>
-    <p class="notes-label">Speaker notes</p>
-    <p data-notes-text></p>
-  </aside>
-
-  <script type="application/json" id="deck-notes" set:html={JSON.stringify(cs.notes)} />
   <script type="application/json" id="deck-nums" set:html={JSON.stringify(Object.fromEntries(sections.map((id) => [id, num(id)])))} />
 </BaseLayout>
 
@@ -212,12 +205,6 @@ const num = (id: string) => String(sections.indexOf(id)).padStart(2, '0');
   const numEl = document.querySelector<HTMLElement>('[data-num]')!;
   const countEl = document.querySelector<HTMLElement>('[data-count]')!;
   const progressEl = document.querySelector<HTMLElement>('[data-progress]')!;
-  const notesEl = document.querySelector<HTMLElement>('[data-notes]')!;
-  const notesText = document.querySelector<HTMLElement>('[data-notes-text]')!;
-  const notesToggle = document.querySelector<HTMLButtonElement>('[data-notes-toggle]')!;
-  const notes: Record<string, string> = JSON.parse(
-    document.getElementById('deck-notes')!.textContent || '{}'
-  );
   const nums: Record<string, string> = JSON.parse(
     document.getElementById('deck-nums')!.textContent || '{}'
   );
@@ -226,11 +213,10 @@ const num = (id: string) => String(sections.indexOf(id)).padStart(2, '0');
   const H = 900;
   let index = 0;
 
-  // Fit the fixed 1600×900 stage to the window, leaving room for the notes
-  // drawer when it is open, so every slide lays out identically on any screen.
+  // Fit the fixed 1600×900 stage to the window, so every slide lays out
+  // identically on any screen.
   function fit() {
-    const notesH = notesEl.hidden ? 0 : notesEl.offsetHeight;
-    const scale = Math.min(window.innerWidth / W, (window.innerHeight - notesH) / H);
+    const scale = Math.min(window.innerWidth / W, window.innerHeight / H);
     deck.style.setProperty('--scale', String(scale));
   }
 
@@ -248,14 +234,7 @@ const num = (id: string) => String(sections.indexOf(id)).padStart(2, '0');
     numEl.textContent = nums[id] ?? '';
     countEl.textContent = `${index + 1} / ${slides.length}`;
     progressEl.style.width = `${((index + 1) / slides.length) * 100}%`;
-    notesText.textContent = notes[id] ?? '';
     history.replaceState(null, '', `#${index + 1}`);
-  }
-
-  function toggleNotes() {
-    notesEl.hidden = !notesEl.hidden;
-    notesToggle.setAttribute('aria-pressed', String(!notesEl.hidden));
-    fit();
   }
 
   function toggleFullscreen() {
@@ -289,10 +268,6 @@ const num = (id: string) => String(sections.indexOf(id)).padStart(2, '0');
       case 'F':
         toggleFullscreen();
         break;
-      case 'n':
-      case 'N':
-        toggleNotes();
-        break;
       case 'Escape':
         if (!document.fullscreenElement) location.href = '/work/disclosure';
         break;
@@ -314,7 +289,6 @@ const num = (id: string) => String(sections.indexOf(id)).padStart(2, '0');
 
   document.querySelector('[data-prev]')!.addEventListener('click', () => show(index - 1));
   document.querySelector('[data-next]')!.addEventListener('click', () => show(index + 1));
-  notesToggle.addEventListener('click', toggleNotes);
   document.querySelector('[data-fullscreen]')!.addEventListener('click', toggleFullscreen);
   window.addEventListener('resize', fit);
 
@@ -821,33 +795,6 @@ const num = (id: string) => String(sections.indexOf(id)).padStart(2, '0');
     font-variant-numeric: tabular-nums;
   }
 
-  .notes {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 2;
-    max-height: 30vh;
-    overflow: auto;
-    padding: 16px 24px 56px;
-    background: var(--color-surface);
-    border-top: 1px solid var(--color-border);
-    font-size: 16px;
-  }
-
-  .notes-label {
-    margin: 0 0 4px;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: var(--tracking-label);
-    text-transform: uppercase;
-  }
-
-  .notes p:last-child {
-    margin: 0;
-    color: var(--color-text);
-  }
-
   /* Print / Save as PDF: one slide per landscape page */
   @media print {
     @page {
@@ -889,8 +836,7 @@ const num = (id: string) => String(sections.indexOf(id)).padStart(2, '0');
 
     .chrome,
     .progress,
-    .controls,
-    .notes {
+    .controls {
       display: none;
     }
   }

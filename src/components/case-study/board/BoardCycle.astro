@@ -1,0 +1,94 @@
+---
+/* Today's board cycle: four tools, one handoff after another. The first and
+   last tools are where the data starts and where the deck ends up. */
+interface Props {
+  steps: { tool: string; step: string }[];
+  class?: string;
+}
+
+const { steps, class: className = '' } = Astro.props;
+---
+
+<figure class:list={['cycle', className]}>
+  <figcaption class="eyebrow">Today’s board cycle</figcaption>
+  <ol>
+    {
+      steps.map((s, i) => (
+        <li class:list={{ end: i === 0 || i === steps.length - 1 }}>
+          <b>{s.tool}</b>
+          <span>{s.step}</span>
+        </li>
+      ))
+    }
+  </ol>
+</figure>
+
+<style>
+  .cycle {
+    margin: 0;
+    font-size: 1rem;
+  }
+
+  figcaption {
+    margin-bottom: 0.75em;
+    font-size: 0.875em;
+  }
+
+  ol {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 2em;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3em;
+    padding: 0.9em 1em;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+
+  li.end {
+    border-color: var(--color-accent-soft);
+  }
+
+  li + li::before {
+    content: '→';
+    position: absolute;
+    left: -1.45em;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-text-muted);
+  }
+
+  b {
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  span {
+    font-size: 0.875em;
+    line-height: 1.45;
+    color: var(--color-text-muted);
+  }
+
+  @media (max-width: 760px) {
+    ol {
+      grid-template-columns: 1fr;
+      gap: 1.6em;
+    }
+
+    li + li::before {
+      content: '↓';
+      left: 1em;
+      top: -1.4em;
+      transform: none;
+    }
+  }
+</style>

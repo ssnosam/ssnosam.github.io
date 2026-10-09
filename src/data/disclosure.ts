@@ -289,22 +289,3 @@ export const takeaways = [
     body: 'Testing throughout early access caught problems while they were still cheap to fix.',
   },
 ];
-
-// Speaker notes for the slide view, keyed by slide id. Press N to show them.
-export const notes: Record<string, string> = {
-  title: 'Senior Product Designer at Measurabl. A new product for compliance reporting, from discovery to early access.',
-  problem: 'Set up the stakes: regulation is prescriptive, penalties are real, and auditors check the work. Users were doing this offline in spreadsheets.',
-  goals: 'Three goals we agreed on as a working group. Keep returning to "auditable and transparent", because it drives the later decisions.',
-  approach: 'Double diamond. Research to make sure we were designing the right things, then design and validation to design things right.',
-  research: 'The EY stat says the stakes are real. The quote is the line that shaped the product: do it all on the platform, and let auditors look in directly.',
-  journey: 'Fourteen steps, four personas. The asset manager owns it, but property managers, our own team, and auditors all have to touch it. That is why this is a collaboration problem.',
-  brief: 'This is the problem statement the team designed against.',
-  flow: 'The flow we designed to. The tinted steps happen off to the side: support, bulk upload, and the auditor review.',
-  decisions: 'Four decisions, each with what it cost. Expect follow-up questions on any of these.',
-  'screen-reports': 'The dashboard is organized by obligation and deadline, and readiness is visible before you start.',
-  'screen-survey': 'Guidance sits beside every question. Explanations and actions taken travel with the answer.',
-  'screen-exports': 'The audit trail as a feature: who exported what and when, linked to the change log.',
-  outcomes: 'Early access, strong SUS scores, ongoing discovery. Be honest that hard metrics were still coming in.',
-  takeaways: 'Close on what carries forward to the next team.',
-  close: 'Thank you. Questions?',
-};

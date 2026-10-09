@@ -1,0 +1,113 @@
+---
+/* The project from February to GA. Key moments get a filled dot. */
+interface Props {
+  items: { when: string; what: string; key?: boolean }[];
+  class?: string;
+}
+
+const { items, class: className = '' } = Astro.props;
+---
+
+<ol class:list={['milestones', className]} style={`--count: ${items.length}`}>
+  {
+    items.map((m) => (
+      <li class:list={{ key: m.key }}>
+        <span class="dot" aria-hidden="true" />
+        <span class="when">{m.when}</span>
+        <span class="what">{m.what}</span>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .milestones {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(var(--count), minmax(0, 1fr));
+    gap: 1em;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 1rem;
+  }
+
+  .milestones::before {
+    content: '';
+    position: absolute;
+    left: 0.3em;
+    right: 0;
+    top: 0.3em;
+    height: 1px;
+    background: var(--color-border);
+  }
+
+  li {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25em;
+  }
+
+  .dot {
+    width: 0.6em;
+    height: 0.6em;
+    margin-bottom: 0.6em;
+    border-radius: 50%;
+    background: var(--color-surface);
+    border: 1.5px solid var(--color-accent-soft);
+  }
+
+  .key .dot {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 0.25em var(--color-accent-wash);
+  }
+
+  .when {
+    font-size: 0.75em;
+    font-weight: 600;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  .key .when {
+    color: var(--color-accent);
+  }
+
+  .what {
+    font-size: 0.875em;
+    line-height: 1.4;
+    color: var(--color-text-muted);
+  }
+
+  .key .what {
+    color: var(--color-text);
+    font-weight: 500;
+  }
+
+  @media (max-width: 760px) {
+    .milestones {
+      grid-template-columns: 1fr;
+      gap: 0.8em;
+      padding-left: 1.6em;
+    }
+
+    .milestones::before {
+      left: 0.3em;
+      top: 0.3em;
+      bottom: 0.3em;
+      right: auto;
+      width: 1px;
+      height: auto;
+    }
+
+    .dot {
+      position: absolute;
+      left: -1.6em;
+      top: 0.3em;
+      margin: 0;
+    }
+  }
+</style>
