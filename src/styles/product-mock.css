@@ -441,3 +441,14 @@
   font-size: 0.85em;
   color: var(--pm-muted);
 }
+
+/* Chrome flattens soft shadows into grey boxes when it prints to PDF, so
+   printed mockups rely on their borders alone. Media queries in the
+   components are screen-only for the same reason: a print page is measured
+   narrower than the slide, which would switch them to their phone layouts. */
+@media print {
+  .pm-window,
+  .pm-pop {
+    box-shadow: none;
+  }
+}

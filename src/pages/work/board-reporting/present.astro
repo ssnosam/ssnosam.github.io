@@ -11,7 +11,6 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 import BoardCycle from '../../../components/case-study/board/BoardCycle.astro';
 import AutonomyLadder from '../../../components/case-study/board/AutonomyLadder.astro';
 import Milestones from '../../../components/case-study/board/Milestones.astro';
-import FunctionsDiagram from '../../../components/case-study/board/FunctionsDiagram.astro';
 import MockDraft from '../../../components/case-study/board/MockDraft.astro';
 import MockCreate from '../../../components/case-study/board/MockCreate.astro';
 import MockSection from '../../../components/case-study/board/MockSection.astro';
@@ -46,18 +45,13 @@ const main = [
   'close',
 ];
 const appendix = [
-  'appendix-why',
   'appendix-timeline',
   'appendix-concept',
-  'appendix-functions',
-  'appendix-familiar',
-  'appendix-refresh',
 ];
 const num = (id: string) =>
   main.includes(id) ? String(main.indexOf(id)).padStart(2, '0') : `A${appendix.indexOf(id) + 1}`;
 
 const placeKinds = ['wizard', 'editor', 'addin'] as const;
-const [functionsDecision, familiarDecision, refreshDecision] = cs.mvpDecisions;
 const agent = Object.fromEntries(cs.agentDecisions.map((d) => [d.id, d]));
 const agentMocks = { create: MockCreate, propose: MockRedline, roll: MockRollForward };
 ---
@@ -348,14 +342,6 @@ const agentMocks = { create: MockCreate, propose: MockRedline, roll: MockRollFor
       </article>
 
       <!-- Appendix: skipped unless A is pressed, there if someone asks for depth. -->
-      <article class="slide slide-appendix" data-id="appendix-why">
-        <p class="eyebrow kicker">Why it mattered</p>
-        <p class="statement">{cs.whyItMattered.lead}</p>
-        <ul class="why">
-          {cs.whyItMattered.points.map((p) => <li>{p}</li>)}
-        </ul>
-      </article>
-
       <article class="slide slide-appendix" data-id="appendix-timeline">
         <p class="eyebrow kicker">Discovery</p>
         <h2>I started wide, then converged on something we could test.</h2>
@@ -382,36 +368,6 @@ const agentMocks = { create: MockCreate, propose: MockRedline, roll: MockRollFor
           }
         </div>
       </article>
-
-      {
-        [
-          { d: functionsDecision, id: 'appendix-functions' },
-          { d: familiarDecision, id: 'appendix-familiar' },
-          { d: refreshDecision, id: 'appendix-refresh' },
-        ].map(({ d, id }) => (
-          <article class="slide slide-appendix slide-decision" data-id={id}>
-            <div class="decision-copy">
-              <p class="eyebrow kicker">{d.eyebrow}</p>
-              <h2>{d.title}</h2>
-              <dl>
-                <dt>The tension</dt>
-                <dd>{d.tension}</dd>
-                <dt class="call">The call</dt>
-                <dd class="call">
-                  {Array.isArray(d.call) ? <ul>{d.call.map((c) => <li>{c}</li>)}</ul> : d.call}
-                </dd>
-                <dt>The cost</dt>
-                <dd>{d.cost}</dd>
-              </dl>
-            </div>
-            <figure class="decision-visual">
-              {id === 'appendix-functions' && <FunctionsDiagram class="deck-functions" />}
-              {id === 'appendix-familiar' && <MockSchematic kind="addin" class="decision-mock" />}
-              {id === 'appendix-refresh' && <MockRedline class="decision-mock" />}
-            </figure>
-          </article>
-        ))
-      }
     </div>
 
     <footer class="chrome" data-chrome aria-hidden="true">
@@ -1213,10 +1169,6 @@ const agentMocks = { create: MockCreate, propose: MockRedline, roll: MockRollFor
     grid-template-columns: 1fr 840px;
   }
 
-  .slide-appendix.slide-decision {
-    grid-template-columns: 1fr 720px;
-  }
-
   .decision-visual {
     margin: 0;
     min-width: 0;
@@ -1274,11 +1226,6 @@ const agentMocks = { create: MockCreate, propose: MockRedline, roll: MockRollFor
   .decision-copy dd ul {
     margin: 0;
     padding-left: 22px;
-  }
-
-  .slide :global(.deck-functions) {
-    font-size: 28px;
-    justify-content: center;
   }
 
   /* Drafting */
@@ -1403,32 +1350,6 @@ const agentMocks = { create: MockCreate, propose: MockRedline, roll: MockRollFor
   }
 
   /* Appendix */
-  .statement {
-    max-width: 1200px;
-    margin: 16px 0 56px;
-    font-family: var(--font-display);
-    font-size: 54px !important;
-    line-height: 1.25 !important;
-    color: var(--color-text) !important;
-  }
-
-  .why {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 72px;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .why li {
-    padding-top: 22px;
-    border-top: 3px solid var(--color-accent-soft);
-    font-size: 24px;
-    line-height: 1.5;
-    color: var(--color-text-muted);
-  }
-
   .slide :global(.deck-milestones) {
     font-size: 22px;
   }
@@ -1600,6 +1521,12 @@ const agentMocks = { create: MockCreate, propose: MockRedline, roll: MockRollFor
 
     .slide-night {
       background: var(--night);
+    }
+
+    /* The eclipse art prints with banding in PDF viewers, so printed title
+       slides rest on the gradient alone. */
+    .title-art {
+      display: none;
     }
 
     .slide-decision {

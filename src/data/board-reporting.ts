@@ -61,14 +61,6 @@ export const cycle = [
   { tool: 'PowerPoint', step: 'Rebuild the same tables, again' },
 ];
 
-export const whyItMattered = {
-  lead: 'Board reporting was a table-stakes gap in RFPs. Without it, customers reached for a separate, dedicated tool.',
-  points: [
-    'A key commitment for our 2026 connected-risk release, so it had a date attached.',
-    'We’d shipped something adjacent before. An audit-plan status report existed, but usage was low. That raised the bar from “generate a report” to “fit how they actually work.”',
-  ],
-};
-
 export const people = [
   {
     role: 'Preparer',
@@ -221,43 +213,6 @@ export type Decision = {
   cost: string;
   caption?: string;
 };
-
-// The MVP decisions the agent inherits. In the deck they live in the appendix.
-export const mvpDecisions: Decision[] = [
-  {
-    id: 'functions',
-    eyebrow: 'MVP decision',
-    title: 'Count and AI Summary became functions, not block types.',
-    tension:
-      'A menu of block types is easy to scan, but it multiplies: we were at nine combinations. And people needed counts and summaries inside tables and sentences, not only on their own.',
-    call: 'Two primitives, tables and text, plus two functions that work in either: “This quarter we closed [Count: Issues, Status = Closed] issues.”',
-    cost: 'A function is a more abstract idea to teach. And to protect MVP scope, the AI assistant moved to after launch.',
-  },
-  {
-    id: 'familiar',
-    eyebrow: 'MVP decision',
-    title: 'Familiar over clever.',
-    tension:
-      'Hashtag placeholders kept a customer’s formatting on roll-forward, which one power user valued highly. The menu-driven add-in was understood with no explanation at all.',
-    call: 'Ship the add-in. Solve formatting persistence underneath the UI as a fast-follow, not with a new interaction model.',
-    cost: 'At launch, formatting doesn’t carry across roll-forward. And some bank customers have asked for hashtag-style behavior.',
-  },
-  {
-    id: 'refresh',
-    eyebrow: 'MVP decision',
-    title: 'Never refresh silently.',
-    tension:
-      'Live data is the point of automation. But a board deck is a point-in-time record someone signed off on, and engineering could store rendered content, not field values.',
-    call: [
-      'The Data tab is always live.',
-      'The editor keeps what you reviewed.',
-      'Editing a block warns you before it pulls live data.',
-      'Revert is there until you save.',
-      'Reopening a report shows a staleness indicator.',
-    ],
-    cost: 'We chose a known complaint, “I updated data two days ago and the report doesn’t reflect it,” over an unrecoverable one: a number changing after sign-off.',
-  },
-];
 
 // The agentic layer, designed and prototyped on top of the MVP.
 export const agentDecisions: Decision[] = [
