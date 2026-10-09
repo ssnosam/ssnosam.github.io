@@ -2,7 +2,6 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
-import Philosophy from '../components/Philosophy.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import { site } from '../data/site.config';
 
@@ -44,7 +43,7 @@ const projects = [
 
 <BaseLayout
   title={`My Work | ${site.name}`}
-  description="Selected projects and case studies from Shelby Mason, plus the principles behind how she approaches product design."
+  description="Selected projects and case studies from Shelby Mason, Senior Product Designer."
 >
   <Nav />
   <main>
@@ -87,7 +86,6 @@ const projects = [
         <a href={`mailto:${site.email}`} class="btn ask">Ask me about my work</a>
       </div>
     </section>
-    <Philosophy />
   </main>
   <Footer />
 </BaseLayout>

@@ -90,7 +90,7 @@ const { title = site.title, description = site.description, theme } = Astro.prop
         window.addEventListener('scroll', onScroll, { passive: true });
       }
 
-      // A hash landing (say /work#philosophy) skips past sections that were
+      // A hash landing (say /#contact) skips past sections that were
       // never scrolled through, so anything above the target would sit hidden.
       // Reveal everything up to the scroll position once the jump has settled.
       if (location.hash) {
