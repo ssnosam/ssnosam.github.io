@@ -10,6 +10,7 @@ import Nav from '../../components/Nav.astro';
 import Footer from '../../components/Footer.astro';
 import CaseStudyHero from '../../components/case-study/CaseStudyHero.astro';
 import CaseStudyMeta from '../../components/case-study/CaseStudyMeta.astro';
+import CaseStudyNav from '../../components/case-study/CaseStudyNav.astro';
 import StatBlock from '../../components/case-study/StatBlock.astro';
 import DesignBet from '../../components/case-study/DesignBet.astro';
 import ReviewNote from '../../components/case-study/ReviewNote.astro';
@@ -54,6 +55,8 @@ import userFlow from '../../assets/work/measures/user-flow.png';
         <div class="meta-block">
           <CaseStudyMeta items={cs.meta} />
         </div>
+
+        <CaseStudyNav />
       </div>
     </section>
 

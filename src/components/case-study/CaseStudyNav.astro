@@ -1,0 +1,350 @@
+---
+/* Table of contents and a floating "contents / back to top" control for a case
+   study page. The list is built from the page itself, from every
+   `main > section[id]` that has an h2, so it stays in step with the page
+   without a second copy of the headings. Without JavaScript it simply doesn't
+   appear, and the page reads as it always did. Place it once, below the hero. */
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<nav class:list={['toc', className]} aria-labelledby="toc-title" data-toc hidden>
+  <p class="toc-title eyebrow" id="toc-title">On this page</p>
+  <ol class="toc-list" data-toc-list></ol>
+</nav>
+
+<div class="float" data-float hidden>
+  <div class="float-menu" id="toc-menu" data-menu hidden>
+    <p class="menu-title">Contents</p>
+    <ol class="menu-list" data-menu-list></ol>
+  </div>
+  <div class="float-bar">
+    <button
+      type="button"
+      class="float-btn"
+      data-menu-toggle
+      aria-expanded="false"
+      aria-controls="toc-menu"
+    >
+      <svg viewBox="0 0 16 16" aria-hidden="true"
+        ><path d="M2 4h12M2 8h12M2 12h8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+        ></path></svg
+      >
+      Contents
+    </button>
+    <span class="float-divider" aria-hidden="true"></span>
+    <button type="button" class="float-btn" data-top>
+      <svg viewBox="0 0 16 16" aria-hidden="true"
+        ><path d="M8 13V3M3.5 7.5 8 3l4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"
+        ></path></svg
+      >
+      Top
+    </button>
+  </div>
+</div>
+
+<script>
+  const toc = document.querySelector<HTMLElement>('[data-toc]');
+  const float = document.querySelector<HTMLElement>('[data-float]');
+
+  if (toc && float) {
+    const sections = Array.from(
+      document.querySelectorAll<HTMLElement>('main > section[id]')
+    ).filter((s) => s.querySelector('h2'));
+
+    const list = toc.querySelector<HTMLOListElement>('[data-toc-list]')!;
+    const menu = float.querySelector<HTMLElement>('[data-menu]')!;
+    const menuList = float.querySelector<HTMLOListElement>('[data-menu-list]')!;
+    const toggle = float.querySelector<HTMLButtonElement>('[data-menu-toggle]')!;
+    const topBtn = float.querySelector<HTMLButtonElement>('[data-top]')!;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const item = (s: HTMLElement, i: number) => {
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = `#${s.id}`;
+      a.dataset.target = s.id;
+      const num = document.createElement('span');
+      num.className = 'num';
+      num.textContent = String(i + 1).padStart(2, '0');
+      const label = document.createElement('span');
+      label.textContent = s.querySelector('h2')!.textContent!.trim();
+      a.append(num, label);
+      li.append(a);
+      return li;
+    };
+
+    if (sections.length > 1) {
+      sections.forEach((s, i) => {
+        list.append(item(s, i));
+        menuList.append(item(s, i));
+      });
+      // Read down the first column, then the second.
+      list.style.setProperty('--rows', String(Math.ceil(sections.length / 2)));
+      toc.hidden = false;
+      float.hidden = false;
+    }
+
+    const setOpen = (open: boolean) => {
+      menu.hidden = !open;
+      toggle.setAttribute('aria-expanded', String(open));
+    };
+
+    toggle.addEventListener('click', () => setOpen(menu.hidden));
+    menuList.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).closest('a')) setOpen(false);
+    });
+    document.addEventListener('click', (e) => {
+      if (!menu.hidden && !float.contains(e.target as Node)) setOpen(false);
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !menu.hidden) {
+        setOpen(false);
+        toggle.focus();
+      }
+    });
+
+    // Back to top lands on the page title, so keyboard and screen reader users
+    // end up where sighted users do.
+    topBtn.addEventListener('click', () => {
+      setOpen(false);
+      window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
+      const h1 = document.querySelector<HTMLElement>('main h1');
+      if (h1) {
+        h1.tabIndex = -1;
+        h1.focus({ preventScroll: true });
+      }
+    });
+
+    // The control appears once the inline contents list has scrolled away,
+    // and the current section is marked in its menu.
+    const onScroll = () => {
+      const past = toc.getBoundingClientRect().bottom < 0;
+      float.classList.toggle('is-shown', past);
+      if (!past) setOpen(false);
+
+      let current = '';
+      const line = window.innerHeight * 0.3;
+      for (const s of sections) {
+        if (s.getBoundingClientRect().top <= line) current = s.id;
+      }
+      menuList.querySelectorAll<HTMLAnchorElement>('a').forEach((a) => {
+        if (a.dataset.target === current) a.setAttribute('aria-current', 'true');
+        else a.removeAttribute('aria-current');
+      });
+    };
+
+    let ticking = false;
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          onScroll();
+          ticking = false;
+        });
+      },
+      { passive: true }
+    );
+    onScroll();
+  }
+</script>
+
+<style>
+  .toc {
+    margin-top: var(--space-6);
+    padding: var(--space-4) var(--space-5);
+    background: var(--color-accent-wash);
+    border-radius: var(--radius-md);
+  }
+
+  .toc-title {
+    margin-bottom: var(--space-3);
+  }
+
+  .toc-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(var(--rows, 1), auto);
+    grid-auto-flow: column;
+    gap: var(--space-2) var(--space-5);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .toc-list :global(a),
+  .menu-list :global(a) {
+    display: flex;
+    gap: var(--space-3);
+    align-items: baseline;
+    color: var(--color-text);
+    font-size: var(--text-sm);
+    line-height: 1.4;
+  }
+
+  .toc-list :global(a:hover) {
+    color: var(--color-accent-ink);
+  }
+
+  .toc-list :global(.num),
+  .menu-list :global(.num) {
+    flex: none;
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: var(--tracking-label);
+    color: var(--color-accent-soft);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Floating control */
+  .float {
+    position: fixed;
+    right: var(--space-4);
+    bottom: var(--space-4);
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: var(--space-2);
+    opacity: 0;
+    transform: translateY(0.75rem);
+    pointer-events: none;
+    transition:
+      opacity 0.3s ease,
+      transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .float[hidden] {
+    display: none;
+  }
+
+  .float.is-shown {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
+
+  .float-bar {
+    display: flex;
+    align-items: center;
+    padding: 0.25rem;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill);
+    box-shadow: 0 10px 30px -12px rgba(31, 42, 54, 0.25);
+  }
+
+  .float-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 0.9rem;
+    border: 0;
+    border-radius: var(--radius-pill);
+    background: none;
+    font: inherit;
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--color-accent-ink);
+    cursor: pointer;
+  }
+
+  .float-btn:hover,
+  .float-btn[aria-expanded='true'] {
+    background: var(--color-accent-wash);
+  }
+
+  .float-btn:focus-visible {
+    outline: 2px solid var(--color-accent-ink);
+    outline-offset: 2px;
+  }
+
+  .float-btn svg {
+    width: 0.95rem;
+    height: 0.95rem;
+  }
+
+  .float-divider {
+    width: 1px;
+    height: 1.1rem;
+    background: var(--color-border);
+  }
+
+  .float-menu {
+    width: min(20rem, calc(100vw - 2 * var(--space-4)));
+    max-height: min(26rem, 60vh);
+    overflow: auto;
+    padding: var(--space-3) var(--space-3) var(--space-2);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: 0 18px 40px -16px rgba(31, 42, 54, 0.3);
+  }
+
+  .menu-title {
+    margin: 0 0 var(--space-2) var(--space-2);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  .menu-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .menu-list :global(a) {
+    padding: 0.45rem var(--space-2);
+    border-radius: 0.5rem;
+  }
+
+  .menu-list :global(a:hover) {
+    background: var(--color-accent-wash);
+    text-decoration: none;
+  }
+
+  .menu-list :global(a[aria-current='true']) {
+    background: var(--color-accent-wash);
+    color: var(--color-accent-ink);
+    font-weight: 600;
+  }
+
+  @media (max-width: 640px) {
+    .toc {
+      padding: var(--space-4);
+    }
+
+    .toc-list {
+      grid-template-columns: 1fr;
+      grid-template-rows: none;
+      grid-auto-flow: row;
+    }
+
+    .float {
+      right: var(--space-3);
+      bottom: var(--space-3);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .float {
+      transition: none;
+    }
+  }
+
+  @media print {
+    .toc,
+    .float {
+      display: none;
+    }
+  }
+</style>

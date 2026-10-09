@@ -14,6 +14,7 @@ import ReviewNote from '../../components/case-study/ReviewNote.astro';
 import DoubleDiamond from '../../components/case-study/DoubleDiamond.astro';
 import JourneyMap from '../../components/case-study/JourneyMap.astro';
 import AnnotatedScreen from '../../components/case-study/AnnotatedScreen.astro';
+import CaseStudyNav from '../../components/case-study/CaseStudyNav.astro';
 import { site } from '../../data/site.config';
 import * as cs from '../../data/disclosure';
 import '../../styles/theme-mist.css';
@@ -49,6 +50,8 @@ import tile from '../../assets/work/disclosure/disclosure-tile.png';
         <div class="meta-block">
           <CaseStudyMeta items={cs.meta} />
         </div>
+
+        <CaseStudyNav />
       </div>
     </section>
 
