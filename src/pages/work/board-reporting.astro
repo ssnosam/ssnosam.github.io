@@ -14,7 +14,6 @@ import TensionCall from '../../components/case-study/board/TensionCall.astro';
 import BoardCycle from '../../components/case-study/board/BoardCycle.astro';
 import AutonomyLadder from '../../components/case-study/board/AutonomyLadder.astro';
 import Milestones from '../../components/case-study/board/Milestones.astro';
-import FunctionsDiagram from '../../components/case-study/board/FunctionsDiagram.astro';
 import MockDraft from '../../components/case-study/board/MockDraft.astro';
 import MockCreate from '../../components/case-study/board/MockCreate.astro';
 import MockSection from '../../components/case-study/board/MockSection.astro';
@@ -30,7 +29,6 @@ import '../../styles/product-mock.css';
 import tile from '../../assets/work/board-reporting/board-reporting-tile.png';
 
 const placeKinds = ['wizard', 'editor', 'addin'] as const;
-const [functionsDecision, familiarDecision, refreshDecision] = cs.mvpDecisions;
 const [createDecision, proposeDecision, rollDecision] = cs.agentDecisions;
 ---
 
@@ -97,13 +95,6 @@ const [createDecision, proposeDecision, rollDecision] = cs.agentDecisions;
         </div>
         <div class="section-figures reveal" style="--reveal-delay: 0.1s">
           <BoardCycle steps={cs.cycle} />
-        </div>
-        <div class="why reveal" style="--reveal-delay: 0.12s">
-          <p class="eyebrow">Why it mattered</p>
-          <p class="why-lead">{cs.whyItMattered.lead}</p>
-          <ul>
-            {cs.whyItMattered.points.map((p) => <li>{p}</li>)}
-          </ul>
         </div>
       </div>
     </section>
@@ -253,19 +244,6 @@ const [createDecision, proposeDecision, rollDecision] = cs.agentDecisions;
             ))
           }
         </ol>
-
-        <div class="mvp">
-          <div class="prose reveal">
-            <h3 class="mvp-title">Three MVP decisions the agent inherits</h3>
-          </div>
-          <TensionCall {...functionsDecision}>
-            <div class="diagram-card"><FunctionsDiagram /></div>
-          </TensionCall>
-          <TensionCall {...familiarDecision} flip index={1}>
-            <MockSchematic kind="addin" />
-          </TensionCall>
-          <TensionCall {...refreshDecision} index={2} />
-        </div>
       </div>
     </section>
 
@@ -534,28 +512,6 @@ const [createDecision, proposeDecision, rollDecision] = cs.agentDecisions;
     font-size: clamp(3rem, 6vw, 4rem);
     color: var(--color-accent-ink);
     white-space: nowrap;
-  }
-
-  .why {
-    max-width: var(--measure);
-    margin-top: var(--space-6);
-    padding: var(--space-4) var(--space-5);
-    border-left: 2px solid var(--color-highlight);
-  }
-
-  .why-lead {
-    color: var(--color-text);
-  }
-
-  .why ul {
-    margin: 0;
-    padding-left: 1.1em;
-    font-size: var(--text-sm);
-    color: var(--color-text-muted);
-  }
-
-  .why li + li {
-    margin-top: var(--space-2);
   }
 
   /* People */
@@ -872,21 +828,6 @@ const [createDecision, proposeDecision, rollDecision] = cs.agentDecisions;
   .trust p {
     margin: 0;
     font-size: var(--text-sm);
-  }
-
-  .mvp {
-    margin-top: var(--space-7);
-  }
-
-  .mvp-title {
-    margin-bottom: var(--space-4);
-  }
-
-  .diagram-card {
-    padding: var(--space-5);
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
   }
 
   /* Agent */
