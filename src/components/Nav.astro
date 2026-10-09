@@ -14,6 +14,10 @@ const links = [
 
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 const isHome = path === '/';
+
+// A case study at /work/hatch-data still belongs to the "My Work" link, so a
+// section matches its own path and anything nested beneath it.
+const isActive = (match: string) => path === match || path.startsWith(`${match}/`);
 ---
 
 <header class="nav">
@@ -28,7 +32,7 @@ const isHome = path === '/';
                 href={link.href}
                 class:list={[
                   { 'resume-link': link.accent },
-                  { 'is-active': link.match !== undefined && path === link.match },
+                  { 'is-active': link.match !== undefined && isActive(link.match) },
                 ]}
                 data-spy={isHome ? link.spy : undefined}
               >

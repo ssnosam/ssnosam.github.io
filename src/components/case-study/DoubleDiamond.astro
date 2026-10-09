@@ -1,0 +1,185 @@
+---
+interface Props {
+  phases: { phase: string; detail: string }[];
+  class?: string;
+}
+
+const { phases, class: className = '' } = Astro.props;
+const [discover, define, develop, deliver] = phases;
+---
+
+<figure class:list={['diamond', className]}>
+  <svg
+    viewBox="0 0 1000 500"
+    role="img"
+    aria-labelledby="dd-title"
+  >
+    <title id="dd-title">
+      Double diamond: research to design the right things (discover, then define), then design to
+      design things right (develop, then deliver), moving from problem to problem definition to
+      solution.
+    </title>
+
+    <text class="group" x="270" y="34" text-anchor="middle">Research</text>
+    <text class="motto" x="270" y="62" text-anchor="middle">“Design the right things”</text>
+    <text class="group" x="730" y="34" text-anchor="middle">Design</text>
+    <text class="motto" x="730" y="62" text-anchor="middle">“Design things right”</text>
+
+    <polygon class="green-a" points="40,270 270,90 270,450" />
+    <polygon class="green-b" points="270,90 500,270 270,450" />
+    <polygon class="blue-a" points="500,270 730,90 730,450" />
+    <polygon class="blue-b" points="730,90 960,270 730,450" />
+    <polygon class="edge-green" points="40,270 270,90 500,270 270,450" />
+    <polygon class="edge-blue" points="500,270 730,90 960,270 730,450" />
+    <line class="edge-green" x1="270" y1="90" x2="270" y2="450" />
+    <line class="edge-blue" x1="730" y1="90" x2="730" y2="450" />
+
+    <text class="phase" x="190" y="262" text-anchor="middle">{discover.phase}</text>
+    <text class="detail" x="190" y="290" text-anchor="middle">{discover.detail}</text>
+    <text class="phase" x="350" y="262" text-anchor="middle">{define.phase}</text>
+    <text class="detail" x="350" y="290" text-anchor="middle">Prioritize problem</text>
+    <text class="detail" x="350" y="312" text-anchor="middle">statements</text>
+    <text class="phase" x="650" y="262" text-anchor="middle">{develop.phase}</text>
+    <text class="detail" x="650" y="290" text-anchor="middle">Ideation and</text>
+    <text class="detail" x="650" y="312" text-anchor="middle">validation</text>
+    <text class="phase" x="810" y="262" text-anchor="middle">{deliver.phase}</text>
+    <text class="detail" x="810" y="290" text-anchor="middle">Improvements</text>
+    <text class="detail" x="810" y="312" text-anchor="middle">and iteration</text>
+
+    <circle class="node" cx="40" cy="270" r="7" />
+    <circle class="node" cx="500" cy="270" r="7" />
+    <circle class="node" cx="960" cy="270" r="7" />
+    <text class="marker" x="40" y="488" text-anchor="start">Problem</text>
+    <text class="marker" x="500" y="488" text-anchor="middle">Problem definition</text>
+    <text class="marker" x="960" y="488" text-anchor="end">Solution</text>
+  </svg>
+
+  <!-- On a phone the diagram's labels would shrink past legibility, so the same
+       four phases read as a short list instead. -->
+  <ol class="phase-list">
+    {
+      phases.map((p, i) => (
+        <li class={i < 2 ? 'is-research' : 'is-design'}>
+          <strong>{p.phase}</strong>
+          <span>{p.detail}</span>
+        </li>
+      ))
+    }
+  </ol>
+</figure>
+
+<style>
+  .diamond {
+    margin: 0;
+  }
+
+  svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    font-family: var(--font-body);
+    overflow: visible;
+  }
+
+  .green-a {
+    fill: var(--mist-green-wash);
+    opacity: 0.55;
+  }
+  .green-b {
+    fill: var(--mist-green-wash);
+  }
+  .blue-a {
+    fill: var(--mist-blue-wash);
+    opacity: 0.6;
+  }
+  .blue-b {
+    fill: var(--mist-blue-wash);
+  }
+
+  .edge-green,
+  .edge-blue {
+    fill: none;
+    stroke-width: 1.5;
+  }
+  .edge-green {
+    stroke: var(--mist-green);
+  }
+  .edge-blue {
+    stroke: var(--mist-blue);
+  }
+
+  .node {
+    fill: var(--color-surface);
+    stroke: var(--color-accent-soft);
+    stroke-width: 2;
+  }
+
+  .group {
+    font-family: var(--font-display);
+    font-size: 26px;
+    fill: var(--color-text);
+  }
+
+  .motto {
+    font-size: 17px;
+    font-style: italic;
+    fill: var(--color-text-muted);
+  }
+
+  .phase {
+    font-size: 19px;
+    font-weight: 600;
+    fill: var(--color-text);
+  }
+
+  .detail {
+    font-size: 15px;
+    fill: var(--color-text-muted);
+  }
+
+  .marker {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    fill: var(--color-accent-ink);
+  }
+
+  .phase-list {
+    display: none;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    gap: var(--space-2);
+  }
+
+  .phase-list li {
+    display: grid;
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+
+  .phase-list strong {
+    color: var(--color-text);
+    font-weight: 600;
+  }
+
+  .is-research {
+    background: var(--mist-green-wash);
+  }
+
+  .is-design {
+    background: var(--mist-blue-wash);
+  }
+
+  @media (max-width: 640px) {
+    svg {
+      display: none;
+    }
+
+    .phase-list {
+      display: grid;
+    }
+  }
+</style>

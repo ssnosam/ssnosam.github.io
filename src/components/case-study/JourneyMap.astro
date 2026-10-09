@@ -1,0 +1,187 @@
+---
+interface Props {
+  /* Journey steps carry persona dots; flow steps may carry an `aside` — work
+     that happens off the main path, like a support call or an auditor review. */
+  steps: { text: string; personas?: string[]; aside?: string }[];
+  personas?: { id: string; name: string; includes?: string }[];
+  label: string;
+  class?: string;
+}
+
+const { steps, personas = [], label, class: className = '' } = Astro.props;
+const nameOf = Object.fromEntries(personas.map((p) => [p.id, p.name]));
+---
+
+<div class:list={['journey', className]}>
+  {
+    personas.length > 0 && (
+      <ul class="legend" aria-label="Personas">
+        {personas.map((p) => (
+          <li>
+            <span class={`dot persona-${p.id}`} aria-hidden="true" />
+            <span>
+              <strong>{p.name}</strong>
+              {p.includes && <span class="includes">{p.includes}</span>}
+            </span>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+
+  <ol class="steps" aria-label={label}>
+    {
+      steps.map((step, i) => (
+        <li class="step">
+          {step.aside && <span class="aside">{step.aside}</span>}
+          <span class="chip">
+            <span class="chip-head">
+              <span class="index">{String(i + 1).padStart(2, '0')}</span>
+              {step.personas && (
+                <span class="dots">
+                  {step.personas.map((id) => (
+                    <span class={`dot persona-${id}`} title={nameOf[id]} />
+                  ))}
+                  <span class="sr-only">
+                    {`(${step.personas.map((id) => nameOf[id]).join(', ')})`}
+                  </span>
+                </span>
+              )}
+            </span>
+            <span class="text">{step.text}</span>
+          </span>
+        </li>
+      ))
+    }
+  </ol>
+</div>
+
+<style>
+  .legend {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-3) var(--space-5);
+    margin: 0 0 var(--space-5);
+    padding: 0;
+    list-style: none;
+  }
+
+  .legend li {
+    display: flex;
+    gap: var(--space-2);
+    align-items: baseline;
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+
+  .legend strong {
+    display: block;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .includes {
+    display: block;
+  }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(12.5rem, 1fr));
+    gap: var(--space-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: step;
+  }
+
+  .step {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .chip {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    flex: 1;
+    padding: var(--space-3);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: 0 6px 18px -14px rgba(31, 42, 54, 0.3);
+  }
+
+  .chip-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .index {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: var(--tracking-label);
+    color: var(--color-accent-soft);
+  }
+
+  .text {
+    font-size: 0.9375rem;
+    line-height: 1.45;
+    color: var(--color-text);
+  }
+
+  .aside {
+    padding: var(--space-2) var(--space-3);
+    border: 1px dashed var(--color-accent-soft);
+    border-radius: var(--radius-md);
+    background: var(--mist-wash);
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    color: var(--color-text-muted);
+  }
+
+  .dots {
+    display: flex;
+    gap: 0.3rem;
+  }
+
+  .dot {
+    display: inline-block;
+    flex: none;
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 50%;
+    border: 1.5px solid var(--dot);
+    background: color-mix(in srgb, var(--dot) 28%, white);
+  }
+
+  .persona-asset {
+    --dot: var(--persona-asset);
+  }
+  .persona-property {
+    --dot: var(--persona-property);
+  }
+  .persona-internal {
+    --dot: var(--persona-internal);
+  }
+  .persona-auditor {
+    --dot: var(--persona-auditor);
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 640px) {
+    .legend {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

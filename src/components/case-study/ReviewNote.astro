@@ -1,0 +1,47 @@
+---
+/* Marks copy that was drafted from the project artifacts rather than written
+   from memory. Shown only in local development (`astro dev`), never in the
+   production build, so it stays a private reminder until the copy is final. */
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+{
+  import.meta.env.DEV && (
+    <aside class:list={['review-note', className]}>
+      <p class="review-label">Draft — needs your review</p>
+      <p class="review-body">
+        <slot />
+      </p>
+    </aside>
+  )
+}
+
+<style>
+  .review-note {
+    max-width: var(--measure);
+    margin: 0 0 var(--space-5);
+    padding: var(--space-3) var(--space-4);
+    background: var(--color-note);
+    border: 1px dashed var(--color-note-edge);
+    border-radius: var(--radius-md);
+  }
+
+  .review-label {
+    margin: 0 0 var(--space-1);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-label);
+    color: var(--color-ink);
+  }
+
+  .review-body {
+    margin: 0;
+    font-size: var(--text-sm);
+    color: var(--color-ink);
+  }
+</style>

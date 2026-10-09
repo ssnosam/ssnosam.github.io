@@ -1,0 +1,66 @@
+---
+interface Props {
+  title: string;
+  /* Every bet cost something. Naming the cost is the point of the section. */
+  tradeoff: string;
+  index?: number;
+  class?: string;
+}
+
+const { title, tradeoff, index = 0, class: className = '' } = Astro.props;
+---
+
+<article class:list={['bet', 'reveal', className]} style={`--reveal-delay: ${index * 0.08}s`}>
+  <h3>{title}</h3>
+  <div class="bet-body">
+    <slot />
+  </div>
+  <p class="tradeoff">
+    <span class="tradeoff-label">The tradeoff</span>
+    {tradeoff}
+  </p>
+</article>
+
+<style>
+  .bet {
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .bet + .bet {
+    margin-top: var(--space-5);
+  }
+
+  h3 {
+    margin-bottom: var(--space-3);
+  }
+
+  .bet-body {
+    max-width: var(--measure);
+  }
+
+  .bet-body :global(p) {
+    margin: 0 0 var(--space-3);
+  }
+
+  /* The tradeoff sits in a tinted block so it reads as the counterweight to the
+     decision above it rather than another supporting paragraph. */
+  .tradeoff {
+    max-width: var(--measure);
+    margin: 0;
+    padding: var(--space-3) var(--space-4);
+    background: var(--color-accent-wash);
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+  }
+
+  .tradeoff-label {
+    display: block;
+    margin-bottom: var(--space-1);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-label);
+    color: var(--color-accent-ink);
+  }
+</style>

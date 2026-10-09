@@ -5,9 +5,12 @@ import { site } from '../data/site.config';
 interface Props {
   title?: string;
   description?: string;
+  /* A case study can swap the site's color tokens for its own palette; see
+     src/styles/theme-*.css. */
+  theme?: string;
 }
 
-const { title = site.title, description = site.description } = Astro.props;
+const { title = site.title, description = site.description, theme } = Astro.props;
 ---
 
 <!doctype html>
@@ -23,7 +26,7 @@ const { title = site.title, description = site.description } = Astro.props;
       document.documentElement.classList.add('js');
     </script>
   </head>
-  <body>
+  <body class={theme}>
     <div class="page-sheet">
       <slot />
     </div>

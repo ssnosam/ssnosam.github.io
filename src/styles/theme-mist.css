@@ -1,0 +1,31 @@
+/* Disclosure's case study borrows the cool, misty palette of the product it
+   describes. Only the color tokens change: type, spacing, and every shared
+   component stay exactly as the rest of the site has them, so the page still
+   reads as part of the portfolio. Applied to <body> via BaseLayout's `theme`. */
+.theme-mist {
+  --color-bg: #f5f8fb;
+  --color-text: #1f2a36;
+  --color-text-muted: #56667a;
+  --color-border: #e0e7ef;
+  --color-accent: #33688c; /* 5.9:1 on white */
+  --color-accent-soft: #6f9bb8;
+  --color-accent-ink: #224d6b;
+  --color-accent-wash: #edf3f8;
+  --color-grid: rgba(51, 104, 140, 0.05);
+  --color-highlight: #d5e7f1;
+  --color-ink: #2a3442;
+
+  --mist-wash: #eef2f7;
+  --mist-wash-deep: #e4eaf2;
+  --mist-blue: #8fc3e3;
+  --mist-blue-wash: #e8f3fa;
+  --mist-green: #5cc0a0;
+  --mist-green-ink: #1f7a5e;
+  --mist-green-wash: #e5f6f0;
+
+  /* persona keys from the journey map */
+  --persona-asset: #4a9fd0;
+  --persona-property: #d8c53c;
+  --persona-internal: #4fc4a0;
+  --persona-auditor: #ef9468;
+}

@@ -1,0 +1,79 @@
+---
+import { Image } from 'astro:assets';
+
+interface Props {
+  title: string;
+  summary: string;
+  art?: ImageMetadata;
+  artAlt?: string;
+  class?: string;
+}
+
+const { title, summary, art, artAlt = '', class: className = '' } = Astro.props;
+---
+
+<header class:list={['hero', className]}>
+  <div class="hero-copy">
+    <h1 class="reveal">{title}</h1>
+    <p class="summary reveal" style="--reveal-delay: 0.08s">{summary}</p>
+    <div class="detail reveal" style="--reveal-delay: 0.16s">
+      <slot />
+    </div>
+  </div>
+
+  {
+    art && (
+      <div class="hero-art reveal" style="--reveal-delay: 0.24s">
+        <Image src={art} alt={artAlt} widths={[280, 560]} sizes="(max-width: 800px) 40vw, 17rem" />
+      </div>
+    )
+  }
+</header>
+
+<style>
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr 17rem;
+    column-gap: var(--space-7);
+    align-items: start;
+    padding-bottom: var(--space-5);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  h1 {
+    margin-bottom: var(--space-4);
+  }
+
+  .hero-copy {
+    max-width: var(--measure);
+  }
+
+  .summary {
+    font-size: var(--text-lg);
+    color: var(--color-text);
+  }
+
+  .detail :global(p:last-child) {
+    margin-bottom: 0;
+  }
+
+  .hero-art :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  @media (max-width: 800px) {
+    .hero {
+      grid-template-columns: 1fr;
+      row-gap: var(--space-4);
+    }
+
+    /* The mark reads as a label for the title, so it leads on a narrow screen
+       rather than trailing three paragraphs of copy. */
+    .hero-art {
+      grid-row: 1;
+      width: 9rem;
+    }
+  }
+</style>

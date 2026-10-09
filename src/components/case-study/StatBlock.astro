@@ -1,0 +1,49 @@
+---
+interface Props {
+  stats: { value: string; label: string }[];
+  class?: string;
+}
+
+const { stats, class: className = '' } = Astro.props;
+---
+
+<dl class:list={['stats', className]}>
+  {
+    stats.map((stat, i) => (
+      <div class="stat reveal" style={`--reveal-delay: ${i * 0.08}s`}>
+        <dt class="value">{stat.value}</dt>
+        <dd class="label">{stat.label}</dd>
+      </div>
+    ))
+  }
+</dl>
+
+<style>
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-5);
+    margin: 0;
+  }
+
+  .value {
+    font-family: var(--font-display);
+    font-size: var(--text-h1);
+    line-height: var(--leading-tight);
+    color: var(--color-text);
+  }
+
+  .label {
+    margin: var(--space-2) 0 0;
+    font-size: var(--text-xs);
+    line-height: var(--leading-body);
+    color: var(--color-text-muted);
+  }
+
+  @media (max-width: 760px) {
+    .stats {
+      grid-template-columns: 1fr;
+      gap: var(--space-4);
+    }
+  }
+</style>

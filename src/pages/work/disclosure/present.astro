@@ -1,0 +1,897 @@
+---
+// Slide view of the Disclosure case study, for presenting in interviews.
+// Same copy as /work/disclosure (src/data/disclosure.ts); the draft review
+// notes are left out here.
+//
+// Keys: ← → / Space / PageUp PageDown to move, Home End to jump, F for
+// fullscreen, N for speaker notes, Esc to return to the case study page.
+// Printing (Cmd+P → Save as PDF) gives one slide per page as a backup.
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import DoubleDiamond from '../../../components/case-study/DoubleDiamond.astro';
+import JourneyMap from '../../../components/case-study/JourneyMap.astro';
+import AnnotatedScreen from '../../../components/case-study/AnnotatedScreen.astro';
+import { site } from '../../../data/site.config';
+import * as cs from '../../../data/disclosure';
+import '../../../styles/theme-mist.css';
+
+const sections = [
+  'title',
+  'problem',
+  'goals',
+  'approach',
+  'research',
+  'journey',
+  'brief',
+  'flow',
+  'decisions',
+  ...cs.screens.map((s) => `screen-${s.id}`),
+  'outcomes',
+  'takeaways',
+  'close',
+];
+const num = (id: string) => String(sections.indexOf(id)).padStart(2, '0');
+---
+
+<BaseLayout
+  title={`Disclosure (slides) | ${site.name}`}
+  description="Slide presentation of the Disclosure case study."
+  theme="theme-mist"
+>
+  <div class="deck" data-deck>
+    <div class="stage" data-stage>
+      <!-- 1. Title -->
+      <article class="slide slide-title" data-id="title">
+        <div class="title-body">
+          <p class="eyebrow">Case study · Measurabl</p>
+          <h1>{cs.title}</h1>
+          <p class="tagline">{cs.tagline}</p>
+        </div>
+      </article>
+
+      <article class="slide" data-id="problem">
+        <h2>The problem</h2>
+        <div class="two-col">
+          <div>
+            <p class="lead">{cs.problem.lead}</p>
+            {cs.problem.body.map((p) => <p>{p}</p>)}
+          </div>
+          <div class="stat-card">
+            <p class="stat-value">{cs.stat.value}</p>
+            <p class="stat-label">{cs.stat.label}</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="slide" data-id="goals">
+        <h2>Goals</h2>
+        <ol class="cards three">
+          {
+            cs.goals.map((g, i) => (
+              <li class="card">
+                <span class="card-num">{String(i + 1).padStart(2, '0')}</span>
+                <h3>{g.title}</h3>
+                <p>{g.body}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </article>
+
+      <article class="slide" data-id="approach">
+        <h2>Approach</h2>
+        <div class="diamond-wrap">
+          <DoubleDiamond phases={cs.approach} />
+        </div>
+      </article>
+
+      <article class="slide slide-quote" data-id="research">
+        <h2>What we heard</h2>
+        <blockquote>
+          <p>“{cs.quote.text}”</p>
+          <footer>{cs.quote.source}</footer>
+        </blockquote>
+      </article>
+
+      <article class="slide" data-id="journey">
+        <h2>One report, four kinds of people</h2>
+        <JourneyMap steps={cs.journey} personas={cs.personas} label="User journey" class="dense" />
+      </article>
+
+      <article class="slide slide-statement" data-id="brief">
+        <p class="eyebrow">The brief</p>
+        <p class="statement">{cs.brief}</p>
+      </article>
+
+      <article class="slide" data-id="flow">
+        <h2>The flow we designed to</h2>
+        <JourneyMap steps={cs.flow} label="User flow" class="dense" />
+      </article>
+
+      <article class="slide" data-id="decisions">
+        <h2>Four design decisions</h2>
+        <ol class="cards two">
+          {
+            cs.decisions.map((d, i) => (
+              <li class="card decision">
+                <span class="card-num">{String(i + 1).padStart(2, '0')}</span>
+                <h3>{d.title}</h3>
+                <p>{d.body[0]}</p>
+                <p class="tradeoff">
+                  <span>Tradeoff</span> {d.tradeoff}
+                </p>
+              </li>
+            ))
+          }
+        </ol>
+      </article>
+
+      {
+        cs.screens.map((screen) => (
+          <article class="slide slide-screen" data-id={`screen-${screen.id}`}>
+            <h2>{screen.title}</h2>
+            <p class="screen-summary">{screen.summary}</p>
+            <AnnotatedScreen
+              src={screen.src}
+              alt={screen.alt}
+              callouts={screen.callouts}
+              sizes="1200px"
+            />
+          </article>
+        ))
+      }
+
+      <article class="slide" data-id="outcomes">
+        <h2>Where it landed</h2>
+        <div class="cards three plain">
+          {
+            cs.outcomes.map((o) => (
+              <div class="outcome">
+                <h3>{o.title}</h3>
+                <p>{o.body}</p>
+              </div>
+            ))
+          }
+        </div>
+      </article>
+
+      <article class="slide" data-id="takeaways">
+        <h2>Takeaways</h2>
+        <ul class="takeaways">
+          {
+            cs.takeaways.map((t) => (
+              <li>
+                <strong>{t.title}</strong> {t.body}
+              </li>
+            ))
+          }
+        </ul>
+      </article>
+
+      <article class="slide slide-title slide-close" data-id="close">
+        <div class="title-body">
+          <p class="eyebrow">Thank you</p>
+          <h1>Questions?</h1>
+          <p class="tagline">
+            {site.email}
+          </p>
+        </div>
+      </article>
+
+    </div>
+
+    <footer class="chrome" data-chrome aria-hidden="true">
+      <span class="chrome-left"><span data-num>01</span>. Disclosure</span>
+      <span class="chrome-right"><span class="rule"></span>{site.name}</span>
+    </footer>
+    <div class="progress" aria-hidden="true"><span data-progress></span></div>
+  </div>
+
+  <nav class="controls" aria-label="Slide controls">
+    <button type="button" data-prev aria-label="Previous slide">&larr;</button>
+    <span class="count" data-count aria-live="polite">1 / {sections.length}</span>
+    <button type="button" data-next aria-label="Next slide">&rarr;</button>
+    <button type="button" data-notes-toggle aria-pressed="false">Notes</button>
+    <button type="button" data-fullscreen>Fullscreen</button>
+    <a href="/work/disclosure">Exit</a>
+  </nav>
+
+  <aside class="notes" data-notes hidden>
+    <p class="notes-label">Speaker notes</p>
+    <p data-notes-text></p>
+  </aside>
+
+  <script type="application/json" id="deck-notes" set:html={JSON.stringify(cs.notes)} />
+  <script type="application/json" id="deck-nums" set:html={JSON.stringify(Object.fromEntries(sections.map((id) => [id, num(id)])))} />
+</BaseLayout>
+
+<script>
+  const deck = document.querySelector<HTMLElement>('[data-deck]')!;
+  const stage = document.querySelector<HTMLElement>('[data-stage]')!;
+  const slides = Array.from(stage.querySelectorAll<HTMLElement>('.slide'));
+  const chrome = document.querySelector<HTMLElement>('[data-chrome]')!;
+  const numEl = document.querySelector<HTMLElement>('[data-num]')!;
+  const countEl = document.querySelector<HTMLElement>('[data-count]')!;
+  const progressEl = document.querySelector<HTMLElement>('[data-progress]')!;
+  const notesEl = document.querySelector<HTMLElement>('[data-notes]')!;
+  const notesText = document.querySelector<HTMLElement>('[data-notes-text]')!;
+  const notesToggle = document.querySelector<HTMLButtonElement>('[data-notes-toggle]')!;
+  const notes: Record<string, string> = JSON.parse(
+    document.getElementById('deck-notes')!.textContent || '{}'
+  );
+  const nums: Record<string, string> = JSON.parse(
+    document.getElementById('deck-nums')!.textContent || '{}'
+  );
+
+  const W = 1600;
+  const H = 900;
+  let index = 0;
+
+  // Fit the fixed 1600×900 stage to the window, leaving room for the notes
+  // drawer when it is open, so every slide lays out identically on any screen.
+  function fit() {
+    const notesH = notesEl.hidden ? 0 : notesEl.offsetHeight;
+    const scale = Math.min(window.innerWidth / W, (window.innerHeight - notesH) / H);
+    deck.style.setProperty('--scale', String(scale));
+  }
+
+  function show(i: number) {
+    index = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach((s, n) => {
+      const active = n === index;
+      s.classList.toggle('is-active', active);
+      s.setAttribute('aria-hidden', String(!active));
+      s.inert = !active;
+    });
+    const id = slides[index].dataset.id!;
+    const bare = id === 'title' || id === 'close';
+    chrome.classList.toggle('is-hidden', bare);
+    numEl.textContent = nums[id] ?? '';
+    countEl.textContent = `${index + 1} / ${slides.length}`;
+    progressEl.style.width = `${((index + 1) / slides.length) * 100}%`;
+    notesText.textContent = notes[id] ?? '';
+    history.replaceState(null, '', `#${index + 1}`);
+  }
+
+  function toggleNotes() {
+    notesEl.hidden = !notesEl.hidden;
+    notesToggle.setAttribute('aria-pressed', String(!notesEl.hidden));
+    fit();
+  }
+
+  function toggleFullscreen() {
+    if (document.fullscreenElement) document.exitFullscreen();
+    else document.documentElement.requestFullscreen?.();
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    switch (e.key) {
+      case 'ArrowRight':
+      case 'ArrowDown':
+      case 'PageDown':
+      case ' ':
+        e.preventDefault();
+        show(index + 1);
+        break;
+      case 'ArrowLeft':
+      case 'ArrowUp':
+      case 'PageUp':
+        e.preventDefault();
+        show(index - 1);
+        break;
+      case 'Home':
+        show(0);
+        break;
+      case 'End':
+        show(slides.length - 1);
+        break;
+      case 'f':
+      case 'F':
+        toggleFullscreen();
+        break;
+      case 'n':
+      case 'N':
+        toggleNotes();
+        break;
+      case 'Escape':
+        if (!document.fullscreenElement) location.href = '/work/disclosure';
+        break;
+    }
+  });
+
+  // A click on the slide itself advances, the way a clicker would.
+  stage.addEventListener('click', (e) => {
+    if ((e.target as HTMLElement).closest('a, button')) return;
+    show(index + 1);
+  });
+
+  let touchX = 0;
+  stage.addEventListener('touchstart', (e) => (touchX = e.touches[0].clientX), { passive: true });
+  stage.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) > 50) show(index + (dx < 0 ? 1 : -1));
+  });
+
+  document.querySelector('[data-prev]')!.addEventListener('click', () => show(index - 1));
+  document.querySelector('[data-next]')!.addEventListener('click', () => show(index + 1));
+  notesToggle.addEventListener('click', toggleNotes);
+  document.querySelector('[data-fullscreen]')!.addEventListener('click', toggleFullscreen);
+  window.addEventListener('resize', fit);
+
+  const fromHash = parseInt(location.hash.slice(1), 10);
+  fit();
+  show(Number.isFinite(fromHash) ? fromHash - 1 : 0);
+</script>
+
+<style>
+  /* The slide view owns the whole window: no grid paper, no sheet. Root size
+     goes up so rem-based components read at presentation scale on the stage. */
+  :global(html) {
+    font-size: 20px;
+  }
+
+  :global(body) {
+    padding: 0;
+    background: var(--mist-wash-deep);
+    background-image: none;
+    overflow: hidden;
+  }
+
+  :global(.page-sheet) {
+    max-width: none;
+    margin: 0;
+    background: none;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  /* Slides are always fully shown; the scroll reveal doesn't apply here. */
+  :global(.js) .deck :global(.reveal) {
+    opacity: 1;
+    transform: none;
+  }
+
+  .deck {
+    --scale: 1;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 1600px;
+    height: 900px;
+    transform: translateX(-50%) scale(var(--scale));
+    transform-origin: top center;
+    background:
+      radial-gradient(60rem 40rem at 100% 0%, var(--mist-blue-wash) 0%, transparent 60%),
+      radial-gradient(50rem 36rem at 0% 100%, var(--mist-green-wash) 0%, transparent 60%),
+      var(--color-surface);
+    box-shadow: 0 30px 80px -40px rgba(31, 42, 54, 0.35);
+    overflow: hidden;
+  }
+
+  .stage {
+    position: absolute;
+    inset: 0;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 88px 120px 130px;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 0.45s ease,
+      visibility 0s linear 0.45s;
+  }
+
+  .slide.is-active {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.45s ease;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .slide,
+    .slide.is-active {
+      transition: none;
+    }
+  }
+
+  .slide h2 {
+    position: relative;
+    margin-bottom: 52px;
+    font-size: 64px;
+    line-height: 1.1;
+  }
+
+  .slide h2::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -18px;
+    width: 44px;
+    height: 2px;
+    background: var(--mist-green);
+  }
+
+  .slide p {
+    font-size: 26px;
+    line-height: 1.6;
+  }
+
+  /* Title and closing slides */
+  .slide-title {
+    justify-content: center;
+    padding-left: 200px;
+  }
+
+  .slide-title h1 {
+    margin-bottom: 28px;
+    font-size: 150px;
+    font-weight: 500;
+    line-height: 1;
+  }
+
+  .slide-title .eyebrow {
+    margin-bottom: 36px;
+    font-size: 20px;
+    color: var(--color-accent);
+  }
+
+  .tagline {
+    max-width: 1240px;
+    font-size: 34px !important;
+    color: var(--color-text) !important;
+  }
+
+  .slide-close h1 {
+    font-size: 120px;
+  }
+
+  /* Problem */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: 96px;
+    align-items: center;
+    flex: 1;
+  }
+
+  .lead {
+    font-family: var(--font-display);
+    font-size: 36px !important;
+    line-height: 1.35 !important;
+    color: var(--color-text) !important;
+  }
+
+  .stat-card {
+    padding: 48px;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.75);
+    border: 1px solid var(--color-border);
+  }
+
+  .stat-value {
+    margin-bottom: 12px;
+    font-family: var(--font-display);
+    font-size: 120px !important;
+    line-height: 1 !important;
+    color: var(--color-accent-ink) !important;
+  }
+
+  .stat-label {
+    margin: 0;
+    font-size: 22px !important;
+  }
+
+  /* Card grids */
+  .cards {
+    display: grid;
+    gap: 32px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    flex: 1;
+    align-content: center;
+  }
+
+  .cards.three {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .cards.two {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px 28px;
+    align-content: start;
+  }
+
+  .card {
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid var(--color-border);
+    border-radius: 20px;
+    box-shadow: 0 20px 40px -32px rgba(31, 42, 54, 0.35);
+  }
+
+  .card-num {
+    display: block;
+    margin-bottom: 20px;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: var(--tracking-label);
+    color: var(--color-accent-soft);
+  }
+
+  .card h3 {
+    margin-bottom: 14px;
+    font-size: 32px;
+  }
+
+  .card p {
+    margin: 0;
+    font-size: 23px;
+  }
+
+  .decision {
+    padding: 22px 30px;
+  }
+
+  .decision .card-num {
+    margin-bottom: 8px;
+  }
+
+  .decision h3 {
+    margin-bottom: 8px;
+    font-size: 28px;
+  }
+
+  .decision p {
+    font-size: 18px;
+    line-height: 1.45;
+  }
+
+  .decision .tradeoff {
+    margin-top: 12px;
+    padding: 10px 16px;
+    border-radius: 12px;
+    background: var(--color-accent-wash);
+    font-size: 17px;
+  }
+
+  .tradeoff span {
+    font-weight: 600;
+    color: var(--color-accent-ink);
+  }
+
+  .plain .outcome {
+    padding-top: 28px;
+    border-top: 2px solid var(--mist-green);
+  }
+
+  .outcome h3 {
+    margin-bottom: 16px;
+    font-size: 34px;
+  }
+
+  /* Approach */
+  .diamond-wrap {
+    flex: 1;
+    display: grid;
+    place-items: center;
+  }
+
+  .diamond-wrap :global(svg) {
+    width: 1180px;
+  }
+
+  /* Quote and statement slides */
+  .slide-quote blockquote {
+    max-width: 1220px;
+    margin: auto 0;
+    padding-left: 48px;
+    border-left: 3px solid var(--mist-green);
+  }
+
+  .slide-quote blockquote p {
+    font-family: var(--font-display);
+    font-size: 44px;
+    line-height: 1.4;
+    color: var(--color-text);
+  }
+
+  .slide-quote footer {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  .slide-statement {
+    justify-content: center;
+    padding-left: 200px;
+    padding-right: 200px;
+  }
+
+  .slide-statement .eyebrow {
+    font-size: 20px;
+    color: var(--color-accent);
+  }
+
+  .statement {
+    font-family: var(--font-display);
+    font-size: 54px !important;
+    line-height: 1.35 !important;
+    color: var(--color-text) !important;
+  }
+
+  /* Journey and flow: the component's own layout, tuned to six columns */
+  .slide :global(.dense .steps) {
+    grid-template-columns: repeat(7, 1fr);
+    gap: 16px;
+  }
+
+  .slide :global(.dense .legend) {
+    grid-template-columns: repeat(4, 1fr);
+    margin-bottom: 32px;
+  }
+
+  .slide :global(.dense .legend li) {
+    font-size: 15px;
+  }
+
+  .slide :global(.dense .legend strong) {
+    font-size: 18px;
+  }
+
+  .slide :global(.dense .chip) {
+    padding: 16px 18px;
+  }
+
+  .slide :global(.dense .text) {
+    font-size: 18px;
+  }
+
+  .slide :global(.dense .aside) {
+    font-size: 15px;
+  }
+
+  /* Screens: image sized to the stage height, callouts beside it */
+  .slide-screen {
+    padding-top: 64px;
+  }
+
+  .slide-screen h2 {
+    margin-bottom: 32px;
+    font-size: 52px;
+  }
+
+  .screen-summary {
+    margin: -6px 0 22px;
+  }
+
+  .slide-screen :global(.annotated) {
+    grid-template-columns: auto 380px;
+    column-gap: 64px;
+    justify-content: start;
+  }
+
+  .slide-screen :global(.shot) {
+    width: fit-content;
+  }
+
+  .slide-screen :global(.shot img) {
+    width: auto;
+    max-width: 960px;
+    height: auto;
+    max-height: 590px;
+  }
+
+  .slide-screen :global(.callouts li) {
+    font-size: 21px;
+  }
+
+  .slide-screen :global(.pin),
+  .slide-screen :global(.num) {
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+  }
+
+  /* Takeaways */
+  .takeaways {
+    display: grid;
+    gap: 34px;
+    max-width: 1200px;
+    margin: auto 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .takeaways li {
+    padding-left: 28px;
+    border-left: 3px solid var(--color-highlight);
+    font-size: 28px;
+    line-height: 1.5;
+    color: var(--color-text-muted);
+  }
+
+  .takeaways strong {
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  /* Chrome, after the old deck: number and title left, name right */
+  .chrome {
+    position: absolute;
+    left: 56px;
+    right: 56px;
+    bottom: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 18px;
+    color: var(--color-text-muted);
+    transition: opacity 0.3s ease;
+  }
+
+  .chrome.is-hidden {
+    opacity: 0;
+  }
+
+  .chrome-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    color: var(--color-text);
+  }
+
+  .rule {
+    width: 72px;
+    height: 1px;
+    background: var(--color-text-muted);
+  }
+
+  .progress {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 3px;
+    background: var(--color-border);
+  }
+
+  .progress span {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, var(--mist-green), var(--color-accent-soft));
+    transition: width 0.45s ease;
+  }
+
+  /* Controls fade in on hover, out of the way while presenting */
+  .controls {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 8px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill);
+    box-shadow: var(--shadow-sm);
+    font-size: 13px;
+    opacity: 0.2;
+    transition: opacity 0.25s ease;
+  }
+
+  .controls:hover,
+  .controls:focus-within {
+    opacity: 1;
+  }
+
+  .controls button,
+  .controls a {
+    padding: 4px 10px;
+    border: 0;
+    border-radius: var(--radius-pill);
+    background: none;
+    font: inherit;
+    color: var(--color-accent-ink);
+    cursor: pointer;
+  }
+
+  .controls button:hover,
+  .controls a:hover,
+  .controls [aria-pressed='true'] {
+    background: var(--color-accent-wash);
+    text-decoration: none;
+  }
+
+  .count {
+    min-width: 4.5em;
+    text-align: center;
+    color: var(--color-text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .notes {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    max-height: 30vh;
+    overflow: auto;
+    padding: 16px 24px 56px;
+    background: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+    font-size: 16px;
+  }
+
+  .notes-label {
+    margin: 0 0 4px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+  }
+
+  .notes p:last-child {
+    margin: 0;
+    color: var(--color-text);
+  }
+
+  /* Print / Save as PDF: one slide per landscape page */
+  @media print {
+    @page {
+      size: 1600px 900px;
+      margin: 0;
+    }
+
+    :global(body) {
+      overflow: visible;
+      background: none;
+    }
+
+    .deck {
+      position: static;
+      transform: none;
+      height: auto;
+      box-shadow: none;
+      background: none;
+    }
+
+    .stage {
+      position: static;
+    }
+
+    .slide {
+      position: relative;
+      width: 1600px;
+      height: 900px;
+      opacity: 1;
+      visibility: visible;
+      break-after: page;
+      background:
+        radial-gradient(60rem 40rem at 100% 0%, var(--mist-blue-wash) 0%, transparent 60%),
+        radial-gradient(50rem 36rem at 0% 100%, var(--mist-green-wash) 0%, transparent 60%),
+        #fff;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .chrome,
+    .progress,
+    .controls,
+    .notes {
+      display: none;
+    }
+  }
+</style>
