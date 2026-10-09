@@ -1,0 +1,521 @@
+---
+// NOTE: the <ReviewNote> callouts flag copy drafted from the original deck's
+// screens and diagrams rather than written from memory: the dates, the request
+// counts, the persona, the design decisions, and the reflection. Correct or
+// replace those, then delete the notes before this page is published or
+// presented. Copy lives in src/data/measures.ts and is shared with the slide
+// view at ./measures/present.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import CaseStudyHero from '../../components/case-study/CaseStudyHero.astro';
+import CaseStudyMeta from '../../components/case-study/CaseStudyMeta.astro';
+import StatBlock from '../../components/case-study/StatBlock.astro';
+import DesignBet from '../../components/case-study/DesignBet.astro';
+import ReviewNote from '../../components/case-study/ReviewNote.astro';
+import Figure from '../../components/case-study/Figure.astro';
+import PainPointMap from '../../components/case-study/PainPointMap.astro';
+import RequestRanking from '../../components/case-study/RequestRanking.astro';
+import JourneyLanes from '../../components/case-study/JourneyLanes.astro';
+import AnnotatedScreen from '../../components/case-study/AnnotatedScreen.astro';
+import { site } from '../../data/site.config';
+import * as cs from '../../data/measures';
+import '../../styles/theme-meadow.css';
+
+import tile from '../../assets/work/measures/measures-tile.png';
+import userFlow from '../../assets/work/measures/user-flow.png';
+---
+
+<BaseLayout
+  title={`Measures | ${site.name}`}
+  description="Redesigning how Hatch Data's energy-saving measures are worked and closed, so every resolved measure reflects what really happened and what it saved."
+  theme="theme-meadow"
+>
+  <Nav />
+  <main>
+    <section id="measures" class="intro">
+      <div class="container">
+        <div class="toolbar">
+          <a href="/work" class="back-link">&larr; Back to my work</a>
+          <a href="/work/measures/present" class="present-link">
+            Present as slides <span aria-hidden="true">&rarr;</span>
+          </a>
+        </div>
+
+        <CaseStudyHero
+          title={cs.title}
+          summary={cs.tagline}
+          art={tile}
+          artAlt="An abstract illustration: three soft rounded bars, the middle one mint green with a check mark at its end, and a short trail of dots leading in."
+        >
+          <p>{cs.intro}</p>
+        </CaseStudyHero>
+
+        <div class="meta-block">
+          <CaseStudyMeta items={cs.meta} />
+        </div>
+      </div>
+    </section>
+
+    <section id="problem">
+      <div class="container split">
+        <div class="prose reveal">
+          <h2>The problem</h2>
+          <p class="lead">{cs.problem.lead}</p>
+          {cs.problem.body.map((p) => <p>{p}</p>)}
+        </div>
+        <div class="stat-card reveal" style="--reveal-delay: 0.08s">
+          <StatBlock stats={[cs.stat]} class="single-stat" />
+        </div>
+      </div>
+    </section>
+
+    <section id="goals" class="wash">
+      <div class="container">
+        <h2 class="reveal">Goals</h2>
+        <ol class="goals">
+          {
+            cs.goals.map((goal, i) => (
+              <li class="goal reveal" style={`--reveal-delay: ${i * 0.08}s`}>
+                <span class="goal-num">{String(i + 1).padStart(2, '0')}</span>
+                <h3>{goal.title}</h3>
+                <p>{goal.body}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
+    <section id="research">
+      <div class="container split">
+        <div class="prose reveal">
+          <h2>What we heard</h2>
+          {cs.research.body.map((p) => <p>{p}</p>)}
+        </div>
+        <div class="stat-card reveal" style="--reveal-delay: 0.08s">
+          <StatBlock stats={[cs.research.stat]} class="single-stat" />
+        </div>
+      </div>
+    </section>
+
+    <section id="approach">
+      <div class="container">
+        <div class="prose reveal">
+          <h2>Finding where it breaks</h2>
+          <p>
+            We plotted every pain point from research onto the lifecycle of a measure, from the
+            moment it's created to the feedback afterward. One stage stood out: closing a measure
+            was where the work and the record came apart.
+          </p>
+        </div>
+        <div class="section-figures reveal" style="--reveal-delay: 0.08s">
+          <PainPointMap points={cs.painPoints} />
+        </div>
+      </div>
+    </section>
+
+    <section id="priorities">
+      <div class="container">
+        <div class="prose reveal">
+          <h2>Choosing what to build</h2>
+          <p>
+            Within that stage we ranked every request. The top two, revising measure statuses and
+            adding reasons for closing, went straight at the 50% problem, so they became the core
+            of the project.
+          </p>
+        </div>
+        <ReviewNote>
+          The counts come from the original deck without a label. Confirm what they measured
+          (requests, votes, or customer mentions) and update the sentence above to match.
+        </ReviewNote>
+        <div class="section-figures narrow reveal" style="--reveal-delay: 0.08s">
+          <RequestRanking items={cs.closingRequests} />
+        </div>
+      </div>
+    </section>
+
+    <section id="journey" class="wash">
+      <div class="container">
+        <div class="prose reveal">
+          <h2>A day in the field</h2>
+          <p>
+            {cs.persona.name} is a {cs.persona.role.toLowerCase()}. {cs.persona.summary} Following their
+            day showed where measures fit into the work, and where the product left them to fill
+            gaps with email and memory.
+          </p>
+        </div>
+        <ReviewNote>
+          The persona's name and role are inferred from the journey map and the screens. Confirm
+          them before presenting.
+        </ReviewNote>
+        <div class="section-figures reveal" style="--reveal-delay: 0.08s">
+          <JourneyLanes steps={cs.journey} label={`${cs.persona.name}'s journey`} />
+        </div>
+      </div>
+    </section>
+
+    <section id="brief">
+      <div class="container">
+        <div class="prose reveal">
+          <p class="eyebrow">The brief</p>
+          <p class="brief">{cs.brief}</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="flow">
+      <div class="container">
+        <div class="prose reveal">
+          <h2>The whole lifecycle</h2>
+          <p>
+            The user flow maps a measure from creation to M&amp;V, with all 23 candidate features
+            placed where they would help. The red markers show where users were likely to drop off,
+            and the closing steps are where most features cluster.
+          </p>
+        </div>
+        <div class="section-figures reveal" style="--reveal-delay: 0.08s">
+          <Figure
+            src={userFlow}
+            alt="The measure lifecycle flow: created, notified, investigated, verified as valid or invalid, worked on, closed as implemented or not implemented, then M&V and reporting. Numbered badges tie each step to a 23-item feature list, and red dots mark likely drop-off points."
+            caption="The measure lifecycle, with the feature list mapped onto it and drop-off points in red"
+            sizes="(max-width: 1100px) 92vw, 64rem"
+            scroll
+          />
+        </div>
+      </div>
+    </section>
+
+    <section id="decisions">
+      <div class="container">
+        <h2 class="reveal">Four design decisions</h2>
+        <ReviewNote>
+          These decisions are reconstructed from the final screens. The choices are visible in the
+          work, but the reasoning and the costs are inferred. Rewrite them in your own words before
+          you present; interviewers push hardest here.
+        </ReviewNote>
+        {
+          cs.decisions.map((d, i) => (
+            <DesignBet title={d.title} index={i} tradeoff={d.tradeoff}>
+              {d.body.map((p) => <p>{p}</p>)}
+            </DesignBet>
+          ))
+        }
+      </div>
+    </section>
+
+    <section id="product" class="wash">
+      <div class="container">
+        <div class="prose reveal">
+          <h2>The product</h2>
+          <p>A measure's whole life on one page, a portfolio view to manage them all, and a list that fits in a pocket.</p>
+        </div>
+        {
+          cs.screens.map((screen) => (
+            <div class:list={['screen', 'reveal', { tall: screen.tall }]}>
+              <h3>{screen.title}</h3>
+              <p class="screen-summary">{screen.summary}</p>
+              <AnnotatedScreen
+                src={screen.src}
+                alt={screen.alt}
+                callouts={screen.callouts}
+                sizes={screen.tall ? '20rem' : undefined}
+              />
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section id="outcome">
+      <div class="container">
+        <h2 class="reveal">Where it landed</h2>
+        <div class="outcome reveal" style="--reveal-delay: 0.08s">
+          <div class="outcome-compare">
+            <p class="before">
+              <span class="label">Before</span>
+              <span class="value">{cs.stat.value}</span>
+              <span class="caption">of automated measures marked implemented in error</span>
+            </p>
+            <span class="arrow" aria-hidden="true">&rarr;</span>
+            <p class="after">
+              <span class="label">Six months after release</span>
+              <span class="value">{cs.outcome.value}</span>
+              <span class="caption">{cs.outcome.label}</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="takeaways">
+      <div class="container">
+        <h2 class="reveal">Takeaways</h2>
+        <ul class="takeaways">
+          {
+            cs.takeaways.map((t, i) => (
+              <li class="reveal" style={`--reveal-delay: ${i * 0.06}s`}>
+                <strong>{t.title}</strong> {t.body}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <section id="reflection">
+      <div class="container">
+        <h2 class="reveal">What I'd do differently</h2>
+        <ReviewNote>
+          Drafted from the artifacts. The strongest version of this section is the one only you can
+          write, and interviewers weight it heavily.
+        </ReviewNote>
+        <div class="prose reveal">
+          {
+            cs.reflection.map((r) => (
+              <p>
+                <strong>{r.lead}</strong> {r.body}
+              </p>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+  main section {
+    padding: var(--space-7) 0;
+  }
+
+  .intro {
+    padding-top: var(--space-5);
+  }
+
+  /* Tinted bands give the long page a slow rhythm: light, then lighter. */
+  .wash {
+    background: linear-gradient(180deg, var(--meadow-wash) 0%, var(--color-surface) 100%);
+  }
+
+  main > section.wash::before,
+  main > section.wash + section::before {
+    display: none;
+  }
+
+  .toolbar {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+    margin-bottom: var(--space-5);
+    font-size: var(--text-sm);
+  }
+
+  .present-link {
+    font-weight: 500;
+  }
+
+  .meta-block {
+    margin-top: var(--space-5);
+  }
+
+  .lead {
+    font-size: var(--text-lg);
+    color: var(--color-text);
+  }
+
+  .split {
+    display: grid;
+    grid-template-columns: 1fr 19rem;
+    column-gap: var(--space-7);
+    align-items: center;
+  }
+
+  .stat-card {
+    padding: var(--space-5);
+    border-radius: var(--radius-md);
+    background: var(--meadow-wash);
+  }
+
+  .stat-card :global(.single-stat) {
+    grid-template-columns: 1fr;
+  }
+
+  .stat-card :global(.value) {
+    font-size: clamp(3rem, 6vw, 4rem);
+    color: var(--color-accent-ink);
+  }
+
+  .section-figures {
+    margin-top: var(--space-5);
+  }
+
+  .section-figures.narrow {
+    max-width: 48rem;
+  }
+
+  .goals {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+    margin: var(--space-5) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .goal {
+    padding: var(--space-4);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+
+  .goal-num {
+    display: block;
+    margin-bottom: var(--space-3);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: var(--tracking-label);
+    color: var(--color-accent-soft);
+  }
+
+  .goal h3 {
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-2);
+  }
+
+  .goal p {
+    margin: 0;
+    font-size: var(--text-sm);
+  }
+
+  .brief {
+    font-family: var(--font-display);
+    font-size: var(--text-h2);
+    line-height: 1.3;
+    color: var(--color-text);
+  }
+
+  .screen {
+    margin-top: var(--space-7);
+  }
+
+  .screen h3 {
+    margin-bottom: var(--space-1);
+  }
+
+  .screen-summary {
+    margin-bottom: var(--space-4);
+  }
+
+  /* A phone screen at full column width would fill several viewports. */
+  .screen.tall :global(.annotated) {
+    grid-template-columns: minmax(0, 20rem) 17rem;
+    justify-content: start;
+  }
+
+  .outcome {
+    margin-top: var(--space-5);
+    padding: var(--space-6) var(--space-5);
+    border-radius: var(--radius-md);
+    background:
+      radial-gradient(36rem 20rem at 100% 0%, var(--meadow-mint-wash) 0%, transparent 70%),
+      radial-gradient(30rem 18rem at 0% 100%, var(--meadow-sky-wash) 0%, transparent 70%),
+      var(--color-surface);
+    border: 1px solid var(--color-border);
+  }
+
+  .outcome-compare {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: var(--space-5);
+    align-items: center;
+  }
+
+  .outcome-compare p {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin: 0;
+  }
+
+  .outcome-compare .label {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  .outcome-compare .value {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 7vw, 5rem);
+    line-height: 1;
+  }
+
+  .before .value {
+    color: var(--color-text-muted);
+  }
+
+  .after .value {
+    color: var(--color-accent-ink);
+  }
+
+  .outcome-compare .caption {
+    max-width: 22rem;
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+
+  .arrow {
+    font-size: var(--text-h2);
+    color: var(--color-accent-soft);
+  }
+
+  .takeaways {
+    display: grid;
+    gap: var(--space-4);
+    max-width: var(--measure);
+    margin: var(--space-4) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .takeaways li {
+    padding-left: var(--space-4);
+    border-left: 2px solid var(--color-highlight);
+    color: var(--color-text-muted);
+  }
+
+  .takeaways strong,
+  #reflection strong {
+    color: var(--color-text);
+    font-weight: 600;
+  }
+
+  @media (max-width: 900px) {
+    .split {
+      grid-template-columns: 1fr;
+      row-gap: var(--space-5);
+    }
+
+    .goals {
+      grid-template-columns: 1fr;
+    }
+
+    .screen.tall :global(.annotated) {
+      grid-template-columns: minmax(0, 18rem);
+    }
+
+    .outcome-compare {
+      grid-template-columns: 1fr;
+    }
+
+    .arrow {
+      transform: rotate(90deg);
+      justify-self: start;
+    }
+  }
+</style>

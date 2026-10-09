@@ -1,0 +1,156 @@
+---
+/* A ranked list of requests drawn as bars against the largest count, with the
+   ones the project took on marked in the accent color. */
+interface Props {
+  items: { feature: string; count: number; detail?: string; inScope?: boolean }[];
+  inScopeLabel?: string;
+  restLabel?: string;
+  class?: string;
+}
+
+const {
+  items,
+  inScopeLabel = 'In scope',
+  restLabel = 'Backlog',
+  class: className = '',
+} = Astro.props;
+
+const max = Math.max(...items.map((i) => i.count));
+---
+
+<figure class:list={['ranking', className]}>
+  <ul class="key" aria-hidden="true">
+    <li><span class="swatch in"></span>{inScopeLabel}</li>
+    <li><span class="swatch"></span>{restLabel}</li>
+  </ul>
+  <ol class="rows">
+    {
+      items.map((item) => (
+        <li class:list={['row', { 'in-scope': item.inScope }]}>
+          <span class="label">
+            {item.feature}
+            {item.detail && <span class="detail">{item.detail}</span>}
+            {item.inScope && <span class="visually-hidden"> ({inScopeLabel})</span>}
+          </span>
+          <span class="track" aria-hidden="true">
+            <span class="bar" style={`width: ${(item.count / max) * 100}%`} />
+          </span>
+          <span class="count">{item.count}</span>
+        </li>
+      ))
+    }
+  </ol>
+</figure>
+
+<style>
+  .ranking {
+    margin: 0;
+  }
+
+  .key {
+    display: flex;
+    gap: var(--space-4);
+    margin: 0 0 var(--space-3);
+    padding: 0;
+    list-style: none;
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+
+  .key li {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .swatch {
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 3px;
+    background: var(--color-border);
+  }
+
+  .swatch.in {
+    background: var(--meadow-mint, var(--color-accent-soft));
+  }
+
+  .rows {
+    display: grid;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: minmax(0, 18rem) minmax(0, 1fr) 2rem;
+    gap: var(--space-3);
+    align-items: center;
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+
+  .label {
+    line-height: 1.35;
+  }
+
+  .detail {
+    display: block;
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+
+  .track {
+    height: 0.625rem;
+    border-radius: var(--radius-pill);
+    background: var(--meadow-wash, var(--color-accent-wash));
+    overflow: hidden;
+  }
+
+  .bar {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--color-border);
+  }
+
+  .count {
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+  }
+
+  .in-scope {
+    color: var(--color-text);
+    font-weight: 600;
+  }
+
+  .in-scope .detail {
+    font-weight: 400;
+  }
+
+  .in-scope .bar {
+    background: var(--meadow-mint, var(--color-accent-soft));
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 640px) {
+    .row {
+      grid-template-columns: minmax(0, 1fr) 2rem;
+      row-gap: var(--space-1);
+    }
+
+    .track {
+      grid-column: 1 / -1;
+      grid-row: 2;
+    }
+  }
+</style>

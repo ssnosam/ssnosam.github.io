@@ -1,0 +1,26 @@
+/* The Measures case study borrows the soft mint of the Hatch Data product it
+   describes, kept pale so the page reads light and open. Only the color tokens
+   change: type, spacing, and every shared component stay exactly as the rest
+   of the site has them. Applied to <body> via BaseLayout's `theme`. */
+.theme-meadow {
+  --color-bg: #f7fbf9;
+  --color-text: #1e2b28;
+  --color-text-muted: #576864;
+  --color-border: #e1ece7;
+  --color-accent: #1f7a62; /* 5.4:1 on white */
+  --color-accent-soft: #5fb79c;
+  --color-accent-ink: #175c4a;
+  --color-accent-wash: #edf7f3;
+  --color-grid: rgba(31, 122, 98, 0.045);
+  --color-highlight: #cdeee2;
+  --color-ink: #2a3532;
+
+  --meadow-wash: #f1f8f5;
+  --meadow-wash-deep: #e6f1ec;
+  --meadow-mint: #3fc19b;
+  --meadow-mint-wash: #e3f6ef;
+  --meadow-sky: #9ccbe6;
+  --meadow-sky-wash: #eaf4fa;
+  --meadow-sun: #f2c46b;
+  --meadow-sun-wash: #fdf5e4;
+}

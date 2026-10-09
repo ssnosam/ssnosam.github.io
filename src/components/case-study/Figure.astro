@@ -1,0 +1,72 @@
+---
+import { Image } from 'astro:assets';
+
+interface Props {
+  src: ImageMetadata;
+  alt: string;
+  caption?: string;
+  /* Wide artwork (the workflow diagrams) stays legible by scrolling inside its
+     own box rather than shrinking to nothing on a phone. */
+  scroll?: boolean;
+  sizes?: string;
+  class?: string;
+}
+
+const {
+  src,
+  alt,
+  caption,
+  scroll = false,
+  sizes = '(max-width: 760px) 92vw, 46vw',
+  class: className = '',
+} = Astro.props;
+
+// Only ask for widths the source can actually supply; upscaling a 749px-wide
+// workshop photo to 1600 would just invent pixels.
+const widths = [480, 800, 1200, 1600].filter((w) => w < src.width).concat(src.width);
+---
+
+<figure class:list={['figure', { 'is-scroll': scroll }, className]}>
+  <div class="figure-frame">
+    <Image src={src} alt={alt} widths={widths} sizes={sizes} loading="lazy" decoding="async" />
+  </div>
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+
+<style>
+  .figure {
+    margin: 0;
+  }
+
+  .figure-frame {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+  }
+
+  .figure-frame :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* A 2500px-wide flow diagram is unreadable squeezed onto a phone, so it keeps
+     a minimum width and scrolls sideways inside the frame instead. */
+  .is-scroll .figure-frame {
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+  }
+
+  .is-scroll .figure-frame :global(img) {
+    min-width: 44rem;
+  }
+
+  figcaption {
+    margin-top: var(--space-2);
+    font-size: var(--text-xs);
+    line-height: var(--leading-body);
+    color: var(--color-text-muted);
+  }
+</style>

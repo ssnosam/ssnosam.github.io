@@ -7,6 +7,7 @@ import ProjectCard from '../components/ProjectCard.astro';
 import { site } from '../data/site.config';
 
 import disclosureTile from '../assets/work/disclosure/disclosure-tile.png';
+import measuresTile from '../assets/work/measures/measures-tile.png';
 
 const projects = [
   {
@@ -17,6 +18,16 @@ const projects = [
       "Measurabl's compliance reporting product, helping asset managers collect, transform, and defend ESG data for frameworks like SFDR.",
     image: disclosureTile,
     imageAlt: 'An abstract report card with a completeness ring, a progress bar, and a green check mark.',
+  },
+  {
+    href: '/work/measures',
+    title: 'Measures',
+    disciplines: ['Product Design', 'UX Research', 'Workflow Design'],
+    summary:
+      'Redesigning how energy-saving measures are worked and closed at Hatch Data, cutting improperly resolved measures by 73%.',
+    image: measuresTile,
+    imageAlt:
+      'An abstract illustration: three soft rounded bars, the middle one mint green with a check mark at its end, and a short trail of dots leading in.',
   },
 ];
 ---
