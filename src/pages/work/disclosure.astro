@@ -1,8 +1,7 @@
 ---
 // NOTE: the <ReviewNote> callouts flag copy drafted from the original deck's
 // screens and flows rather than written from memory: the dates, the design
-// decisions, the outcomes, and the reflection. Correct or replace those, then
-// delete the notes before this page is published or presented. Copy lives in
+// decisions and the outcomes. They render only in local development. Copy lives in
 // src/data/disclosure.ts and is shared with the slide view at ./disclosure/present.
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Nav from '../../components/Nav.astro';
@@ -226,24 +225,6 @@ import tile from '../../assets/work/disclosure/disclosure-tile.png';
       </div>
     </section>
 
-    <section id="reflection">
-      <div class="container">
-        <h2 class="reveal">What I'd do differently</h2>
-        <ReviewNote>
-          Drafted from the artifacts. The strongest version of this section is the one only you can
-          write, and interviewers weight it heavily.
-        </ReviewNote>
-        <div class="prose reveal">
-          {
-            cs.reflection.map((r) => (
-              <p>
-                <strong>{r.lead}</strong> {r.body}
-              </p>
-            ))
-          }
-        </div>
-      </div>
-    </section>
   </main>
   <Footer />
 </BaseLayout>
@@ -426,8 +407,7 @@ import tile from '../../assets/work/disclosure/disclosure-tile.png';
     color: var(--color-text-muted);
   }
 
-  .takeaways strong,
-  #reflection strong {
+  .takeaways strong {
     color: var(--color-text);
     font-weight: 600;
   }

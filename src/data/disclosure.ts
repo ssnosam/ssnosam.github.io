@@ -290,18 +290,6 @@ export const takeaways = [
   },
 ];
 
-// draft: the strongest version of this is the one only Shelby can write.
-export const reflection = [
-  {
-    lead: 'I’d bring auditors into research earlier.',
-    body: 'They show up across the journey map and drive half the design decisions, but most of what we knew about them came secondhand from asset managers. A few direct sessions would have tested the exports log before we built it.',
-  },
-  {
-    lead: 'I’d agree on success metrics before early access.',
-    body: 'SUS told us the product was usable. It did not tell us whether reports were submitted on time or passed assurance, and that is what customers actually bought it for.',
-  },
-];
-
 // Speaker notes for the slide view, keyed by slide id. Press N to show them.
 export const notes: Record<string, string> = {
   title: 'Senior Product Designer at Measurabl. A new product for compliance reporting, from discovery to early access.',
