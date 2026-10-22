@@ -22,6 +22,9 @@ jobs:
         uses: actions/checkout@v4
       - name: Install, build, and upload
         uses: withastro/action@v3
+        # Encrypts /work at build time; see integrations/protect-work.mjs.
+        env:
+          WORK_PASSWORD: ${{ secrets.WORK_PASSWORD }}
         with:
           # The action defaults to Node 20, but Astro 7 requires >=22.12.0
           # (see "engines" in package.json), so pin it explicitly.

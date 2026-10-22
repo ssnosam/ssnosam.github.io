@@ -3,3 +3,4 @@ dist/
 .astro/
 .DS_Store
 shelby-photo-original.png
+.env
