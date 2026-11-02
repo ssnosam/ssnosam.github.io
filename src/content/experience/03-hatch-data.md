@@ -7,5 +7,5 @@ note: "Promoted from Product Designer in January 2022"
 summary: "Served as founding designer, establishing the initial core branding, visual identity, and end-to-end user experience for the Hatch Data platform."
 ---
 
-- Partnered closely with engineering, data science, customer success, and consulting teams to translate complex technical requirements into user-friendly interfaces
-- Co-created a high-impact platform whose user experience served as a key market differentiator, leading to the company's acquisition by Measurabl
+- Co-created a platform that reached an NPS of 49, with a user experience that served as a key market differentiator, leading to the company's acquisition by Measurabl
+- Redesigned how energy-saving measures are worked and closed, substantially reducing improperly resolved measures after release

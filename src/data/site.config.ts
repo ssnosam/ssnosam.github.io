@@ -25,21 +25,23 @@ export const quickFacts = [
 ];
 
 export const skills = [
-  'Visual Design',
+  'Product Discovery',
+  'Systems Thinking',
+  'Interactive Prototyping',
+  'AI-Assisted Prototyping',
+  'Agentic AI Design',
   'Data Visualization',
   'User Research',
   'Usability Testing',
-  'Human-Centered Design (HCD)',
-  'Brainstorming',
-  'Branding',
+  'Visual Design',
 ];
 
 export const tools = [
+  'Figma',
   'Claude',
   'Gemini',
   'Notebook LM',
   'Replit',
-  'Figma',
   'Adobe Suite',
   'Canva',
   'Atlassian (Confluence, Jira)',
