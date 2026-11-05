@@ -4,6 +4,7 @@ role: "Marketing & Communications Manager"
 startDate: 2026-08-01
 endDate: null
 cause: "Animal Welfare"
+resumeLine: "Lead marketing and communications across email, web, and social to support adoptions, fundraising, and volunteer recruitment"
 ---
 
 - Brand & Strategy: Help lead integrated marketing and communication strategies to elevate brand visibility, raise awareness for rabbit welfare, and drive community engagement

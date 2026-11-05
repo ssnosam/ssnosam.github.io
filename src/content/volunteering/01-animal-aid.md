@@ -4,6 +4,7 @@ role: "Volunteer and Events Committee Member"
 startDate: 2021-10-01
 endDate: 2025-09-01
 cause: "Animal Welfare"
+resumeLine: "Chaired the Events Committee, planning fundraising and outreach events, and led weekly caregiving shifts as Person-In-Charge"
 ---
 
 - Leadership & Care: Served as Person-In-Charge (PIC) for weekly caregiving shifts, managing daily shelter operations, ensuring high standards of animal care, and overseeing shift volunteers and protocols

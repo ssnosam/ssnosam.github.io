@@ -26,7 +26,7 @@ const volunteerRoles = await Promise.all(
 );
 
 function formatDate(date: Date | null) {
-  if (!date) return 'Current';
+  if (!date) return 'Present';
   return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' });
 }
 ---
@@ -40,7 +40,7 @@ function formatDate(date: Date | null) {
 
     <header class="resume-header">
       <h1>{site.name}</h1>
-      <p class="tagline">is a Senior Product Designer &amp; Creative in {site.location}</p>
+      <p class="tagline">Senior Product Designer · {site.location}</p>
       <p class="contact-line">
         <a href={`mailto:${site.email}`}>{site.email}</a>
         <span class="sep" aria-hidden="true">·</span>
@@ -61,7 +61,7 @@ function formatDate(date: Date | null) {
                   {data.role} at {data.company}
                 </h3>
                 <span class="dates">
-                  {formatDate(data.startDate)} to {formatDate(data.endDate)}
+                  {formatDate(data.startDate)} – {formatDate(data.endDate)}
                 </span>
               </div>
               {data.note && <p class="note">{data.note}</p>}
@@ -82,12 +82,18 @@ function formatDate(date: Date | null) {
                   {data.role} at {data.organization}
                 </h3>
                 <span class="dates">
-                  {formatDate(data.startDate)} to {formatDate(data.endDate)}
+                  {formatDate(data.startDate)} – {formatDate(data.endDate)}
                 </span>
               </div>
               <div class="role-body">
-                {data.summary && <p>{data.summary}</p>}
-                <Content />
+                {data.resumeLine ? (
+                  <p>{data.resumeLine}</p>
+                ) : (
+                  <>
+                    {data.summary && <p>{data.summary}</p>}
+                    <Content />
+                  </>
+                )}
               </div>
             </article>
           ))
@@ -110,14 +116,14 @@ function formatDate(date: Date | null) {
         </section>
 
         <section class="side-block">
-          <h2 class="section-heading">Expertise</h2>
+          <h2 class="section-heading">Skills</h2>
           <ul class="plain-list">
             {skills.map((skill) => <li>{skill}</li>)}
           </ul>
         </section>
 
         <section class="side-block">
-          <h2 class="section-heading">Familiar Tools</h2>
+          <h2 class="section-heading">Tools</h2>
           <ul class="plain-list">
             {tools.map((tool) => <li>{tool}</li>)}
           </ul>
@@ -127,9 +133,7 @@ function formatDate(date: Date | null) {
           <h2 class="section-heading">Personal Interests</h2>
           <ul class="plain-list">
             {personalInterests.map((item) => (
-              <li>
-                <span class="interest-emoji">{item.emoji}</span> {item.label}
-              </li>
+              <li>{item.label}</li>
             ))}
           </ul>
         </section>
@@ -305,11 +309,6 @@ function formatDate(date: Date | null) {
     font-size: var(--text-sm);
     margin-bottom: var(--space-2);
     color: var(--color-text-muted);
-  }
-
-  .interest-emoji {
-    display: inline-block;
-    width: 1.4em;
   }
 
   .resume-footer {

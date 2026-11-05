@@ -22,6 +22,8 @@ const volunteering = defineCollection({
     endDate: z.coerce.date().nullable(),
     cause: z.string().optional(),
     summary: z.string().optional(),
+    // one line for the résumé, which stays short; the homepage keeps the bullets
+    resumeLine: z.string().optional(),
   }),
 });
 
